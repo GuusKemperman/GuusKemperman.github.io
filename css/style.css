@@ -935,7 +935,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .no-js #loader {
-  display: none;
+    display: none;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 .js #loader {

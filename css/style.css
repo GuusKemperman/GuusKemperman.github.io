@@ -271,7 +271,7 @@ h1, h2, h3, h4, h5, h6 {
   content: 'viewport-units-buggyfill; height:100vh; width: 100vw';
   display: table;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   #fh5co-header {
     height: auto !important;
     padding: 3em 0;
@@ -286,7 +286,7 @@ h1, h2, h3, h4, h5, h6 {
   display: table-cell;
   vertical-align: middle;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   #fh5co-header .fh5co-text-wrap {
     height: auto !important;
     padding: 3em 0;
@@ -329,7 +329,7 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 9px;
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   #fh5co-header h1 {
     font-size: 2.2em;
     line-height: 60px;
@@ -337,7 +337,7 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 9px;
   }
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   #fh5co-header h1 {
     font-size: 1.5em;
     line-height: 50px;
@@ -357,7 +357,7 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
   letter-spacing: .09em;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   #fh5co-header h2 {
     font-weight: 400;
     font-size: 18px;
@@ -370,7 +370,7 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 2em;
   left: 50%;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .btn-next {
     bottom: 4px;
   }
@@ -401,7 +401,7 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255, 255, 255, 0.3);
   color: #ffab00;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .btn-next a i {
     font-size: 20px;
   }
@@ -416,21 +416,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #ffab00;
 }
 
-.fh5co-bio-photo img {
-  max-width: 100%;
-  -webkit-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
-  -moz-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
-  -ms-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
-  -o-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
-  box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
-  -webkit-transition: 0.5s;
-  -o-transition: 0.5s;
-  transition: 0.5s;
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  -ms-border-radius: 7px;
-  border-radius: 7px;
-}
 
 .fh5co-project {
   height: 100vh;
@@ -460,7 +445,7 @@ h1, h2, h3, h4, h5, h6 {
 .fh5co-project.no-border:before {
   display: none;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project {
     height: inherit !important;
     padding: 3em 0;
@@ -474,7 +459,7 @@ h1, h2, h3, h4, h5, h6 {
   content: 'viewport-units-buggyfill; height:100vh; width:100vw';
   position: relative;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project .fh5co-project-inner {
     float: left;
     width: 100%;
@@ -488,9 +473,9 @@ h1, h2, h3, h4, h5, h6 {
   height: calc(100% - 50%);
   position: relative;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project .fh5co-imgs {
-    margin-bottom: 30px;
+    margin-bottom: 0px;
   }
 }
 .fh5co-project .fh5co-imgs .img-holder-1,
@@ -501,7 +486,7 @@ h1, h2, h3, h4, h5, h6 {
   -ms-border-radius: 7px;
   border-radius: 7px;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project .fh5co-imgs .img-holder-1,
   .fh5co-project .fh5co-imgs .img-holder-2 {
     position: relative;
@@ -527,7 +512,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   bottom: 0;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project .fh5co-imgs .img-holder-1 {
     right: 0;
   }
@@ -536,12 +521,12 @@ h1, h2, h3, h4, h5, h6 {
   bottom: -2em;
   right: 50px;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project .fh5co-imgs .img-holder-2 {
     position: absolute;
   }
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .fh5co-project .fh5co-imgs .img-holder-2 {
     right: 30px;
     bottom: -1em;
@@ -566,14 +551,14 @@ h1, h2, h3, h4, h5, h6 {
   right: auto;
   left: 50px;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .fh5co-project.fh5co-reverse .img-holder-2 {
     position: absolute;
     left: auto;
     right: 50px;
   }
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .fh5co-project.fh5co-reverse .img-holder-2 {
     right: 30px;
     bottom: -1em;
@@ -613,7 +598,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 38px;
   color: rgba(255, 255, 255, 0.6);
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   #fh5co-main .fh5co-lead,
   .fh5co-section .fh5co-lead {
     font-size: 22px;
@@ -755,7 +740,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 500px;
   width: 100%;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   #fh5co-map {
     height: 250px;
   }
@@ -769,7 +754,7 @@ h1, h2, h3, h4, h5, h6 {
   float: left;
   margin-right: 3em;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .fh5co-list-style-1.fh5co-inline {
     margin-right: 0px;
     float: none;
@@ -876,7 +861,7 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .col-xxs-12 {
     float: none;
     width: 100%;
@@ -888,7 +873,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 200px;
   font-size: 18px;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 512px) {
   .btn-cta {
     padding: 10px 30px !important;
     width: 100%;
@@ -898,7 +883,7 @@ h1, h2, h3, h4, h5, h6 {
 .row-bottom-padded-lg {
   padding-bottom: 7em;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .row-bottom-padded-lg {
     padding-bottom: 2em;
   }
@@ -907,7 +892,7 @@ h1, h2, h3, h4, h5, h6 {
 .row-top-padded-lg {
   padding-top: 7em;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .row-top-padded-lg {
     padding-top: 2em;
   }
@@ -916,7 +901,7 @@ h1, h2, h3, h4, h5, h6 {
 .row-bottom-padded-md {
   padding-bottom: 4em;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .row-bottom-padded-md {
     padding-bottom: 2em;
   }
@@ -925,7 +910,7 @@ h1, h2, h3, h4, h5, h6 {
 .row-top-padded-md {
   padding-top: 4em;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .row-top-padded-md {
     padding-top: 2em;
   }
@@ -934,7 +919,7 @@ h1, h2, h3, h4, h5, h6 {
 .row-bottom-padded-sm {
   padding-bottom: 2em;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .row-bottom-padded-sm {
     padding-bottom: 2em;
   }
@@ -943,7 +928,7 @@ h1, h2, h3, h4, h5, h6 {
 .row-top-padded-sm {
   padding-top: 2em;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 512px) {
   .row-top-padded-sm {
     padding-top: 2em;
   }
@@ -975,3 +960,41 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.fh5co-bio-photo img {
+    max-width: 100%;
+    -webkit-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
+    -moz-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
+    -ms-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
+    -o-box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
+    box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.49);
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    -ms-border-radius: 7px;
+    border-radius: 7px;
+}
+
+.profile-photo {
+    width: 290px;
+    height:440px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.clip-path-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    clip-path: polygon(5% 12%, 100% 0%, 95% 88%, 0% 100%);
+    border-radius: 10px; /* Add this line to round the corners */
+    overflow: hidden; /* Add this line to hide any overflow from the rounded corners */
+}
+
+.clip-path-wrapper img {
+    width: 100%;
+    height: 100%;
+}

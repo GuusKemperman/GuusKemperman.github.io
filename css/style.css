@@ -424,21 +424,22 @@ h1, h2, h3, h4, h5, h6 {
   display: table;
   position: relative;
 }
-.fh5co-project:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.03);
-  width: 101%;
-  -webkit-transform: skewY(-7deg);
-  -moz-transform: skewY(-7deg);
-  -ms-transform: skewY(-7deg);
-  -o-transform: skewY(-7deg);
-  transform: skewY(-7deg);
-}
+
+    .fh5co-project::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.01);
+        width: 101%;
+        -webkit-transform: skewY(-3deg);
+        -moz-transform: skewY(-3deg);
+        -ms-transform: skewY(-3deg);
+        -o-transform: skewY(-3deg);
+        transform: translateY(10px) skewY(-7deg);
+    }
 .fh5co-project.no-border {
   border-bottom: none;
 }
@@ -991,8 +992,8 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     position: absolute;
     clip-path: polygon(5% 12%, 100% 0%, 95% 88%, 0% 100%);
-    border-radius: 10px; /* Add this line to round the corners */
-    overflow: hidden; /* Add this line to hide any overflow from the rounded corners */
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .clip-path-wrapper img {

@@ -1,0 +1,486 @@
+
+# How to reflect C++ functions
+
+**How do we store a function that could return any type, and have any number of different types as parameters? How would we even call such a function?**
+
+```cpp
+struct VisualScriptNode
+{
+	std::function<?> mFunctionToInvoke{};
+};
+```
+
+This is the problem that we are trying to solve today. Not that we are the first of course, so why should you write your own reflection system? There are existing solutions for runtime reflection, a great example is [entt\::meta](https://github.com/skypjack/entt/blob/master/docs/md/meta.md), one that I took a lot of inspiration from. There was one major, but fair, limitation that ruled existing libraries out; every reflected type needs to have a C++ equivalent.
+
+I ran into this problem while developing a virtual machine for a visual scripting tool. The virtual machine has to execute nodes using arguments outputted as a result of the execution of other nodes. The interface of the nodes cannot be templated, because the argument types may not even have a C++ equivalent; they may be types created based on other scripts.
+
+You may be facing similar limitations of existing reflection libraries for your purposes, or maybe you are simply interested in learning how to implement a runtime-reflection system and encountered this roadblock.
+
+The main goal of this blog is to be an introduction to reflection, possibly to help you develop your own scripting tool, or perhaps for a different purpose altogether. This blog is enough to get you started on a runtime-reflection system and to provide a foundation for your own scripting tool. While you do not need to have ever worked on reflection before, I am assuming that you know the basics of reflection. Throughout this blog, there is heavy usage of templates, in particular [variadic templates](https://en.cppreference.com/w/cpp/language/parameter_pack).
+
+We are aiming for a minimal implementation. At the end of this blog, you should be able to write an implementation capable of the following:
+
+```cpp
+int ExampleFunction(float byValue, const int& byReference, size_t* byPointer)
+{
+	(*byPointer)++;
+	return static_cast<int>(byValue) + byReference;
+}
+
+std::function stdFunc = &ExampleFunction;
+
+const MetaFunc func{ stdFunc };
+
+// An any whose type has been erased
+MetaAny floatAsAny = 100.0f;
+
+// And an integer whose type has not been erased
+int intAsInt = 50;
+
+// And finally a size_t, that we will pas by pointer
+size_t numTimesRan = 0;
+
+// The MetaAny can be passed in like any other into the function
+FuncResult succeeded = func(floatAsAny, intAsInt, &numTimesRan);
+ASSERT(!succeeded.HasError());
+
+// And the return value is as expected
+ASSERT(*succeeded.GetReturnValue().As<int32>() == 150);
+
+// But if we mix up the argument order, the typeIds and form no longer match
+FuncResult failed = func(intAsInt, floatAsAny, &numTimesRan);
+ASSERT(failed.HasError());
+
+ASSERT(numTimesRan == 1);
+```
+
+## Storing type information
+
+We are starting with the idea that we are invoking the function with a series of void pointers, with the goal being that we do not make an invalid cast. We need to find a way to store the type information along with these pointers, so we can be sure we can safely cast from the ```void*``` to the correct type.
+
+We will keep it simple by treating a type as only a typeid. Entt has a helpful type_hash method that I decided to use, but alternatives such as [```std::typeinfo::hash_code```](https://en.cppreference.com/w/cpp/types/type_info/hash_code) can be used as well.
+
+```cpp
+using TypeId = uint32;
+
+template<typename T>
+static consteval TypeId MakeTypeId() 
+{ 
+	return entt::type_hash<T>::value(); 
+}
+```
+
+We now have a unique identifier for every type.
+
+Buuut, ```MakeTypeId<int32&>()``` and ```MakeTypeId<const int32&>()``` will return entirely different values. ```int32&``` can be passed to a parameter of the type ```const int32&```, but not vice versa. In most cases, your parameters will always be a limited combination of type qualifiers and declarators. We can sum up all the combinations we want to support in an enum.
+
+```cpp
+enum class TypeForm
+{
+	Value,
+	Ref,
+	ConstRef,
+	Ptr,
+	ConstPtr,
+	RValue,
+};
+```
+
+We can specifically account for every one of these, and use it to decide if we want to allow assigning a variable with typeform A to a parameter of typeform B. But we are getting ahead of ourselves; when we have a function with multiple parameters, we want to determine the form of each of them, as well as for the return type. Let's start by determining the form of a single type. Thanks to the [standard library's typetraits](https://en.cppreference.com/w/cpp/header/type_traits) header, we can retrieve the information that we need.
+
+```cpp
+template <typename T>
+consteval TypeForm MakeTypeForm()
+{
+	if constexpr (std::is_rvalue_reference_v<T>)
+	{
+		static_assert(!std::is_pointer_v<std::remove_reference_t<T>>, "References to pointers are not allowed");
+		return TypeForm::RValue;
+	}
+	else  if constexpr (std::is_reference_v<T>)
+	{
+		static_assert(!std::is_pointer_v<std::remove_reference_t<T>>, "References to pointers are not allowed");
+		return std::is_const_v<std::remove_reference_t<T>> ? TypeForm::ConstRef : TypeForm::Ref;
+	}
+	else if constexpr (std::is_pointer_v<T>)
+	{
+		static_assert(!std::is_pointer_v<std::remove_pointer_t<T>>, "Pointers to pointers are not allowed");
+		return std::is_const_v<std::remove_pointer_t<T>> ? TypeForm::ConstPtr : TypeForm::Ptr;
+	}
+	else
+	{
+		return TypeForm::Value;
+	}
+}
+
+// The values are as expected
+static_assert(MakeTypeForm<const void*>() == TypeForm::ConstPtr);
+static_assert(MakeTypeForm<const int&>() == TypeForm::ConstRef);
+static_assert(MakeTypeForm<int>() == TypeForm::Value);
+static_assert(MakeTypeForm<int&&>() == TypeForm::RValue);
+```
+
+This is a good step in the right direction, but ```MakeTypeId<int32&>()``` and ```MakeTypeId<const int32&>()``` still return entirely different values. And that may actually be what we want in certain cases. But for our use case, it would be helpful to have a function that returns the same value, regardless of whether it's a reference or a const pointer. 
+
+```cpp
+template <typename T>
+consteval TypeId MakeStrippedTypeId()
+{
+	return MakeTypeId<std::remove_const_t<std::remove_reference_t<std::remove_pointer_t<T>>>>();
+}
+static_assert(MakeStrippedTypeId<const int*>() == MakeStrippedTypeId<int&&>());
+```
+
+Since the typeform and the stripped typeid are so often used together, it may be helpful to create your own struct to wrap these two variables together.
+
+```cpp
+struct TypeTraits
+{
+	TypeId mStrippedTypeId{};
+	TypeForm mForm{};
+};
+
+template<typename T>
+consteval TypeTraits MakeTypeTraits()
+{
+	return { MakeStrippedTypeId<T>(), MakeTypeForm<T>() };
+}
+```
+
+Great, we have solved the first problem; we have a way of storing the type.
+
+## MetaAny
+
+But now we also need to store the value.
+
+Most reflection libraries will have some class that can represent any value, similar to [std\::any](https://en.cppreference.com/w/cpp/utility/any). They are generally implemented with a ```void*``` pointer, and some form of identifier that represents the type.
+
+```std::any``` is owning; it is responsible for freeing the memory and calling the appropriate destructor. In this example, we will only be dealing with [trivially destructible types](https://en.cppreference.com/w/cpp/language/destructor). If you want to expand this system in the future, you could implement a lookup table that returns the destructor you need to call based on the typeid.
+
+Our implementation can be both owning and non-owning. The reason being, that parameters can often require the argument to be a reference type. If you initialize the any with a reference to ```numTimesExectued```, and pass that argument to a function that increments the value, you want the original value to be incremented.
+
+A very simple implementation would look someting along these lines.
+
+```cpp
+class MetaAny
+{
+public:
+	MetaAny(TypeId typeId, void* data, bool isOwner);
+
+	template<typename T>
+	explicit MetaAny(T&& anyObject);
+
+	MetaAny(const MetaAny&) = delete;
+	MetaAny(MetaAny&& other) noexcept;
+
+	MetaAny& operator=(const MetaAny&) = delete;
+	MetaAny& operator=(MetaAny&& other) noexcept;
+
+	// Frees the mData buffer if this 
+	//is the owner
+	~MetaAny();
+
+	TypeId GetTypeId() const { return mTypeId; }
+	bool IsOwner() const { return mIsOwner; }
+
+	const void* GetData() const { return mData; }
+	void* GetData() { return mData; }
+
+	void* Release() { mIsOwner = false; return mData; }
+
+	template<typename T>
+	T* As()
+	{
+		return mTypeId == MakeTypeId<T>() ? static_cast<T*>(mData) : nullptr;
+	}
+
+private:
+	TypeId mTypeId{};
+	void* mData{};
+	bool mIsOwner{};
+};
+```
+
+Remember how we want to invoke the function by passing in a series of void pointers? And how we only allow a limited number of TypeForms? We can use that to our advantage, because a single pointer can represent an argument of any of the TypeForms. The pointer can point to an existing object, or point to a buffer in which the owned object is located.
+
+It would be lovely if the user would not have to interact with void pointers all that much, so let's make a constructor that safely handles all of that for them. If we pass in an existing object, we want to reference this object. But if we pass in an rvalue, we will be the owner. 
+
+```cpp
+template <typename T>
+MetaAny::MetaAny(T&& anyObject)
+{
+    static constexpr TypeTraits traits = MakeTypeTraits<T>();
+
+    mTypeId = traits.mStrippedTypeId;
+
+    if constexpr (traits.mForm == TypeForm::Value
+        || traits.mForm == TypeForm::RValue)
+    {
+        // We will own the value; we are responsible for constructing it,
+        // and deleting it.
+        mIsOwner = true;
+        mData = _aligned_malloc(sizeof(T), alignof(T));
+        mData = new (mData) T(std::forward<T>(anyObject));
+    }
+    else if constexpr (traits.mForm == TypeForm::Ref
+			|| traits.mForm == TypeForm::ConstRef)
+    {
+        using MutableRef = std::remove_const_t<std::remove_reference_t<T>>&;
+        mData = &const_cast<MutableRef>(anyObject);
+    }
+    else if constexpr (traits.mForm == TypeForm::Ptr
+			|| traits.mForm == TypeForm::ConstPtr)
+    {
+        using MutablePtr = std::remove_const_t<std::remove_pointer_t<T>>*;
+        mData = const_cast<MutablePtr>(anyObject);
+    }
+}
+```
+
+Now we can assign values to our MetaAny.
+
+```cpp
+MetaAny rotationSpeed = 100.0f;
+
+float movementSpeed = 50.0f;
+MetaAny ptrToSpeed = &speed;
+```
+
+Next, we will be looking at how we can use these MetaAny's to pass arguments into functions.
+
+## Packing
+
+Our original problem is that we do not know the signature of the ```std::function``` to store. But now that we have our MetaAny class, we can decide on a signature: ```std::function<FuncResult(std::span<MetaAny>)>```. When we invoke the function, we 'pack' all our arguments into an array of MetaAny. We can then decide if those arguments are valid, and if so, 'unpack' them, cast each argument to the correct type, and call the reflected function. By using this method of packing and unpacking, the function signature is known at compile time, which means our reflected function class does not need to be templated.
+
+When we call a function, we provide a series of arguments. In order to pack those arguments, we want, for each argument, to store its type, the way its are passed to us, and its value. And now we have a way to do all three! 
+
+```cpp
+template <typename Arg>
+MetaAny PackSingle(Arg&& arg)
+{
+	return MetaAny{ std::forward<Arg>(arg) };
+}
+
+template <typename ... Args>
+std::pair<std::array<MetaAny, sizeof...(Args)>, std::array<TypeForm, sizeof...(Args)>> Pack(Args&&... args)
+{
+	return {
+		std::array<MetaAny, sizeof...(Args)>{ PackSingle<Args>(std::forward<Args>(args))... },
+		std::array<TypeForm, sizeof...(Args)>{ MakeTypeForm<Args>()... }
+	};
+}
+```
+
+So what does this give us? The first array is a series of values, along with their type. The second array contains the way we passed the arguments in.
+
+```cpp
+int value = 123;
+
+auto [values, forms] = Pack(5, &value); 
+ASSERT(*values[0].As<int>() == 5);
+ASSERT(forms[1] == TypeForm::Ptr);
+```
+
+We make a special exception for MetaAny. Note that the copy constructor and copy assign of MetaAny have been explicitly deleted; in this example, we will only be looking at trivially copy-able types, but that will not always be the case. Making an accidental copy of a string is not great in regular C++, but now you also pay the cost of looking up the copy-constructor somewhere. But in the packing we can slightly cheat; we can be sure for a fact that the original MetaAny will not be destructed. After packing the arguments, the function is immediately invoked, there is no opportunity for the original arguments to be destructed. Because of this, we can just reference the data of the original MetaAny.
+
+```cpp
+template <>
+MetaAny PackSingle<const MetaAny&>(const MetaAny& other)
+{
+	return { other.GetTypeId(), const_cast<void*>(other.GetData()), false };
+}
+
+template <>
+MetaAny PackSingle<MetaAny&>(MetaAny& other)
+{
+	return { other.GetTypeId(), other.GetData(), false };
+}
+```
+
+By implementing this overload, we are able to pass a type of MetaAny to our Pack function.
+
+```cpp
+const MetaAny value = 123;
+
+auto [values, forms] = Pack(value); 
+ASSERT(*values[0].As<int>() == 5);
+ASSERT(forms[0] == TypeForm::ConstRef);
+```
+
+Now besides the *size* of the array, the return value of Pack is not templated at all; it will always be an array of MetaAny and an array of TypeForm, regardless of whether you pass in an int, a float, a string, or one of your own types. We have generalized the arguments of various types into one type, an array of MetaAny. We can use the results of the Pack function to invoke an ```std::function<FuncResult(std::span<MetaAny>)>```.
+
+## Unpacking
+
+But how do we invoke a function with our packed arguments? It's not like we can just pass an array of MetaAny to a function and expect it to work. We need to cast the MetaAny to the correct type, before forwarding it to the function. We perform the exact same logic as in the constructor of MetaAny, but reversed.
+
+```cpp
+template<typename T>
+T UnpackSingle(MetaAny& any)
+{
+	static constexpr TypeForm typeForm = MakeTypeForm<T>();
+
+	if constexpr (traits.mForm == TypeForm::Ptr
+		|| traits.mForm == TypeForm::ConstPtr)
+	{
+		return static_cast<T>(any.GetData());
+
+	}
+	else if constexpr (traits.mForm == TypeForm::RValue
+		|| traits.mForm == TypeForm::Value)
+	{
+		// We don't want the Any to delete the data after we have moved it
+		// to our function.
+		void* data = any.Release();
+		return std::move(*static_cast<std::remove_reference_t<T>*>(data));
+	}
+	else
+	{
+		return *static_cast<std::remove_reference_t<T>*>(any.GetData());
+	}
+}
+```
+
+When we unpack more than one argument, we have to use [pack expansion](https://en.cppreference.com/w/cpp/language/parameter_pack#Pack_expansion). Now normally, when using for example ```std::forward<Args>(args)...```, the order in which forward is called is irrelevant. If we have a function ```void Add(int, float)```, then ```std::forward``` may first be called for the ```float```, before evalutating the ```int```. But the only thing we care about is that once that expression has been unfolded, all of our arguments are in the correct order.
+
+We however, are using a combination of a variadic template, ```int, float```, and a runtime span, ```std::span<MetaAny>```. We know that the first item of that span represents the integer, and the second item represents the float. Now that we need to match each template to the correct index in the span, we do care about the order in which ```Unpack``` is called. The order is the reverse of the pack, since our varidiac template is ```int, float```, ```Unpack<float>``` will be called before ```Unpack<int>```. We provide an index alongside the span of arguments in order to inform the function which argument to use.
+
+```cpp
+template<typename T>
+T Unpack(std::span<MetaAny> args, size_t& index)
+{
+	return UnpackSingle<T>(args[--index]);
+}
+
+template<typename Ret, typename... Params>
+FuncResult DefaultInvoke(const std::function<Ret(Params...)>& functionToInvoke,
+	                                std::span<MetaAny> runtimeArgs)
+{
+	// Unpack needs to know the argument that it
+	// needs to forward.
+	size_t argIndex = runtimeArgs.size();
+
+	if constexpr (std::is_same_v<Ret, void>)
+	{
+		functionToInvoke(Unpack<Params>(runtimeArgs, argIndex)...);
+		return std::nullopt;
+	}
+	else
+	{
+		return MetaAny{ functionToInvoke(Unpack<Params>(runtimeArgs, argIndex)...) };
+	}
+}
+```
+
+Now we have all the elements we need to package our arguments into a known type, and unpack them to invoke any ```std::function```. 
+One very simple example would be to add two numbers together.
+
+```cpp
+std::function<int(int, float)> add = [](int lhs, float rhs) { return lhs + static_cast<int>(rhs); }; 
+
+auto [packedValues, packedForms] = Pack(20, 45.0f);
+
+FuncResult result = DefaultInvoke(add, packedValues);
+
+ASSERT(*result.GetReturnValue().As<int>() == 65);
+```
+
+While this works great, we can't quite call it a day yet. We have no safety in place, there is nothing stopping the user from accidentally packing two integers; the second integer would be interpreted as a float. In the best-case scenario, your output will contain garbage data. We have spent a lot of time gathering the TypeIds and the TypeForms of the arguments, but we haven't collected any information about the parameters. 
+
+## MetaFunc
+
+So we need to store the parameters alongside the function we need to invoke. It's time to implement another minimal class. So how can we represent our reflected function? At the very least we require the function we need to invoke and information about the parameters to prevent any invalid casts.
+
+```cpp
+class MetaFunc
+{
+public:
+	template<typename Ret, typename... Params>
+	MetaFunc(std::function<Ret(Params...)>&& func) :
+		mParameters(MakeTypeTraits<Params>()...),
+		mFuncToInvoke(std::bind(&DefaultInvoke<Ret, Params...>, std::move(func), std::placeholders::_1))
+	{
+	}
+
+	template<typename ... Args>
+	FuncResult operator()(Args&&... args) const
+	{
+		auto packedArgs = Pack(std::forward<Args>(args)...);
+		return InvokeChecked(packedArgs.first, packedArgs.second);
+	}
+
+	FuncResult InvokeChecked(std::span<MetaAny> args, std::span<const TypeForm> formOfArgs) const
+
+private:
+	std::vector<TypeTraits> mParameters{};
+	std::function<FuncResult(std::span<MetaAny>)> mFuncToInvoke{};
+};
+```
+
+The constructor is the last place where the return type and the parameters are known by the compiler. From this point on, we will only be interacting with the ```std::function<FuncResult(std::span<MetaAny>)>``` member. We have bound the ```DefaultInvoke``` function from earlier, this function will be responsible for casting our arguments to the correct type before invoking the function. 
+
+We finally have the information that we need; we have the types and forms of both the arguments and the parameters. We can compare those against each other. Luckily all of this does not have to be in the templated DefaultInvoke function, and can instead be placed in our .cpp file, in the ```InvokeChecked``` function.
+
+Which arguments you want to allow to forward to the parameters is up to you and at your own risk. But at the very minimum, you should check:
+
+1. Do the number of arguments match the number of parameters?
+2. Does the typeId of the argument match that of the parameters?
+
+
+```cpp
+FuncResult MetaFunc::InvokeChecked(std::span<MetaAny> args, std::span<const TypeForm> formOfArgs) const
+{
+	ASSERT_LOG(args.size() != formOfArgs.size(), "Num of args ({}) did not match num of forms provided ({})", args.size(), formOfArgs.size());
+
+	if (args.size() != mParams.size())
+	{
+		return std::format("Expected {} arguments, but received {}", mParams.size(), args.size());
+	}
+
+	for (uint32 i = 0; i < args.size(); i++)
+	{
+		// Check if the argument can be passed in correctly.
+		// We check if the typeIds match, and the form;
+		// Passing a const reference to a reference is for
+		// example not allowed.
+		std::optional<std::string> reasonWhyWeCannotPassItIn = CanArgBePassedIntoParam(args[i], formOfArgs[i], mParams[i]);
+
+		if (reasonWhyWeCannotPassItIn.has_value())
+		{
+			return std::format("Cannot pass argument number {} - {}", i, std::move(*reasonWhyWeCannotPassItIn));
+		}
+	}
+
+	return mFuncToInvoke(args);
+}
+```
+
+This is the reason why the typeforms are in a separate array, the first array needs to be forwarded to the function, while the second array is only there for checking if it is safe to pass the arguments.
+
+You can follow the rules of the argument forms that C++ has laid out, e.g., don't allow passing a const argument to a mutable parameter, but you can change this according to your needs. Do you want implicit dereferencing? You always thought const-correctness was for cowards? Go for it!
+
+This can be further expanded by taking into account inheritance and implicit conversions, but this is beyond the scope of this blog.
+
+## Usage
+
+This tool was a vital component during the development of my scripting tool. I was also able to represent functions created through scripts using MetaFunc. Having a single representation for both reduced code repetition. A simplified example snippet from the virtual machine shows one of the practical use cases.
+
+```cpp
+case ScriptNodeType::FunctionCall:
+{
+	const MetaFuncScriptNode& metaFuncNode = static_cast<const MetaFuncScriptNode&>(node);
+
+	const MetaFunc* const originalFunc = metaFuncNode.TryGetOriginalFunc();
+	ASSERT(originalFunc != nullptr && "Should've been caught during script-compilation");
+
+	result = originalFunc->InvokeChecked({ inputValues, numOfInputs }, { inputForms, numOfInputs });
+	break;
+}
+```
+
+## Final remarks
+
+The MetaFunc class was introduced to represent reflected functions of various types through one, non-templated, interface. There are a lot of improvements that can be made, mainly by correctly invoking the destructor for non-trivially destructible types and accounting for inheritance. Both of these require implementing the reflection of types, but the hardest part of reflection is over. I hope this blog will have provided some insight into reflection and be equally helpful to your project. 
+
+![](assets/media/buaslogo.png)
+
+```#BUas #BUasGames #C++```

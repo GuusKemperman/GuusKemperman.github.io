@@ -1,0 +1,50 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 40px auto; /* Center the content horizontally */
+    padding: 20px;
+    max-width: 50%; /* Constrain the content to 50% of the page width */
+    background-color: #1a1a1a; /* Dark background color */
+    color: #e0e0e0; /* Light text color */
+}
+
+h1, h2, h3 {
+    color: #4db2ff; /* Light blue headings */
+}
+
+a {
+    color: #4db2ff; /* Light blue links */
+    text-decoration: none;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+p {
+    margin-bottom: 20px;
+}
+
+blockquote {
+    border-left: 4px solid #4db2ff; /* Light blue border for blockquote */
+    margin: 0;
+    padding: 10px;
+    background-color: #333; /* Darker background for blockquote */
+    color: #e0e0e0; /* Light text color for blockquote */
+}
+
+code {
+    font-family: 'Courier New', monospace;
+    background-color: #333; /* Darker background for code */
+    padding: 2px 4px;
+    border: 1px solid #555; /* Darker border for code */
+}
+
+pre {
+    background-color: #333; /* Darker background for pre */
+    padding: 10px;
+    border: 1px solid #555; /* Darker border for pre */
+    overflow-x: auto;
+}
+
+/* Add more styles as needed */

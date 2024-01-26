@@ -1,0 +1,405 @@
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your HTML Title</title>
+    <link rel="stylesheet" type="text/css" href="css/blogs.css">
+</head>
+
+<h1 id="how-to-reflect-c-functions">How to reflect C++ functions</h1>
+<p><strong>How do we store a function that could return any type, and have any number of different types as parameters? How would we even call such a function?</strong></p>
+<pre><code class="lang-cpp"><span class="hljs-selector-tag">struct</span> <span class="hljs-selector-tag">VisualScriptNode</span>
+{
+<span class="hljs-attribute">std</span>::function&lt;?&gt; mFunctionToInvoke{};
+};
+</code></pre>
+<p>This is the problem that we are trying to solve today. Not that we are the first of course, so why should you write your own reflection system? There are existing solutions for runtime reflection, a great example is <a href="https://github.com/skypjack/entt/blob/master/docs/md/meta.md">entt\::meta</a>, one that I took a lot of inspiration from. There was one major, but fair, limitation that ruled existing libraries out; every reflected type needs to have a C++ equivalent.</p>
+<p>I ran into this problem while developing a virtual machine for a visual scripting tool. The virtual machine has to execute nodes using arguments outputted as a result of the execution of other nodes. The interface of the nodes cannot be templated, because the argument types may not even have a C++ equivalent; they may be types created based on other scripts.</p>
+<p>You may be facing similar limitations of existing reflection libraries for your purposes, or maybe you are simply interested in learning how to implement a runtime-reflection system and encountered this roadblock.</p>
+<p>The main goal of this blog is to be an introduction to reflection, possibly to help you develop your own scripting tool, or perhaps for a different purpose altogether. This blog is enough to get you started on a runtime-reflection system and to provide a foundation for your own scripting tool. While you do not need to have ever worked on reflection before, I am assuming that you know the basics of reflection. Throughout this blog, there is heavy usage of templates, in particular <a href="https://en.cppreference.com/w/cpp/language/parameter_pack">variadic templates</a>.</p>
+<p>We are aiming for a minimal implementation. At the end of this blog, you should be able to write an implementation capable of the following:</p>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">ExampleFunction</span><span class="hljs-params">(<span class="hljs-keyword">float</span> byValue, <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>&amp; byReference, <span class="hljs-keyword">size_t</span>* byPointer)</span>
+</span>{
+    (*byPointer)++;
+<span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">int</span>&gt;(byValue) + byReference;
+}
+
+<span class="hljs-built_in">std</span>::function stdFunc = &amp;ExampleFunction;
+
+<span class="hljs-keyword">const</span> MetaFunc func{ stdFunc };
+
+<span class="hljs-comment">// An any whose type has been erased</span>
+MetaAny floatAsAny = <span class="hljs-number">100.0f</span>;
+
+<span class="hljs-comment">// And an integer whose type has not been erased</span>
+<span class="hljs-keyword">int</span> intAsInt = <span class="hljs-number">50</span>;
+
+<span class="hljs-comment">// And finally a size_t, that we will pas by pointer</span>
+<span class="hljs-keyword">size_t</span> numTimesRan = <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">// The MetaAny can be passed in like any other into the function</span>
+FuncResult succeeded = func(floatAsAny, intAsInt, &amp;numTimesRan);
+ASSERT(!succeeded.HasError());
+
+<span class="hljs-comment">// And the return value is as expected</span>
+ASSERT(*succeeded.GetReturnValue().As&lt;int32&gt;() == <span class="hljs-number">150</span>);
+
+<span class="hljs-comment">// But if we mix up the argument order, the typeIds and form no longer match</span>
+FuncResult failed = func(intAsInt, floatAsAny, &amp;numTimesRan);
+ASSERT(failed.HasError());
+
+ASSERT(numTimesRan == <span class="hljs-number">1</span>);
+</code></pre>
+<h2 id="storing-type-information">Storing type information</h2>
+<p>We are starting with the idea that we are invoking the function with a series of void pointers, with the goal being that we do not make an invalid cast. We need to find a way to store the type information along with these pointers, so we can be sure we can safely cast from the <code>void*</code> to the correct type.</p>
+<p>We will keep it simple by treating a type as only a typeid. Entt has a helpful type_hash method that I decided to use, but alternatives such as <a href="https://en.cppreference.com/w/cpp/types/type_info/hash_code"><code>std::typeinfo::hash_code</code></a> can be used as well.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">using</span> TypeId = uint32;
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function"><span class="hljs-keyword">static</span> consteval TypeId <span class="hljs-title">MakeTypeId</span><span class="hljs-params">()</span> 
+</span>{ 
+<span class="hljs-keyword">return</span> entt::type_hash&lt;T&gt;::value(); 
+}
+</code></pre>
+<p>We now have a unique identifier for every type.</p>
+<p>Buuut, <code>MakeTypeId&lt;int32&amp;&gt;()</code> and <code>MakeTypeId&lt;const int32&amp;&gt;()</code> will return entirely different values. <code>int32&amp;</code> can be passed to a parameter of the type <code>const int32&amp;</code>, but not vice versa. In most cases, your parameters will always be a limited combination of type qualifiers and declarators. We can sum up all the combinations we want to support in an enum.</p>
+<pre><code class="lang-cpp"><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">class</span> <span class="hljs-title">TypeForm</span></span>
+{
+    Value,
+    Ref,
+    ConstRef,
+    Ptr,
+    ConstPtr,
+    RValue,
+};
+</code></pre>
+<p>We can specifically account for every one of these, and use it to decide if we want to allow assigning a variable with typeform A to a parameter of typeform B. But we are getting ahead of ourselves; when we have a function with multiple parameters, we want to determine the form of each of them, as well as for the return type. Let&#39;s start by determining the form of a single type. Thanks to the <a href="https://en.cppreference.com/w/cpp/header/type_traits">standard library&#39;s typetraits</a> header, we can retrieve the information that we need.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function">consteval TypeForm <span class="hljs-title">MakeTypeForm</span><span class="hljs-params">()</span>
+</span>{
+<span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(<span class="hljs-built_in">std</span>::is_rvalue_reference_v&lt;T&gt;)</span>
+    </span>{
+<span class="hljs-keyword">static_assert</span>(!<span class="hljs-built_in">std</span>::is_pointer_v&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;T&gt;&gt;, <span class="hljs-string">"References to pointers are not allowed"</span>);
+<span class="hljs-keyword">return</span> TypeForm::RValue;
+    }
+<span class="hljs-keyword">else</span>  <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (<span class="hljs-built_in">std</span>::is_reference_v&lt;T&gt;)
+    {
+<span class="hljs-keyword">static_assert</span>(!<span class="hljs-built_in">std</span>::is_pointer_v&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;T&gt;&gt;, <span class="hljs-string">"References to pointers are not allowed"</span>);
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::is_const_v&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;T&gt;&gt; ? TypeForm::ConstRef : TypeForm::Ref;
+    }
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (<span class="hljs-built_in">std</span>::is_pointer_v&lt;T&gt;)
+    {
+<span class="hljs-keyword">static_assert</span>(!<span class="hljs-built_in">std</span>::is_pointer_v&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_pointer_t</span>&lt;T&gt;&gt;, <span class="hljs-string">"Pointers to pointers are not allowed"</span>);
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::is_const_v&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_pointer_t</span>&lt;T&gt;&gt; ? TypeForm::ConstPtr : TypeForm::Ptr;
+    }
+<span class="hljs-keyword">else</span>
+    {
+<span class="hljs-keyword">return</span> TypeForm::Value;
+    }
+}
+
+<span class="hljs-comment">// The values are as expected</span>
+<span class="hljs-keyword">static_assert</span>(MakeTypeForm&lt;<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span>*&gt;() == TypeForm::ConstPtr);
+<span class="hljs-keyword">static_assert</span>(MakeTypeForm&lt;<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>&amp;&gt;() == TypeForm::ConstRef);
+<span class="hljs-keyword">static_assert</span>(MakeTypeForm&lt;<span class="hljs-keyword">int</span>&gt;() == TypeForm::Value);
+<span class="hljs-keyword">static_assert</span>(MakeTypeForm&lt;<span class="hljs-keyword">int</span>&amp;&amp;&gt;() == TypeForm::RValue);
+</code></pre>
+<p>This is a good step in the right direction, but <code>MakeTypeId&lt;int32&amp;&gt;()</code> and <code>MakeTypeId&lt;const int32&amp;&gt;()</code> still return entirely different values. And that may actually be what we want in certain cases. But for our use case, it would be helpful to have a function that returns the same value, regardless of whether it&#39;s a reference or a const pointer. </p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function">consteval TypeId <span class="hljs-title">MakeStrippedTypeId</span><span class="hljs-params">()</span>
+</span>{
+<span class="hljs-keyword">return</span> MakeTypeId&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_const_t</span>&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_pointer_t</span>&lt;T&gt;&gt;&gt;&gt;();
+}
+<span class="hljs-keyword">static_assert</span>(MakeStrippedTypeId&lt;<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>*&gt;() == MakeStrippedTypeId&lt;<span class="hljs-keyword">int</span>&amp;&amp;&gt;());
+</code></pre>
+<p>Since the typeform and the stripped typeid are so often used together, it may be helpful to create your own struct to wrap these two variables together.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">struct</span> TypeTraits
+{
+    TypeId mStrippedTypeId{};
+    TypeForm mForm{};
+};
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function">consteval TypeTraits <span class="hljs-title">MakeTypeTraits</span><span class="hljs-params">()</span>
+</span>{
+<span class="hljs-keyword">return</span> { MakeStrippedTypeId&lt;T&gt;(), MakeTypeForm&lt;T&gt;() };
+}
+</code></pre>
+<p>Great, we have solved the first problem; we have a way of storing the type.</p>
+<h2 id="metaany">MetaAny</h2>
+<p>But now we also need to store the value.</p>
+<p>Most reflection libraries will have some class that can represent any value, similar to <a href="https://en.cppreference.com/w/cpp/utility/any">std\::any</a>. They are generally implemented with a <code>void*</code> pointer, and some form of identifier that represents the type.</p>
+<p><code>std::any</code> is owning; it is responsible for freeing the memory and calling the appropriate destructor. In this example, we will only be dealing with <a href="https://en.cppreference.com/w/cpp/language/destructor">trivially destructible types</a>. If you want to expand this system in the future, you could implement a lookup table that returns the destructor you need to call based on the typeid.</p>
+<p>Our implementation can be both owning and non-owning. The reason being, that parameters can often require the argument to be a reference type. If you initialize the any with a reference to <code>numTimesExectued</code>, and pass that argument to a function that increments the value, you want the original value to be incremented.</p>
+<p>A very simple implementation would look someting along these lines.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">class</span> MetaAny
+{
+<span class="hljs-keyword">public</span>:
+    MetaAny(TypeId typeId, <span class="hljs-keyword">void</span>* data, <span class="hljs-keyword">bool</span> isOwner);
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">MetaAny</span><span class="hljs-params">(T&amp;&amp; anyObject)</span></span>;
+
+    MetaAny(<span class="hljs-keyword">const</span> MetaAny&amp;) = <span class="hljs-keyword">delete</span>;
+    MetaAny(MetaAny&amp;&amp; other) <span class="hljs-keyword">noexcept</span>;
+
+    MetaAny&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> MetaAny&amp;) = <span class="hljs-keyword">delete</span>;
+    MetaAny&amp; <span class="hljs-keyword">operator</span>=(MetaAny&amp;&amp; other) <span class="hljs-keyword">noexcept</span>;
+
+<span class="hljs-comment">// Frees the mData buffer if this </span>
+<span class="hljs-comment">//is the owner</span>
+    ~MetaAny();
+
+<span class="hljs-function">TypeId <span class="hljs-title">GetTypeId</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> mTypeId; }
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">IsOwner</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> mIsOwner; }
+
+<span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span>* <span class="hljs-title">GetData</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> mData; }
+<span class="hljs-function"><span class="hljs-keyword">void</span>* <span class="hljs-title">GetData</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> mData; }
+
+<span class="hljs-function"><span class="hljs-keyword">void</span>* <span class="hljs-title">Release</span><span class="hljs-params">()</span> </span>{ mIsOwner = <span class="hljs-literal">false</span>; <span class="hljs-keyword">return</span> mData; }
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function">T* <span class="hljs-title">As</span><span class="hljs-params">()</span>
+    </span>{
+<span class="hljs-keyword">return</span> mTypeId == MakeTypeId&lt;T&gt;() ? <span class="hljs-keyword">static_cast</span>&lt;T*&gt;(mData) : <span class="hljs-literal">nullptr</span>;
+    }
+
+<span class="hljs-keyword">private</span>:
+    TypeId mTypeId{};
+<span class="hljs-keyword">void</span>* mData{};
+<span class="hljs-keyword">bool</span> mIsOwner{};
+};
+</code></pre>
+<p>Remember how we want to invoke the function by passing in a series of void pointers? And how we only allow a limited number of TypeForms? We can use that to our advantage, because a single pointer can represent an argument of any of the TypeForms. The pointer can point to an existing object, or point to a buffer in which the owned object is located.</p>
+<p>It would be lovely if the user would not have to interact with void pointers all that much, so let&#39;s make a constructor that safely handles all of that for them. If we pass in an existing object, we want to reference this object. But if we pass in an rvalue, we will be the owner. </p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+MetaAny::MetaAny(T&amp;&amp; anyObject)
+{
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">constexpr</span> TypeTraits traits = MakeTypeTraits&lt;T&gt;();
+
+    mTypeId = traits.mStrippedTypeId;
+
+<span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(traits.mForm == TypeForm::Value
+        || traits.mForm == TypeForm::RValue)</span>
+    </span>{
+<span class="hljs-comment">// We will own the value; we are responsible for constructing it,</span>
+<span class="hljs-comment">// and deleting it.</span>
+        mIsOwner = <span class="hljs-literal">true</span>;
+        mData = _aligned_malloc(<span class="hljs-keyword">sizeof</span>(T), <span class="hljs-keyword">alignof</span>(T));
+        mData = <span class="hljs-keyword">new</span> (mData) T(<span class="hljs-built_in">std</span>::forward&lt;T&gt;(anyObject));
+    }
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (traits.mForm == TypeForm::Ref
+            || traits.mForm == TypeForm::ConstRef)
+    {
+<span class="hljs-keyword">using</span> MutableRef = <span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_const_t</span>&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;T&gt;&gt;&amp;;
+        mData = &amp;<span class="hljs-keyword">const_cast</span>&lt;MutableRef&gt;(anyObject);
+    }
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (traits.mForm == TypeForm::Ptr
+            || traits.mForm == TypeForm::ConstPtr)
+    {
+<span class="hljs-keyword">using</span> MutablePtr = <span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_const_t</span>&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_pointer_t</span>&lt;T&gt;&gt;*;
+        mData = <span class="hljs-keyword">const_cast</span>&lt;MutablePtr&gt;(anyObject);
+    }
+}
+</code></pre>
+<p>Now we can assign values to our MetaAny.</p>
+<pre><code class="lang-cpp"><span class="hljs-attribute">MetaAny rotationSpeed</span> = 100.0f;
+
+<span class="hljs-attribute">float movementSpeed</span> = 50.0f;
+<span class="hljs-attribute">MetaAny ptrToSpeed</span> = &amp;speed;
+</code></pre>
+<p>Next, we will be looking at how we can use these MetaAny&#39;s to pass arguments into functions.</p>
+<h2 id="packing">Packing</h2>
+<p>Our original problem is that we do not know the signature of the <code>std::function</code> to store. But now that we have our MetaAny class, we can decide on a signature: <code>std::function&lt;FuncResult(std::span&lt;MetaAny&gt;)&gt;</code>. When we invoke the function, we &#39;pack&#39; all our arguments into an array of MetaAny. We can then decide if those arguments are valid, and if so, &#39;unpack&#39; them, cast each argument to the correct type, and call the reflected function. By using this method of packing and unpacking, the function signature is known at compile time, which means our reflected function class does not need to be templated.</p>
+<p>When we call a function, we provide a series of arguments. In order to pack those arguments, we want, for each argument, to store its type, the way its are passed to us, and its value. And now we have a way to do all three! </p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Arg&gt;
+<span class="hljs-function">MetaAny <span class="hljs-title">PackSingle</span><span class="hljs-params">(Arg&amp;&amp; arg)</span>
+</span>{
+<span class="hljs-keyword">return</span> MetaAny{ <span class="hljs-built_in">std</span>::forward&lt;Arg&gt;(arg) };
+}
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> ... Args&gt;
+<span class="hljs-built_in">std</span>::pair&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">array</span>&lt;MetaAny, <span class="hljs-keyword">sizeof</span>...(Args)&gt;, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">array</span>&lt;TypeForm, <span class="hljs-keyword">sizeof</span>...(Args)&gt;&gt; Pack(Args&amp;&amp;... args)
+{
+<span class="hljs-keyword">return</span> {
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">array</span>&lt;MetaAny, <span class="hljs-keyword">sizeof</span>...(Args)&gt;{ PackSingle&lt;Args&gt;(<span class="hljs-built_in">std</span>::forward&lt;Args&gt;(args))... },
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">array</span>&lt;TypeForm, <span class="hljs-keyword">sizeof</span>...(Args)&gt;{ MakeTypeForm&lt;Args&gt;()... }
+    };
+}
+</code></pre>
+<p>So what does this give us? The first array is a series of values, along with their type. The second array contains the way we passed the arguments in.</p>
+<pre><code class="lang-cpp"><span class="hljs-built_in">int</span> <span class="hljs-keyword">value</span> = <span class="hljs-number">123</span>;
+
+auto [values, forms] = <span class="hljs-built_in">Pack</span>(<span class="hljs-number">5</span>, &amp;<span class="hljs-keyword">value</span>); 
+<span class="hljs-keyword">ASSERT</span>(*values[<span class="hljs-number">0</span>].As&lt;<span class="hljs-built_in">int</span>&gt;() == <span class="hljs-number">5</span>);
+<span class="hljs-keyword">ASSERT</span>(forms[<span class="hljs-number">1</span>] == TypeForm::Ptr);
+</code></pre>
+<p>We make a special exception for MetaAny. Note that the copy constructor and copy assign of MetaAny have been explicitly deleted; in this example, we will only be looking at trivially copy-able types, but that will not always be the case. Making an accidental copy of a string is not great in regular C++, but now you also pay the cost of looking up the copy-constructor somewhere. But in the packing we can slightly cheat; we can be sure for a fact that the original MetaAny will not be destructed. After packing the arguments, the function is immediately invoked, there is no opportunity for the original arguments to be destructed. Because of this, we can just reference the data of the original MetaAny.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span> &lt;&gt;
+MetaAny PackSingle&lt;<span class="hljs-keyword">const</span> MetaAny&amp;&gt;(<span class="hljs-keyword">const</span> MetaAny&amp; other)
+{
+<span class="hljs-keyword">return</span> { other.GetTypeId(), <span class="hljs-keyword">const_cast</span>&lt;<span class="hljs-keyword">void</span>*&gt;(other.GetData()), <span class="hljs-literal">false</span> };
+}
+
+<span class="hljs-keyword">template</span> &lt;&gt;
+MetaAny PackSingle&lt;MetaAny&amp;&gt;(MetaAny&amp; other)
+{
+<span class="hljs-keyword">return</span> { other.GetTypeId(), other.GetData(), <span class="hljs-literal">false</span> };
+}
+</code></pre>
+<p>By implementing this overload, we are able to pass a type of MetaAny to our Pack function.</p>
+<pre><code class="lang-cpp">const MetaAny <span class="hljs-keyword">value</span> = <span class="hljs-number">123</span>;
+
+auto [values, forms] = <span class="hljs-built_in">Pack</span>(<span class="hljs-keyword">value</span>); 
+<span class="hljs-keyword">ASSERT</span>(*values[<span class="hljs-number">0</span>].As&lt;<span class="hljs-built_in">int</span>&gt;() == <span class="hljs-number">5</span>);
+<span class="hljs-keyword">ASSERT</span>(forms[<span class="hljs-number">0</span>] == TypeForm::ConstRef);
+</code></pre>
+<p>Now besides the <em>size</em> of the array, the return value of Pack is not templated at all; it will always be an array of MetaAny and an array of TypeForm, regardless of whether you pass in an int, a float, a string, or one of your own types. We have generalized the arguments of various types into one type, an array of MetaAny. We can use the results of the Pack function to invoke an <code>std::function&lt;FuncResult(std::span&lt;MetaAny&gt;)&gt;</code>.</p>
+<h2 id="unpacking">Unpacking</h2>
+<p>But how do we invoke a function with our packed arguments? It&#39;s not like we can just pass an array of MetaAny to a function and expect it to work. We need to cast the MetaAny to the correct type, before forwarding it to the function. We perform the exact same logic as in the constructor of MetaAny, but reversed.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-function">T <span class="hljs-title">UnpackSingle</span><span class="hljs-params">(MetaAny&amp; any)</span>
+</span>{
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">constexpr</span> TypeForm typeForm = MakeTypeForm&lt;T&gt;();
+
+<span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(traits.mForm == TypeForm::Ptr
+        || traits.mForm == TypeForm::ConstPtr)</span>
+    </span>{
+<span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;T&gt;(any.GetData());
+
+    }
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">constexpr</span> (traits.mForm == TypeForm::RValue
+        || traits.mForm == TypeForm::Value)
+    {
+<span class="hljs-comment">// We don't want the Any to delete the data after we have moved it</span>
+<span class="hljs-comment">// to our function.</span>
+<span class="hljs-keyword">void</span>* data = any.Release();
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::move(*<span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;T&gt;*&gt;(data));
+    }
+<span class="hljs-keyword">else</span>
+    {
+<span class="hljs-keyword">return</span> *<span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-built_in">std</span>::<span class="hljs-keyword">remove_reference_t</span>&lt;T&gt;*&gt;(any.GetData());
+    }
+}
+</code></pre>
+<p>When we unpack more than one argument, we have to use <a href="https://en.cppreference.com/w/cpp/language/parameter_pack#Pack_expansion">pack expansion</a>. Now normally, when using for example <code>std::forward&lt;Args&gt;(args)...</code>, the order in which forward is called is irrelevant. If we have a function <code>void Add(int, float)</code>, then <code>std::forward</code> may first be called for the <code>float</code>, before evalutating the <code>int</code>. But the only thing we care about is that once that expression has been unfolded, all of our arguments are in the correct order.</p>
+<p>We however, are using a combination of a variadic template, <code>int, float</code>, and a runtime span, <code>std::span&lt;MetaAny&gt;</code>. We know that the first item of that span represents the integer, and the second item represents the float. Now that we need to match each template to the correct index in the span, we do care about the order in which <code>Unpack</code> is called. The order is the reverse of the pack, since our varidiac template is <code>int, float</code>, <code>Unpack&lt;float&gt;</code> will be called before <code>Unpack&lt;int&gt;</code>. We provide an index alongside the span of arguments in order to inform the function which argument to use.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+T Unpack(std::span&lt;MetaAny&gt; args, size_t&amp; index)
+{
+<span class="hljs-built_in">return</span> UnpackSingle&lt;T&gt;(args[--index]);
+}
+
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Ret, <span class="hljs-keyword">typename</span>... Params&gt;
+FuncResult DefaultInvoke(<span class="hljs-keyword">const</span> std::function&lt;Ret(Params...)&gt;&amp; functionToInvoke,
+                                    std::span&lt;MetaAny&gt; runtimeArgs)
+{
+<span class="hljs-comment">// Unpack needs to know the argument that it</span>
+<span class="hljs-comment">// needs to forward.</span>
+    size_t argIndex = runtimeArgs.<span class="hljs-built_in">size</span>();
+
+<span class="hljs-built_in">if</span> <span class="hljs-keyword">constexpr</span> (std::is_same_v&lt;Ret, <span class="hljs-keyword">void</span>&gt;)
+    {
+        functionToInvoke(Unpack&lt;Params&gt;(runtimeArgs, argIndex)...);
+<span class="hljs-built_in">return</span> std::nullopt;
+    }
+<span class="hljs-built_in">else</span>
+    {
+<span class="hljs-built_in">return</span> MetaAny{ functionToInvoke(Unpack&lt;Params&gt;(runtimeArgs, argIndex)...) };
+    }
+}
+</code></pre>
+<p>
+    Now we have all the elements we need to package our arguments into a known type, and unpack them to invoke any <code>std::function</code>.
+    One very simple example would be to add two numbers together.
+</p>
+<pre><code class="lang-cpp"><span class="hljs-built_in">std</span>::function&lt;<span class="hljs-keyword">int</span>(<span class="hljs-keyword">int</span>, <span class="hljs-keyword">float</span>)&gt; add = [](<span class="hljs-keyword">int</span> lhs, <span class="hljs-keyword">float</span> rhs) { <span class="hljs-keyword">return</span> lhs + <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">int</span>&gt;(rhs); }; 
+
+<span class="hljs-keyword">auto</span> [packedValues, packedForms] = Pack(<span class="hljs-number">20</span>, <span class="hljs-number">45.0f</span>);
+
+FuncResult result = DefaultInvoke(add, packedValues);
+
+ASSERT(*result.GetReturnValue().As&lt;<span class="hljs-keyword">int</span>&gt;() == <span class="hljs-number">65</span>);
+</code></pre>
+<p>While this works great, we can&#39;t quite call it a day yet. We have no safety in place, there is nothing stopping the user from accidentally packing two integers; the second integer would be interpreted as a float. In the best-case scenario, your output will contain garbage data. We have spent a lot of time gathering the TypeIds and the TypeForms of the arguments, but we haven&#39;t collected any information about the parameters. </p>
+<h2 id="metafunc">MetaFunc</h2>
+<p>So we need to store the parameters alongside the function we need to invoke. It&#39;s time to implement another minimal class. So how can we represent our reflected function? At the very least we require the function we need to invoke and information about the parameters to prevent any invalid casts.</p>
+<pre><code class="lang-cpp">class MetaFunc
+{
+<span class="hljs-symbol">public:</span>
+    template&lt;typename Ret, typename... Params&gt;
+    MetaFunc(<span class="hljs-symbol">std:</span><span class="hljs-symbol">:function&lt;Ret</span>(Params...)&gt;&amp;&amp; func) :
+        mParameters(MakeTypeTraits&lt;Params&gt;()...),
+        mFuncToInvoke(<span class="hljs-symbol">std:</span><span class="hljs-symbol">:bind</span>(&amp;DefaultInvoke&lt;Ret, Params...&gt;, <span class="hljs-symbol">std:</span><span class="hljs-symbol">:move</span>(func), <span class="hljs-symbol">std:</span><span class="hljs-symbol">:placeholders</span><span class="hljs-symbol">:</span><span class="hljs-symbol">:_1</span>))
+    {
+    }
+
+    template&lt;typename ... Args&gt;
+    FuncResult operator()(Args&amp;&amp;... args) const
+    {
+        auto packedArgs = Pack(<span class="hljs-symbol">std:</span><span class="hljs-symbol">:forward&lt;Args&gt;</span>(args)...);
+<span class="hljs-keyword">return</span> InvokeChecked(packedArgs.first, packedArgs.second);
+    }
+
+    FuncResult InvokeChecked(<span class="hljs-symbol">std:</span><span class="hljs-symbol">:span&lt;MetaAny&gt;</span> args, <span class="hljs-symbol">std:</span><span class="hljs-symbol">:span&lt;const</span> TypeForm&gt; formOfArgs) const
+
+<span class="hljs-symbol">private:</span>
+<span class="hljs-symbol">std:</span><span class="hljs-symbol">:vector&lt;TypeTraits&gt;</span> mParameters{};
+<span class="hljs-symbol">std:</span><span class="hljs-symbol">:function&lt;FuncResult</span>(<span class="hljs-symbol">std:</span><span class="hljs-symbol">:span&lt;MetaAny&gt;</span>)&gt; mFuncToInvoke{};
+};
+</code></pre>
+<p>The constructor is the last place where the return type and the parameters are known by the compiler. From this point on, we will only be interacting with the <code>std::function&lt;FuncResult(std::span&lt;MetaAny&gt;)&gt;</code> member. We have bound the <code>DefaultInvoke</code> function from earlier, this function will be responsible for casting our arguments to the correct type before invoking the function. </p>
+<p>We finally have the information that we need; we have the types and forms of both the arguments and the parameters. We can compare those against each other. Luckily all of this does not have to be in the templated DefaultInvoke function, and can instead be placed in our .cpp file, in the <code>InvokeChecked</code> function.</p>
+<p>Which arguments you want to allow to forward to the parameters is up to you and at your own risk. But at the very minimum, you should check:</p>
+<ol>
+    <li>Do the number of arguments match the number of parameters?</li>
+    <li>Does the typeId of the argument match that of the parameters?</li>
+</ol>
+<pre><code class="lang-cpp">FuncResult MetaFunc::InvokeChecked(<span class="hljs-built_in">std</span>::span&lt;MetaAny&gt; <span class="hljs-built_in">args</span>, <span class="hljs-built_in">std</span>::span&lt;const TypeForm&gt; formOfArgs) const
+{
+    ASSERT_LOG(<span class="hljs-built_in">args</span>.size() != formOfArgs.size(), <span class="hljs-string">"Num of args ({}) did not match num of forms provided ({})"</span>, <span class="hljs-built_in">args</span>.size(), formOfArgs.size());
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">args</span>.size() != mParams.size())
+    {
+<span class="hljs-built_in">return</span> <span class="hljs-built_in">std</span>::format(<span class="hljs-string">"Expected {} arguments, but received {}"</span>, mParams.size(), <span class="hljs-built_in">args</span>.size());
+    }
+
+<span class="hljs-keyword">for</span> (uint32 i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">args</span>.size(); i++)
+    {
+        // Check <span class="hljs-keyword">if</span> the argument can be passed <span class="hljs-keyword">in</span> correctly.
+        // We check <span class="hljs-keyword">if</span> the typeIds match, <span class="hljs-keyword">and</span> the form;
+        // Passing a const reference to a reference <span class="hljs-built_in">is</span> <span class="hljs-keyword">for</span>
+        // <span class="hljs-built_in">example</span> <span class="hljs-keyword">not</span> allowed.
+<span class="hljs-built_in">std</span>::optional&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&gt; reasonWhyWeCannotPassItIn = CanArgBePassedIntoParam(<span class="hljs-built_in">args</span>[i], formOfArgs[i], mParams[i]);
+
+<span class="hljs-keyword">if</span> (reasonWhyWeCannotPassItIn.has_value())
+        {
+<span class="hljs-built_in">return</span> <span class="hljs-built_in">std</span>::format(<span class="hljs-string">"Cannot pass argument number {} - {}"</span>, i, <span class="hljs-built_in">std</span>::move(*reasonWhyWeCannotPassItIn));
+        }
+    }
+
+<span class="hljs-built_in">return</span> mFuncToInvoke(<span class="hljs-built_in">args</span>);
+}
+</code></pre>
+<p>This is the reason why the typeforms are in a separate array, the first array needs to be forwarded to the function, while the second array is only there for checking if it is safe to pass the arguments.</p>
+<p>You can follow the rules of the argument forms that C++ has laid out, e.g., don&#39;t allow passing a const argument to a mutable parameter, but you can change this according to your needs. Do you want implicit dereferencing? You always thought const-correctness was for cowards? Go for it!</p>
+<p>This can be further expanded by taking into account inheritance and implicit conversions, but this is beyond the scope of this blog.</p>
+<h2 id="usage">Usage</h2>
+<p>This tool was a vital component during the development of my scripting tool. I was also able to represent functions created through scripts using MetaFunc. Having a single representation for both reduced code repetition. A simplified example snippet from the virtual machine shows one of the practical use cases.</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">case</span> ScriptNodeType::FunctionCall:
+{
+<span class="hljs-keyword">const</span> MetaFuncScriptNode&amp; metaFuncNode = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">const</span> MetaFuncScriptNode&amp;&gt;(node);
+
+<span class="hljs-keyword">const</span> MetaFunc* <span class="hljs-keyword">const</span> originalFunc = metaFuncNode.TryGetOriginalFunc();
+    ASSERT(originalFunc != <span class="hljs-literal">nullptr</span> &amp;&amp; <span class="hljs-string">"Should've been caught during script-compilation"</span>);
+
+    result = originalFunc-&gt;InvokeChecked({ inputValues, numOfInputs }, { inputForms, numOfInputs });
+<span class="hljs-keyword">break</span>;
+}
+</code></pre>
+<h2 id="final-remarks">Final remarks</h2>
+<p>The MetaFunc class was introduced to represent reflected functions of various types through one, non-templated, interface. There are a lot of improvements that can be made, mainly by correctly invoking the destructor for non-trivially destructible types and accounting for inheritance. Both of these require implementing the reflection of types, but the hardest part of reflection is over. I hope this blog will have provided some insight into reflection and be equally helpful to your project. </p>
+
+
+<p><img src="images/BuasLogo.png" alt=""></p>
+<p><code>#BUas #BUasGames #C++</code></p>

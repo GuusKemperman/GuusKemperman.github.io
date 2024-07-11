@@ -1,0 +1,80 @@
+theme: minima
+
+title: About me
+author: Guus Kemperman
+email: guus.kemperman@gmail.com
+url: https://GuusKemperman.net
+# Email / Social media user names used by the minima theme:
+# All of these are optional and can be removed or commented out
+#twitter_username: "twitteruser"
+github_username: GuusKemperman
+linkedin_username: Guus Kemperman
+#facebook_username: username
+#flickr_username: username
+#instagram_username: username
+#pinterest_username: username
+#youtube_username: username
+#googleplus_username: +username
+
+timezone: Etc/UTC # GitHub uses UTC. This is to force dev environment to match
+future: false # GitHub Pages will publish future posts if this isn't set to false
+
+description: My portfolio and resume, a collection of blogs and projects
+
+show_excerpts: false
+
+# Used by simple links page
+social-links:
+  Resume:          /resume
+  LinkedIn:        https://linkedin.com/in/GuusKemperman
+  GitHub:          https://github.com/GuusKemperman
+  Website:         /
+
+# plugin: jekyll-seo-tag
+social:
+  name: Guus Kemperman
+  links:
+    - https://linkedin.com/in/GuusKemperman
+    - https://github.com/GuusKemperman
+
+# plugin: jekyll-titles-from-headings
+titles_from_headings:
+  strip_title: true
+
+collections:
+  personal: # collection for personal blog posts
+    output: true
+
+header_pages:
+  - archive.html
+  - projects.md
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+gravatar_hash: 9727281b743ee1d4b98f843b7f84278f723413d2b16e3af231286214863b0518
+code_block_max_height: 500px
+
+home_post_limit: 5
+
+# The github repo that is to be used for looking up comments
+comments_repo: GuusKemperman/GuusKemperman.github.io
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: https://s.gravatar.com/avatar/9727281b743ee1d4b98f843b7f84278f723413d2b16e3af231286214863b0518?s=800 # Apply default site image
+  - scope:
+      path: ""
+      type: posts
+    values:
+      tags:
+        - Other # Add a default tag to all posts
+
+# Disable highlighting to use highlightJS instead
+# highlighter: none # Not supported by GitHub Pages
+kramdown:
+  syntax_highlighter_opts:
+    disable: true

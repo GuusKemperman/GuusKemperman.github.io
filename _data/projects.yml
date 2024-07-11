@@ -1,0 +1,68 @@
+- name: Coral Engine
+  role: Developer
+  start: July 2023
+  end: Present
+  itch: https://buas.itch.io/lichgate
+  primary-video: projects/y2/coral/CoralTrailer.mp4
+  description: >
+    Coral Engine started as a personal project. After seven months I was reinforced by a team of five talented programmers. We extended the engine and ensured it was production-ready for our final project. I've worked as a lead programmer on the development of Lichgate, developed entirely in Coral Engine.<br><br>
+    
+    My main contributions were creating the core architecture, asset management, runtime reflection, visual scripting and prefabs. I've gained a great deal of experience with designing architectures and APIs to create a framework that is accessible to other programmers.
+
+- name: Turbo Tails
+  role: Developer
+  start: April 2022
+  end: June 2022
+  itch: https://gennakh.itch.io/turbo-tails
+  primary-image: projects/y1/blockd/large.gif
+  secondary-image: projects/y1/blockd/small.png
+  description: >
+    This award-winning game was created by a talented team of fifteen individuals over eight weeks. It received the Best Y1 Game 2023 award from industry professionals and the best tech award from BUAS staff. During the project, I honed my skills in using the scrum methodology, collaborating in a multi-disciplinary team, and developing with Unreal Engine. My key responsibilities encompassed AI, the weapons, local multiplayer, and UI development.
+
+- name: 2D Raytracer
+  role: Developer
+  start: Febuary 2022
+  end: April 2022
+  itch: https://guuskemperman.itch.io/spider-sling
+  primary-image: projects/y1/blockc/large.gif
+  secondary-image: projects/y1/blockc/small.gif
+  description: >
+    Through my work on this project, I gained experience in areas important for optimizing games, such as multi-threading, caches and GP-GPU. By implementing these techniques and technologies, I was able to create a highly efficient raytracer that can handle tens of thousands of objects with ease, while also supporting advanced features such as reflections.
+    <br><br>
+    To achieve the high performance for this raytracer, I employed a BVH, as well as a subdivisible screen-space grid to quickly eliminate areas that do not require raytracing.
+
+- name: RTS 3D
+  role: Developer
+  start: November 2021
+  end: January 2022
+  itch: https://guuskemperman.itch.io/rts-game-3d
+  primary-image: projects/y1/blockb/large.gif
+  secondary-image: projects/y1/blockb/small.png
+  description: >
+    This is the first cross-platform I've created, able to run on a Windows PC, but also on any Raspberry Pi; a cheaper way of becoming familiar with console-programming. I gained experience in hardware rendering and OpenGL. More advanced topics, such as instancing, animations and procedural textures were used. I learned my way around ImGui and the Bullet Physics library. The terrain and forests are procedurally generated, with a basic level editor to tweak the parameters as needed. The entire gamestate can be serialized to a compressed file, to be loaded in again at a later time.
+
+- name: RTS 2D
+  role: Developer
+  start: September 2021
+  end: October 2021
+  itch: https://guuskemperman.itch.io/rts-game-2d
+  primary-image: projects/y1/blocka/large.gif
+  secondary-image: projects/y1/blocka/small.png
+  description: >
+    I used autonomous steering combined with a finite state machine to achieve realistic behaviour with coordination among the units, allowing them to move inside enormous formations.
+    <br><br>
+    Acceleration structures were utilized to allow battles between thousands of units.
+
+- name: Snow man's land
+  role: Developer
+  start: December 2020
+  end: May 2021
+  itch: https://guuskemperman.itch.io/snow-mans-land
+  primary-image: projects/intakeassignment/large.png
+  secondary-image: projects/intakeassignment/small.png
+  description: >
+    This way my first game written in C++.
+    The CPU based rendering required significant optimization and introduced me to the workings of rasterization.
+    I gained a lot of experience with UI programming during this project.
+    Implementing the AI's behaviour familiarised me with AI-programming and pathfinding algorithms.
+    The wave function collapse algorithm is utilized by the level editor to determine the visual design of the tilemap.

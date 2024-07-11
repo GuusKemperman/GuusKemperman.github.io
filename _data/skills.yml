@@ -1,0 +1,26 @@
+#- skill: string
+#  description: string
+#  list:
+#    - array
+#    - of
+#    - strings
+#
+# Template supports both a description AND a skill list, however it may look best if only one or the
+# other is used. Lists are sorted and concatenated without line breaks separated by • (&bull;)
+
+# - skill: C++
+#   description: "Thousands of hours spent programming over the last few years. I've managed large projects, both solo and in teams."
+# - skill: Optimising
+#   description: "One of my favourite aspects of programming; benchmarks, profiling, optimising and seeing a clear objective improvement."
+- skill: Tools, Technologies
+  list:
+    - C++
+    - Optimising
+    - Engine development
+    - Tools development
+    - AI
+    - Github
+    - Perforce
+    - Visual Studio
+    - Unreal Engine
+    - Cross-platform development

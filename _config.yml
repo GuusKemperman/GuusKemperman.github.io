@@ -65,7 +65,7 @@ defaults:
   - scope:
       path: ""
     values:
-      image: https://s.gravatar.com/avatar/9727281b743ee1d4b98f843b7f84278f723413d2b16e3af231286214863b0518?s=800 # Apply default site image
+      image: img/default-image.png # Apply default site image
   - scope:
       path: ""
       type: posts

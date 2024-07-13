@@ -47,15 +47,7 @@ Not only are exceptions not slowing us down; they are even faster than tradition
 
 ## What's the catch?
 
-Exceptions are faster, but can also opens your API up to misuse; It is not clear to a user that a function can throw an exception without relying on them reading the documentation.
-
-```cpp
-std::filesystem::path GetUserDataFile();
-Image LoadTexture(const std::filesystem::path& pathToPng);
-std::string ReadFile(const std::filesystem::path& binaryFile);
-```
-
-A user could easily forget to use a try-catch block. I personally believe that code should be self-documenting; APIs should be difficult to misuse, and users should explicitly choose how to handle error. By not making the user aware of the possibility of failure, the program could crash in an instance where it could have safely been handled. I prefer returning an error type than relying on the user to remember to catch the exception.
+Exceptions are faster, but can also opens your API up to misuse; It is not clear to a user that a function can throw an exception without relying on them reading the documentation. A user could easily forget to use a try-catch block. I personally believe that code should be self-documenting; APIs should be difficult to misuse, and users should explicitly choose how to handle error. By not making the user aware of the possibility of failure, the program could crash in an instance where it could have safely been handled. I prefer returning an error type than relying on the user to remember to catch the exception.
 
 While we've focused on the improved performance of the successful path, throwing exceptions can be quite slow. Therefore, exceptions should be used exclusively to signal exceptional circumstances. Optimizations should aim to minimize the occurrence of these exceptions, ensuring that the normal execution path remains efficient.
 

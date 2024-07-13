@@ -5,9 +5,13 @@ date: 2024-07-15
 tags: Coral
 ---
 
-As a programmer, I profile and optimize my code using the appropriate tools and techniques, so that my software works efficiently even in challenging scenarios. I created a small tool for benchmarks. It runs the level for 1 real-world minute and measures the average delta time. Each benchmark ran with various amounts of enemies. This allowed me to accurately and consistently measure the result of my optimizations. After each change, I ran the benchmark to confirm it had a positive effect. I use Visual Studio's profiler to determine the most problematic areas.
+We use a node based interpreter. We follow the execution links while recursively walking up the tree where needed, to obtain the outputs from any pure nodes. The node based interpreter still benefits from plenty of optimizations; some are specific to our implementation, while others are applicable to most of C++ or development of runtime interpreters. 
+
+As a programmer, I profile and optimize my code using the appropriate tools and techniques, so that my software works efficiently even in challenging scenarios. 
 
 ## Benchmark
+
+I created a small tool for benchmarks. It runs the level for 1 real-world minute and measures the average delta time. Each benchmark ran with various amounts of enemies. This allowed me to accurately and consistently measure the result of my optimizations. After each change, I ran the benchmark to confirm it had a positive effect. I use Visual Studio's profiler to determine the most problematic areas.
 
 ![](/img/blogs/optimizing-visual-scripting/W7_StressTestEnvironment.gif)
 
@@ -17,7 +21,7 @@ The environment consisted of enemies moving from point to point.
 
 The behavior of an individual enemy.
 
-**Initial benchmark**
+**Initial results**
 
 ![](/img/blogs/optimizing-visual-scripting/InitialBench.png)
 
@@ -27,16 +31,16 @@ The behavior of an individual enemy.
 | Standard deviation (Ns) 	| 1.51E+05 	| 9.37E+05 	| 6.01E+06 	| 1.34E+08 	| 6.05E+09 	|
 
 N: The number of enemies.
-Average deltatime (Ns): The average delta time. The first frame has been left out, as it takes much longer than all the other frames and it would skew the results.
+Average deltatime (Ns): The average delta time.
 Standard deviation (Ns): How dispersed the delta time is in relation to the mean.
 
 ![](/img/blogs/optimizing-visual-scripting/W7_ProfilingFuncDetails.png)
 
 I analyze the overview to figure out which functions require the most optimization. I thoroughly examine the function calls that took up the highest total CPU time to figure out which lines require the most optimizing, and if there is any low-hanging fruit that can be easily optimized.
 
-## std::vector in a hot-loop
+## Heap allocations containers
 
-**Before**
+The STL library offers many convenient containers. One of which is ```std::vector```. 
 
 ![](/img/blogs/optimizing-visual-scripting/W7_LocalVectorIsSlow.png)
 
@@ -48,8 +52,6 @@ Executing each node requires collecting the inputs that we need to pass in. We e
 	std::vector<TypeForm> valueForms{};
 ```
 
-**After**
-
 We know the number of inputs that the node has, so we can easily reduce this to a single stack allocation using alloca.
 
 ```cpp
@@ -58,25 +60,20 @@ We know the number of inputs that the node has, so we can easily reduce this to 
 	TypeForm* inputForms = static_cast<TypeForm*>(_alloca(numOfInputPins * sizeof(TypeForm)));
 ```
 
-
 **Final result: 18.26% faster**
 
 ![](/img/blogs/optimizing-visual-scripting/AllocaBench.png)
 
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
-| Average deltatime (Ns)  	| 1.11E+00 	| 1.01E+01 	| 1.00E+02 	| 9.86E+02 	| 1.17E+04 	|
-| Standard deviation (Ns) 	| 2.88E-01 	| 1.75E+00 	| 7.39E+00 	| 2.40E+01 	| 8.15E+02 	|
+| Average deltatime (Ns)  	| 1.11E+06 	| 1.01E+07 	| 1.00E+08 	| 1.00E+09 	| 1.30E+10 	|
+| Standard deviation (Ns) 	| 1.45E+05 	| 8.65E+05 	| 7.39E+06 	| 2.40E+08 	| 8.15E+09 	|
 
 ## std::unordered_map slow emplace
-
-**Before**
 
 ![](/img/blogs/optimizing-visual-scripting/W7_CachingToUnorderdedMapIsSlow.png)
 
 The cache was an unordered_map, but emplacing elements into the map took up too much time.
-
-**After**
 
 ```cpp
 context.mCachedValues.reserve(func.GetNodes().size() * 5);
@@ -93,7 +90,7 @@ std::sort(context.mCachedValues.begin(), context.mCachedValues.end());
 
 Searching through a vector is normally a linear process, but by utilizing binary search we can reduce this to O(Log(N)). The search time was now roughly the same as with the unordered_map.
 
-```
+```cpp
 // Binary search
 auto existingCachedValue = std::lower_bound(context.mCachedValues.begin(), context.mCachedValues.end(), pin.GetId());
 ASSERT(&existingCachedValue->mPinOfOrigin.get() == &pin);
@@ -111,8 +108,6 @@ return *existingCachedValue;
 
 ## O(N) to O(1)
 
-**Before** 
-
 All the operations to go find a node, pin, or link by its id were O(N), it was a simple, but slow, linear search.
 
 ![](/img/blogs/optimizing-visual-scripting/W7_InefficientGetConnectedLinks.png)
@@ -122,8 +117,6 @@ The pins were all over the place in memory, with each node having a separate vec
 ![](/img/blogs/optimizing-visual-scripting/W7_InefficientFindPin.png)
 
 The percentages were low in the profiler, but they showed up in several different places and added up together, it became apparent that searching for an element was one of the slowest parts, and it would scale poorly with larger functions.
-
-**After**
 
 By not erasing elements from the container but instead marking them as null, we can start using the Id as an index to the element in the array.
 
@@ -163,8 +156,6 @@ Engine::VirtualMachine::VMContext::CachedValue& Engine::VirtualMachine::FindCach
 
 ## POD optimization
 
-**Before**
-
 ![](/img/blogs/optimizing-visual-scripting/W7_ProfilingInefficientOverloadResolution.png)
 
 12% of our execution is spent on resolving overloads between constructors (default, copy & move). 8.7% is spent on invoking a function that constructs the object.
@@ -174,8 +165,6 @@ Engine::VirtualMachine::VMContext::CachedValue& Engine::VirtualMachine::FindCach
 15% of our time is spent on calling the destructor.
 
 A lot of time was spent on constructing/destructing POD types, (such as integers, floats, vec3, etc.). This required looking up the type, looking up the necessary function, resolving any overloads, and finally invoking a std::function.
-
-**After**
 
 Rather than addressing the symptom, which is that a lot of time is spent in constructing and resolving overloads, I decided to address the root of the problem; that the constructors and destructors are being called at all. The fastest code is code that does not run. I now keep track of which types are plain old data.
 
@@ -234,11 +223,7 @@ if (!mTypeInfo.mIsTriviallyDestructible)
 
 ## Simple lookup cache
 
-**Before**
-
 When executing a node, I had to look up the address of the function to call each time.
-
-**After**
 
 I now only look up the address once during the compilation stage.
 
@@ -284,3 +269,9 @@ This calls free();
 Every single time a function is invoked, we call malloc to store the return value. If the cached return value is out of date and we need to run the function again, we are freeing the original value, and calling malloc again. 
 
 There would ideally only be one call to malloc at the very start of the program. A stack pointer would indicate where we should store our next value. We would use return value optimization to directly store the returned value at that position in the stack. At the end of each function, we simply roll back the pointer to the position it was in when we entered the function, calling the destructor only for the non-trivially destructible types.
+
+by caching outputs, allocating on a stack and using RVO. We have additional optimizations for trivial types, by for example avoiding the indirection of invoking the copy constructor when a memcpy will suffice.
+
+I initially wanted to go for a bytecode based approach; it's a subject I'd been interested in for a while and one I wanted to learn more about. There is an opportunity for an optimization pass to shift more of the workload to compile time. 
+
+In the end I decided against it, it's an additional layer of complexity that makes the system more difficult to debug and extend. The idea was that if the performance was lacking, there might be more benefit to transpiling to C++, or to use LLVM directly. 

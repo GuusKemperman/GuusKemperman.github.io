@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How exceptions make your game faster"
-date: 2024-07-13
+date: 2024-07-15
 tags: Coral
 ---
 
@@ -39,7 +39,24 @@ Exceptions are aimed towards zero-overhead on the successful path, but ```std::o
 
 ## Results
 
-To see the practical impact of using exceptions, I applied this approach to the visual script interpreter in Coral Engine. There were several dozen places where error states were returned and checked, in functions that were called thousands of times per second. I switched to throwing exceptions instead and having a single try/catch block.
+To see the practical impact of using exceptions, I applied this approach to the visual script interpreter in Coral Engine. There were several dozen places where error states were returned and checked, in functions that were called thousands of times per second.
+
+```cpp
+Expected<CachedValue*, ScriptError> nodeResult = ExecuteNode(otherNode);
+
+if (nodeResult.HasError())
+{
+	return std::move(nodeResult.GetError());
+}
+```
+
+ I switched to throwing exceptions instead and having a single try/catch block [[5]](#sources).
+
+```cpp
+CachedValue* nodeReturnValue = ExecuteNode(otherNode);
+```
+
+ExecuteNode may throw a ScriptError, but each exception is caught further up the callstack. So how did this impact performance?
 
 Performance Improvement: **5.6%**
 

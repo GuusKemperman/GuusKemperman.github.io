@@ -97,3 +97,47 @@ hr {
     display: none !important;
   }
 }
+
+.wrapper {
+    max-width: 100%; /* Take up the full width of the page */
+    width: 70%; /* Or a percentage of the page width */
+    margin: 0 auto; /* Keep it centered */
+    padding: 20px; /* Optional: Add some padding */
+}
+
+.project-media {
+    width: 100%;
+    height: 375px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.project-tags {
+    padding: 10px 0;
+}
+
+.project-tags p {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+.project-tags i {
+    margin-right: 5px;
+    color: #555;
+}
+
+h1, h4 {
+    margin-bottom: 10px;
+}
+
+.project-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.2s; /* Apply smooth hover transition */
+}
+
+.project-card:hover {
+    transform: scale(1.02); /* Only scale project card on hover */
+}

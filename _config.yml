@@ -1,6 +1,6 @@
 theme: minima
 
-title: About me
+title: Guus Kemperman
 author: Guus Kemperman
 email: guus.kemperman@gmail.com
 url: https://GuusKemperman.github.io
@@ -46,8 +46,8 @@ collections:
     output: true
 
 header_pages:
+  - resume.html
   - archive.html
-  - projects.md
 
 plugins:
   - jekyll-feed

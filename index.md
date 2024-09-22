@@ -1,6 +1,6 @@
 ﻿---
 layout: page
-title: Projects
+title: 
 description: Various projects created over the years
 ---
 

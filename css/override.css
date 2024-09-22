@@ -105,6 +105,20 @@ hr {
     padding: 20px; /* Optional: Add some padding */
 }
 
+/* Base grid styles */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns by default */
+    gap: 20px; /* Space between grid items */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .project-grid {
+        grid-template-columns: 1fr; /* Single column on narrow screens */
+    }
+}
+
 .project-media {
     width: 100%; /* Full width of the container */
     height: auto; /* Auto height to maintain aspect ratio */

@@ -4,7 +4,7 @@ title: Projects
 description: Various projects created over the years
 ---
 
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+<div class="project-grid">
   {% for item in site.data.projects %}
     <a href="{{ item.itch }}" class="project-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
       <h1><strong>{{ item.name }} ({{ item.end }})</strong></h1>

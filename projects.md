@@ -6,7 +6,7 @@ description: Various projects created over the years
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
   {% for item in site.data.projects %}
-    <div class="project-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
+    <a href="{{ item.itch }}" class="project-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
       <h1><strong>{{ item.name }} ({{ item.end }})</strong></h1>
       <h4><em>{{ item.brief-description }}</em></h4>
         {% if item.primary-image %}
@@ -24,7 +24,7 @@ description: Various projects created over the years
           <p>⏳ <strong>Duration:</strong> {{ item.duration }}</p>
           <p>🧠 <strong>Contribution:</strong> {{ item.contribution }}</p>
         </div>
-    </div>
+    </a>
   {% endfor %}
 </div>
 

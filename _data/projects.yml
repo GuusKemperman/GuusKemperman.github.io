@@ -2,25 +2,24 @@
   role: Developer
   start: July 2023
   end: August 2024
-  itch: https://github.com/GuusKemperman/CoralEngine
+  code_link: https://github.com/GuusKemperman/CoralEngine
+  game_link: https://buas.itch.io/lichgate 
+  details_link: "/projects/coral-engine.html"
   primary-video: projects/y2/coral/CoralTrailer.mp4
   engine: C++
-  team_size: 0-10
+  team_size: 1-10
   platforms: Windows | PS5
   duration: 14 Months
-  brief-description: A student made game engine
+  brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest personal project yet!
+
   contribution: Designed core architecture | Custom Visual Scripting | Physics | Assets management & More!
 
-  full-description: >
-    Coral Engine started as a personal project. After seven months I was reinforced by a team of five talented programmers. We extended the engine and ensured it was production-ready for our final project. I've worked as a lead programmer on the development of Lichgate, developed entirely in Coral Engine.<br><br>
-    
-    My main contributions were creating the core architecture, asset management, runtime reflection, visual scripting and prefabs. I've gained a great deal of experience with designing architectures and APIs to create a framework that is accessible to other programmers.
 
 - name: Turbo Tails
   role: Developer
   start: April 2022
   end: June 2022
-  itch: https://gennakh.itch.io/turbo-tails
+  game_link: https://gennakh.itch.io/turbo-tails
   primary-image: projects/y1/blockd/large.gif
   secondary-image: projects/y1/blockd/small.png
 
@@ -37,7 +36,7 @@
   role: Developer
   start: Febuary 2022
   end: April 2022
-  itch: https://guuskemperman.itch.io/spider-sling
+  game_link: https://guuskemperman.itch.io/spider-sling
   primary-image: projects/y1/blockc/large.gif
   secondary-image: projects/y1/blockc/small.gif
 
@@ -56,7 +55,7 @@
   role: Developer
   start: November 2021
   end: January 2022
-  itch: https://guuskemperman.itch.io/rts-game-3d
+  game_link: https://guuskemperman.itch.io/rts-game-3d
   primary-image: projects/y1/blockb/large.gif
   secondary-image: projects/y1/blockb/small.png
 
@@ -73,7 +72,7 @@
   role: Developer
   start: September 2021
   end: October 2021
-  itch: https://guuskemperman.itch.io/rts-game-2d
+  game_link: https://guuskemperman.itch.io/rts-game-2d
   primary-image: projects/y1/blocka/large.gif
   secondary-image: projects/y1/blocka/small.png
   engine: C++
@@ -92,7 +91,7 @@
   role: Developer
   start: December 2020
   end: May 2021
-  itch: https://guuskemperman.itch.io/snow-mans-land
+  game_link: https://guuskemperman.itch.io/snow-mans-land
   primary-image: projects/intakeassignment/large.png
   secondary-image: projects/intakeassignment/small.png
 

@@ -1,0 +1,44 @@
+﻿---
+layout: default
+---
+
+{% assign project = site.data.projects | where: "name", page.name | first %}
+
+<div>
+    <h1><strong>{{ project.name }}</strong></h1>
+    <h4><em>{{ project.start }} - {{ project.end }}</em></h4>
+
+    {% if project.primary-image %}
+    <img class="project-media" src="../img/{{ project.primary-image }}">
+    {% elsif project.primary-video %}
+    <video class="project-media" controls>
+        <source src="../img/{{ project.primary-video }}" type="video/mp4">
+    </video>
+    {% endif %}
+
+    <div class="project-tags">
+        <p>
+            {% if project.engine %}
+            🔧 <strong>Engine/Tools:</strong> {{ project.engine }}&emsp;
+            {% endif %}
+            {% if project.team_size %}
+            👥 <strong>Team Size:</strong> {{ project.team_size }}&emsp;
+            {% endif %}
+            {% if project.platforms %}
+            💻 <strong>Platforms:</strong> {{ project.platforms }}&emsp;
+            {% endif %}
+            {% if project.duration %}
+            ⏳ <strong>Duration:</strong> {{ project.duration }}&emsp;
+            {% endif %}
+            {% if project.code_link %}
+            🔗 <a href="{{ project.code_link }}"><strong>Code</strong></a>&emsp;
+            {% endif %}
+            {% if project.game_link %}
+            🎮 <a href="{{ project.game_link }}"><strong>Game</strong></a>
+            {% endif %}
+        </p>
+    </div>
+    <div class="project-description">
+        {{ content }} <!-- Automatically processes Markdown from .md file -->
+    </div>
+</div>

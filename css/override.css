@@ -131,9 +131,13 @@ hr {
     padding: 10px 0;
 }
 
+/* Apply font size to all relevant text elements globally */
+body, p, ul, ol {
+    font-size: 110%;
+}
+
 .project-tags p {
     margin: 8px 0;
-    font-size: 1.1em;
 }
 
 .project-tags i {

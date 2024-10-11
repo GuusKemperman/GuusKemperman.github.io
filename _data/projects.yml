@@ -39,7 +39,6 @@
   game_link: https://guuskemperman.itch.io/spider-sling
   primary-image: projects/y1/blockc/large.gif
   secondary-image: projects/y1/blockc/small.gif
-
   engine: C++ | OpenGL
   team_size: Solo
   platforms: Windows

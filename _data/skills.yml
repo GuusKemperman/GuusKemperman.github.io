@@ -14,13 +14,22 @@
 #   description: "One of my favourite aspects of programming; benchmarks, profiling, optimising and seeing a clear objective improvement."
 - skill: Tools, Technologies
   list:
+    # Tools
     - C++
-    - Optimising
-    - Engine development
-    - Tools development
-    - AI
+    - Unreal Engine
+        # Hard skills
+    - Profiling & Optimising
+    - Engine Development
+    - Tools Development
+    - Cross-platform development
+    - DOD & ECS Design
     - Github
     - Perforce
-    - Visual Studio
-    - Unreal Engine
-    - Cross-platform development
+    - CI/CD
+    - Rapid Development
+        # Soft skills
+    - Teamwork
+    - Communication
+    - Time estimations
+    - Fast learner
+    - Passionate

@@ -25,9 +25,10 @@ I continued working on Coral Engine for several months, ridding it of some techn
 - *CI/CD*: Set up **GitHub Actions** for automatic compilation, testing, and distribution.
 - *Utility AI*: Created a framework for state-based **AI** behaviour.
 - *Project management*: I **managed** the team of programmers, overseeing task distribution and ensuring alignment.
+- *Frontend*: I played a large part in utilising ImGui to create an accessible interface for designers, including the content browser and most editor windows.
 
 # My contributions to Lichgate
-- *Flowfields*: Implemented an optimized flowfield algorithm for **AI** navigation. 
+- *Flowfields*: Implemented an optimized flowfield algorithm for **AI** navigation.
 - *Procedural Endless World*: Developed tools for Level designers for generating endless, **procedural levels**.
 
 # Games Created with Coral Engine

@@ -12,24 +12,23 @@
 #   description: "Thousands of hours spent programming over the last few years. I've managed large projects, both solo and in teams."
 # - skill: Optimising
 #   description: "One of my favourite aspects of programming; benchmarks, profiling, optimising and seeing a clear objective improvement."
-- skill: Tools, Technologies
-  list:
-    # Tools
-    - C++
-    - Unreal Engine
-        # Hard skills
-    - Profiling & Optimising
-    - Engine Development
-    - Tools Development
-    - Cross-platform development
-    - Data Driven Development
-    - Github
-    - Perforce
-    - CI/CD
-    - Rapid Development
-        # Soft skills
-    - Teamwork
-    - Communication
-    - Time estimations
-    - Fast learner
-    - Passionate
+
+# Tools
+- skill: C++
+  description: "5 years of experience with a strong passion for C++. I watch conference talks, attend local meetings, give presentations and write blogs about the language and it's features"
+- skill: Unreal Engine
+  description: "2 years of Unreal C++ experience"
+    # Hard skills
+- skill: Profiling & Optimising
+  description: "Able to use Data Oriented Design, multi-threading and SIMD to optimise bottlenecks"
+- skill: Engine Development
+  description: "2 years of experience developing frameworks and engines"
+- skill: STL, ImGui & Entt Libraries
+  description: "3-5 years of extensive usage, I actively follow their development"
+- skill: Cross-platform development
+  description: "Windows, Linux and Playstation 5"
+- skill: Perforce - Github - CI/CD
+  description: "3 years of experience working with source control, set up CI/CD pipelines through Github"
+    # Soft skills
+- skill: Teamwork
+  description: "1 year of experience working in different teams of 10-20 people on various game projects, both programmers and designers"

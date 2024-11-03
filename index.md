@@ -10,7 +10,7 @@ description: Various projects created over the years
 <section class="intro">
   <div class="intro-content">
     <div class="image-wrapper">
-      <img src="/img/resume/profilepic.jpg" alt="Guus Kemperman" class="intro-image">
+      <img src="/img/resume/profilepic2.jpg" alt="Guus Kemperman" class="intro-image">
     </div>
     <div class="intro-text">
       <h1>{{ resume.header.name }} {{ resume.header.suffix }}</h1>

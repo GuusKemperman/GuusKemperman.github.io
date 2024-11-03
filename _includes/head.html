@@ -11,6 +11,19 @@
         gtag('config', 'G-JGXT0BS33M');
     </script>
 
+    <!--Makes it so that external links open in a new tab by default-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const links = document.querySelectorAll("a[href]");
+            links.forEach(link => {
+                if (link.hostname !== window.location.hostname) {
+                    link.setAttribute("target", "_blank");
+                    link.setAttribute("rel", "noopener noreferrer");
+                }
+            });
+        });
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">

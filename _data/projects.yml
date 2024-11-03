@@ -5,12 +5,13 @@
   code_link: https://github.com/GuusKemperman/CoralEngine
   game_link: https://buas.itch.io/lichgate 
   details_link: "/projects/coral-engine.html"
-  primary-video: projects/y2/coral/CoralTrailer.mp4
+  primary-image: projects/y2/coral/trailer_preview.gif
+  main-page-video:  CoralTrailer.mp4
   engine: C++
   team_size: 1-10
   platforms: Windows | PS5
   duration: 14 Months
-  brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest personal project yet!
+  brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!
 
   contribution: Designed core architecture | Custom Visual Scripting | Physics | Assets management & More!
 

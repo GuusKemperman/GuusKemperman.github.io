@@ -3,21 +3,22 @@
 
   {%- include head.html -%}
 
-  <body>
+<body>
 
     <div class="no-print">
-      {%- include header.html -%}
+        {%- include header.html -%}
     </div>
 
+    <!--Truly horrible, my apologies-->
     <main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        {{ content }}
-      </div>
+        <div class="wrapper {% if page.name == "index.md" %}wrapper-index{% endif %}">
+            {{ content }}
+        </div>
     </main>
 
     <div class="no-print">
-      {%- include footer.html -%}
+        {%- include footer.html -%}
     </div>
-  </body>
+</body>
 
 </html>

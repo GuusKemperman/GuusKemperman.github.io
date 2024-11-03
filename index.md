@@ -4,6 +4,25 @@ title:
 description: Various projects created over the years
 ---
 
+{%- assign resume = site.data.resume -%}
+
+
+<section class="intro">
+  <div class="intro-content">
+    <div class="image-wrapper">
+      <img src="/img/resume/profilepic.jpg" alt="Guus Kemperman" class="intro-image">
+    </div>
+    <div class="intro-text">
+      <h1>{{ resume.header.name }} {{ resume.header.suffix }}</h1>
+      <h2>{{ resume.header.current_title }}</h2>
+      <p>{{ resume.header.intro }}</p>
+
+    <a href="/resume.html" class="read-more">Read more</a>
+
+    </div>
+  </div>
+</section>
+
 <div class="project-grid">
   {% for item in site.data.projects %}
 
@@ -35,12 +54,6 @@ description: Various projects created over the years
           <p>⏳ <strong>Duration:</strong> {{ item.duration }}</p>
           <p>🧠 <strong>Contribution:</strong> {{ item.contribution }}</p>
         </div>
-
-        {% if item.details_link %}
-          <span class="details-indicator" style="position: absolute; top: 10px; right: 10px; background: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">
-            Read more
-          </span>
-        {% endif %}
     </a>
 
   {% endfor %}

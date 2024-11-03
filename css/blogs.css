@@ -3,9 +3,3 @@ img {
 	height: auto; /* Maintain aspect ratio */
 }
 
-.wrapper {
-	max-width: 100%; /* Take up the full width of the page */
-	width: 40%; /* Or a percentage of the page width */
-	margin: 0 auto; /* Keep it centered */
-	padding: 20px; /* Optional: Add some padding */
-}

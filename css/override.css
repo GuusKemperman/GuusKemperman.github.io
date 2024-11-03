@@ -98,25 +98,19 @@ hr {
   }
 }
 
+
 .wrapper {
-    max-width: 100%; /* Take up the full width of the page */
-    width: 70%; /* Or a percentage of the page width */
+    max-width: 1100px; /* Take up the full width of the page */
+    /*width: 70%; /* Or a percentage of the page width */
     margin: 0 auto; /* Keep it centered */
     padding: 20px; /* Optional: Add some padding */
 }
 
-/* Base grid styles */
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns by default */
-    gap: 20px; /* Space between grid items */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .project-grid {
-        grid-template-columns: 1fr; /* Single column on narrow screens */
-    }
+.wrapper-index {
+    max-width: 1100px; /* Take up the full width of the page */
+    /*width: 70%; /* Or a percentage of the page width */
+    margin: 0 auto; /* Keep it centered */
+    padding: 20px; /* Optional: Add some padding */
 }
 
 .project-media {
@@ -149,23 +143,124 @@ h1, h4 {
     margin-bottom: 10px;
 }
 
-.project-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.2s; /* Apply smooth hover transition */
+.project-grid {
+    max-width: 1200px; /* Take up the full width of the page */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between grid items */
+    justify-content: center;
+}
 
-    display: block; /* Make anchor tag behave like a block element */
-    text-decoration: none; /* Remove underline from anchor text */
-    color: black; /* Use the same color as normal links */
+.project-card {
+    flex: 1 1 max(400px, calc(50% - 100px)); /* Take up half of the row, minus gap space */
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s;
 }
 
 .project-card:hover {
-    transform: scale(1.02); /* Only scale project card on hover */
-    text-decoration: none; /* Ensure no underline on hover */
+    transform: scale(1.02); /* Scale on hover */
+    text-decoration: none; /* Remove underline on hover */
 }
 
 .project-card:visited {
-    color: black; /* Use the same color as normal links */
+    color: black; /* Keep link color consistent */
+}
+.intro {
+    width: 100%;
+    padding: 20px 10px;
+}
+
+.intro-content {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.image-wrapper {
+    flex-shrink: 0;
+    width: 256px; /* Keep the width for the circular frame */
+    height: 256px; /* Keep the height for the circular frame */
+    overflow: hidden; /* Ensure overflow is hidden */
+    border-radius: 50%; /* Maintain the circular shape */
+    margin-right: 30px; /* Right margin for spacing */
+    display: flex; /* Use flex to center the image */
+    align-items: center; /* Center the image vertically */
+    justify-content: center; /* Center the image horizontally */
+}
+
+.intro-image {
+    height: 100%; /* Full height of the wrapper */
+    width: 100%; /* Set width to 100% to fill the circle */
+    object-fit: cover; /* Ensure the image covers the full area */
+    object-position: center; /* Center the image to avoid cutoff */
+}
+
+.intro-text h1 {
+    font-size: 5.0rem;
+    margin: 0px;
+    margin-top: 0px;
+}
+
+.intro-text h2 {
+    font-size: 2.5rem;
+    margin: 0px;
+    margin-top: -15px;
+    color: #666;
+}
+
+.intro-text p {
+    font-size: 1.25rem;
+    margin: 15px 0;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 1000px) { /* Adjust the max-width as needed */
+    .intro-content {
+        flex-direction: column; /* Stack the elements vertically */
+        /*align-items: flex-start; /* Align items to the start (left) */
+    }
+
+    .image-wrapper {
+        margin-right: 0; /* Remove right margin for smaller screens */
+        margin-bottom: 20px; /* Add space below the image */
+    }
+
+    .intro-text 
+    {
+        text-align: center;
+    }
+}
+
+
+.read-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: black; /* Change text color to black */
+    text-decoration: none; /* Remove underline */
+    font-size: 1.25rem;
+    border: 2px solid black; /* Add a black border */
+    border-radius: 4px;
+    position: relative; /* Positioning for the arrow */
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.read-more:hover {
+    color: #555; /* Slightly change color on hover */
+    border-color: #555; /* Change border color on hover */
+}
+
+.read-more:hover::after {
+    transform: translateX(5px); /* Move arrow slightly on hover */
+}
+
+.read-more:visited {
+    color: black; /* Keep link color consistent */
 }

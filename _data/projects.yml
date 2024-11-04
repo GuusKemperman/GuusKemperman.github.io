@@ -1,49 +1,58 @@
-﻿- name: Coral Engine
-  role: Developer
+﻿- name: Lichgate
+  start: April 2024
+  end: July 2024
+  code_link: https://github.com/GuusKemperman/CoralEngine
+  game_link: https://buas.itch.io/lichgate 
+  details_link: "/projects/lichgate.html"
+  primary-image: projects/y2/lichgate/lichgate.gif
+  engine: Coral Engine
+  team_size: 10
+  platforms: Windows | PS5
+  duration: 8 Weeks
+  brief-description: Lichgate - a relentless survivor, action rogue-like where you must grow stronger to vanquish the undead - made with our custom-built Coral Engine!
+  contribution: AI Navigation | Procedural Terrain
+
+- name: Coral Engine
   start: July 2023
   end: August 2024
   code_link: https://github.com/GuusKemperman/CoralEngine
-  game_link: https://buas.itch.io/lichgate 
   details_link: "/projects/coral-engine.html"
   primary-image: projects/y2/coral/trailer_preview.gif
-  main-page-video:  CoralTrailer.mp4
+  main-page-video: CoralTrailer.mp4
   engine: C++
-  team_size: 1-10
+  team_size: Started as solo, grew to 10
   platforms: Windows | PS5
   duration: 14 Months
   brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!
-
   contribution: Designed core architecture | Custom Visual Scripting | Physics | Assets management & More!
 
-
 - name: Turbo Tails
-  role: Developer
   start: April 2022
   end: June 2022
   game_link: https://gennakh.itch.io/turbo-tails
+  details_link: "/projects/turbo-tails.html"
   primary-image: projects/y1/blockd/large.gif
   secondary-image: projects/y1/blockd/small.png
-
   engine: Unreal
   team_size: 13
   platforms: Windows
-  duration: 3 Months
+  duration: 8 Weeks
   brief-description: A 4 player mouse racing game with chaotic weapons
   contribution: Designed AI | Local Multiplayer | UI | Core systems
   full-description: >
     This award-winning game was created by a talented team of fifteen individuals over eight weeks. It received the Best Y1 Game 2023 award from industry professionals and the best tech award from BUAS staff. During the project, I honed my skills in using the scrum methodology, collaborating in a multi-disciplinary team, and developing with Unreal Engine. My key responsibilities encompassed AI, the weapons, local multi-player, and UI development.
 
 - name: Spider Sling
-  role: Developer
   start: Febuary 2022
   end: April 2022
   game_link: https://guuskemperman.itch.io/spider-sling
+  details_link: "/projects/spider-sling.html"
   primary-image: projects/y1/blockc/large.gif
   secondary-image: projects/y1/blockc/small.gif
   engine: C++ | OpenGL
   team_size: Solo
   platforms: Windows
-  duration: 3 Months
+  duration: 8 Weeks
   brief-description: A 2D GPU Raytraced game where you try to survive for as long as possible
   contribution: Optimisations | Physics | Graphics
   full-description: >
@@ -52,17 +61,16 @@
     To achieve the high performance for this raytracer, I employed a BVH, as well as a subdivisible screen-space grid to quickly eliminate areas that do not require raytracing.
 
 - name: RTS 3D
-  role: Developer
   start: November 2021
   end: January 2022
   game_link: https://guuskemperman.itch.io/rts-game-3d
+  details_link: "/projects/rts-3D.html"
   primary-image: projects/y1/blockb/large.gif
   secondary-image: projects/y1/blockb/small.png
-
   engine: C++ | OpenGL
   team_size: Solo
   platforms: Windows | Linux
-  duration: 3 Months
+  duration: 8 Weeks
   brief-description: A cross-platform retro RTS
   contribution: Procedural Enemies & Terrain | Graphics | AI
   full-description: >
@@ -73,12 +81,13 @@
   start: September 2021
   end: October 2021
   game_link: https://guuskemperman.itch.io/rts-game-2d
+  details_link: "/projects/rts-2D.html"
   primary-image: projects/y1/blocka/large.gif
   secondary-image: projects/y1/blocka/small.png
   engine: C++
   team_size: Solo
   platforms: Windows
-  duration: 3 Months
+  duration: 8 Weeks
   brief-description: A CPU rendered 2D RTS game
   contribution: Graphics | AI
 
@@ -92,14 +101,14 @@
   start: December 2020
   end: May 2021
   game_link: https://guuskemperman.itch.io/snow-mans-land
+  details_link: "/projects/snow-mans-land.html"
   primary-image: projects/intakeassignment/large.png
   secondary-image: projects/intakeassignment/small.png
-
   engine: C++
   team_size: Solo
   platforms: Windows
   duration: 7 Months
-  brief-description: Build snowmen, shoot snowballs and destroy the enemy igloos!
+  brief-description: The project that got me accepted into BUAS. Build snowmen, shoot snowballs and destroy the enemy igloos!
   contribution: Graphics | AI | UI | Audio | Procedural generation
 
   full-description: >

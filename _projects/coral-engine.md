@@ -11,21 +11,23 @@ I continued working on Coral Engine for several months, ridding it of some techn
 
 # My Contributions
 
-- *Core architecture*: Designed and iterated the **core architecture** from concept to release.
-- *Asset management*: Created a system for importing, editing assets and efficiently managing resources in a **multi-threaded** environment.
+- *[Engine Architecture](#engine-architecture)*: Designed and iterated the **core architecture** from concept to release.
+- *[Asset management](#content-pipeline)*: Created a system for importing, editing assets and efficiently managing resources in a **multi-threaded** environment.
+- *[Runtime reflection](#runtime-reflection)*: Created a system to represent both C++ and Visual Script classes through a unified interface.
+- *[Visual Scripting](#visual-scripting)*: Built a performant node-based **visual-scripting interpreter** from scratch, fully integrated with the ECS system (EnTT).
+- *[Optimisations](#optimisations)*: I have consistently benchmarked, profiled and accordingly optimised the worst bottlenecks.
 - *Event handling*: Developed an powerful, easy-to-use event system.
-- *Physics*: Helped created a 2D **physics** system with **optimized** collision handling.
-- *Prefab System*: Implemented a system similar to [**Unity's prefabs**](https://docs.unity3d.com/Manual/Prefabs.html), allowing entity euse.
+- *[Physics](#physics)*: Helped created a 2D **physics** system with **optimized** collision handling.
+- *[Prefab System](#prefabs)*: Implemented a system similar to [**Unity's prefabs**](https://docs.unity3d.com/Manual/Prefabs.html), allowing entity euse.
 - *Level editor*: Developed a **user-friendly editor** for level design, included tools for quickly transforming objects and undoing changes.
-- *Visual scripting*: Built a performant node-based **visual-scripting interpreter** from scratch, fully integrated with the ECS system (EnTT).
-- *Runtime reflection*: Created a system to represent both C++ and Visual Script classes through a unified interface.
 - *Particle system*:  Created an extendable, **data-oriented** particle system.
 - *Serialization*: Designed a serialization system with backward compatibility.
 - *Unit Test Framework*: Created a light-weight framework for quickly creating tests in-engine.
 - *CI/CD*: Set up **GitHub Actions** for automatic compilation, testing, and distribution.
-- *Utility AI*: Created a framework for state-based **AI** behaviour.
+- *[Utility AI](#utility-ai)*: Created a framework for state-based **AI** behaviour.
 - *Project management*: I **managed** the team of programmers, overseeing task distribution and ensuring alignment.
 - *Frontend*: I played a large part in utilising ImGui to create an accessible interface for designers, including the content browser and most editor windows.
+
 
 # My contributions to Lichgate
 - *Flowfields*: Implemented an optimized flowfield algorithm for **AI** navigation.
@@ -254,175 +256,96 @@ We very organically came to a point where we sat down to discuss important desig
 
 As a programmer, I have contributed to a well-designed architecture for a cross-platform game engine, content pipeline, and demo game, so that the codebase is easy to use and understand.
 
-# Terrain height
+# Runtime reflection
 
-We specified wanting to have a level with vertical elements in our sprint goal, but throughout the sprint, it became apparent that the original assignee would not be able to start working on this task on time. I dropped my current task of implementing audio to focus on implementing the verticality, as the task has a much higher priority and was more in line with the sprint goal.
+Types can be easily reflected and exposed to the scripting tool. The reflection system is capable of reflecting every class, including their constructor, baseclasses, private fields and functions.
 
-This task was interesting as I was not involved with its original creation, and I had to adhere to the definitions of done already in place.
-
-![](/img/projects/y2/coral/PhysicsVerticalityTask.png)
-
-We have a very simple physics implementation. One constraint we have is that all of our colliders are 2D; the user does not need to specify the height of a cylinder. But now that we would be walking on the terrain, we need to know the height of the colliders beneath our feet.
-
-I decided to use a very simple, yet robust, approach; iterating over the colliders, getting the height of the collider based only on its position, and then choosing the highest collider that overlaps the given 2D point.
+Let's say you have this imaginary class:
 
 ```cpp
-float CE::Physics::GetHeightAtPosition(glm::vec2 position2D) const
+namespace CE
 {
-	float highestHeight = -std::numeric_limits<float>::infinity();
-
-	GetHeightAtPosition<TransformedDiskColliderComponent>(position2D, highestHeight);
-	GetHeightAtPosition<TransformedAABBColliderComponent>(position2D, highestHeight);
-	GetHeightAtPosition<TransformedPolygonColliderComponent>(position2D, highestHeight);
-
-	return highestHeight;
-}
-
-template <typename ColliderType>
-void CE::Physics::GetHeightAtPosition(glm::vec2 position, float& highestHeight) const
-{
-	const Registry& reg = mWorld.get().GetRegistry();
-
-	auto view = reg.View<const TransformComponent, const PhysicsBody2DComponent, const ColliderType>();
-
-	// Don't do .each, as we may be able to do an early out, preventing us from
-	// having to retrieve the other components at all.
-	for (entt::entity entity : view)
+	class ParticleEmitterComponent
+		: public ExampleBaseClass
 	{
-		// Only colliders in the terrain layer influence the height
-		if (view.template get<const PhysicsBody2DComponent>(entity).mRules.mLayer != CollisionLayer::Terrain)
-		{
-			continue;
-		}
+	public:
+		ParticleEmitterComponent(uint32 numOfParticles);
 
-		const glm::vec3 worldPos = view.template get<const TransformComponent>(entity).GetWorldPosition();
-		const float height = worldPos[Axis::Up];
+		// Events!
+		void OnBeginPlay(World& world, entt::entity owner);
 
-		if (height > highestHeight
-			&& AreOverlapping(view.template get<const ColliderType>(entity), position))
-		{
-			highestHeight = height;
-		}
-	}
+		void PlayFromStart(bool destroyExistingParticles);
+
+		glm::vec3 mMinInitialLocalPosition{};
+
+		// Why is this a float you might ask?
+		// If you want to, for example, spawn .5f particles per frame, you can't do anything the first frame, as you can't spawn half a particle.
+		// But the next frame, two halves make one whole.
+		float mNumOfParticlesToSpawnNextFrame{};
+
+		/// ... More data members
+
+	private:
+		friend ReflectAccess;
+		static MetaType Reflect();
+		REFLECT_AT_START_UP(ParticleEmitterComponent);
+	};
 }
 ```
 
-In order to make this method viable, I made sure to optimise the physics system by creating TransformedColliders; otherwise, we would have to calculate tens of thousands of world matrices, which slowed our program down immensely. Now, we only update the TransformedColliders once per frame.
-
-```
-template <typename Collider, typename TransformedCollider>
-void CE::PhysicsSystem::UpdateTransformedColliders(World& world)
-{
-	Registry& reg = world.GetRegistry();
-	const auto collidersWithoutTransformed = reg.View<Collider>(entt::exclude_t<TransformedCollider>{});
-	reg.AddComponents<TransformedCollider>(collidersWithoutTransformed.begin(), collidersWithoutTransformed.end());
-
-	const auto transformedWithoutColliders = reg.View<TransformedCollider>(entt::exclude_t<Collider>{});
-	reg.RemoveComponents<TransformedCollider>(transformedWithoutColliders.begin(), transformedWithoutColliders.end());
-
-	const auto colliderView = reg.View<TransformComponent, Collider, TransformedCollider>();
-
-	for (auto [entity, transform, collider, transformedCollider] : colliderView.each())
-	{
-		transformedCollider = collider.CreateTransformedCollider(transform);
-	}
-}
-```
-
-Once we had a *relatively* efficient way of obtaining the height at a given position, the rest of the system was a series of small adjustments; only allowing physics bodies to move if the height at the current position roughly matched the height at their desired position.
-
-My contributions to this task are now fast enough to suit our needs. I initially expected to have to implement a BVH to reduce the overall complexity and designed the architecture with this idea in mind, but I was surprised to see that this did not turn out to be necessary. Even with the many colliders in our demos, we did not experience physics to be a performance bottleneck. In fact, the physics had become significantly faster overall, mainly due to the introduction of AABBs serving as early outs for polygon checks, and by only transforming the colliders once. It would not be beneficial to the sprint goal if I dedicated additional time to premature optimisation.
-
-There was one item missing from the list of DoDs, which was incorporating the new vertical elements into the navigation system, since we do not want our AI to think they can walk off a steep ledge, only to get stuck. I discussed this with the original assignee and added this issue to the original task.
-
-The navmesh we were using was generated based on 2D colliders. We would have to make major changes to both the libraries we use and the information we pass to those libraries if we wanted to create a 3D navmesh. I am not well versed with navmeshes, nor would we have the time to implement such a feature. So instead, I used the flood-fill algorithm to find edges that are too steep, and told the navmesh library that these edges were obstacles.
+You can add a ```Reflect``` function. The REFLECT_AT_START_UP macro informs the engine of it's existence when the program initializes. The Reflect function is trivial to implement, and gives the user a chance to customise some behaviour by adjusting properties:
 
 ```cpp
-std::queue<glm::vec2> open{};
-open.emplace(terrainStart);
 
-struct Vec2Hasher
+CE::MetaType CE::ParticleEmitterComponent::Reflect()
 {
-	size_t operator() (const glm::vec2 point) const
-	{
-		return static_cast<size_t>(glm::fract(sin(glm::dot(point, glm::vec2(12.9898, 78.233))) * 43758.5453) * static_cast<float>(std::numeric_limits<size_t>::max()));
-	}
-};
+	MetaType type = { 
+			MetaType::T<ParticleEmitterComponent>{}, 
+			"ParticleEmitterComponent", 
+			MetaType::Ctor<uint32>{}, // Registers our constructor
+			MetaType::Base<ExampleBaseClass> // Registers our baseclass
+	};
 
-std::unordered_set<glm::vec2, Vec2Hasher> closed{};
-closed.reserve(mMaxNumOfTerrainSamples);
+	type.GetProperties().Add(Props::sIsScriptableTag);
 
-while (!open.empty())
-{
-	glm::vec2 current = open.front();
-	open.pop();
+	type.AddField(&ParticleEmitterComponent::mDestroyOnFinish, "mDestroyOnFinish")
+		.GetProperties()
+			.Add(Props::sIsScriptableTag);
 
-	if (closed.find(current) != closed.end())
-	{
-		continue;
-	}
-	closed.emplace(current);
+	type.AddField(&ParticleEmitterComponent::mNumOfParticlesToSpawnNextFrame, "mNumOfParticlesToSpawnNextFrame")
+		.GetProperties()
+			.Add(Props::sIsEditorReadOnlyTag)
+			.Add(Props::sNoSerializeTag);
 
-	// Test the terrain heights at our current position and compare that to the positions
-	// surrounding it, and adding holes in the navmesh if the height difference is too great.
+	type.AddFunc(&ParticleEmitterComponent::PlayFromStart, "PlayFromStart")
+		.GetProperties()
+			.Add(Props::sIsScriptableTag)
+			.Add(Props::sCallFromEditorTag);
 
-	// We also add the neighbours to open if they are still located on the navmesh
+	BindEvent(type, sOnBeginPlay, &ParticleEmitterComponent::OnBeginPlay);
+
+	ReflectParticleComponentType<ParticleEmitterComponent>(type);
+	return type;
 }
 ```
 
-I've left only the aspects that are related to algorithms and data structures. I use ```queue``` as its First-In-First-Out logic matches the requirements of the floodfill algorithm. I keep track of which points we have already processed using an ```unorderded_set```. I experimented with using a plain ```vector``` as it has a much faster insertion time, but since we are always performing more lookups than insertions, the ```unordered_set``` proved to be much faster. 
+No static reflection or code-generating tools, everything is pure C++ and almost entirely macro-free. This makes the tool easy to use by other programmers.
 
-![](/img/projects/y2/coral/PhysicsHeightDemo.gif)
+![](/img/projects/y2/coral/W8_ReflectedCPPInScriptEditor.png)
 
-My contribution was clearly visible in the demo and allowed for the creation of more interesting levels.
+*The reflected fields and functions, as seen in the script editor*
 
-## Other contributions
+### Limits
 
-### *"The goal of this sprint is to create a game environment with our own engine comprising a room with obstacles, a player, and pursuing enemies, with the player armed with a gun to eliminate the threats."*
- 
-I discussed and helped integrate other people's work and ideas into the engine. It was quite a transition from Bee into a codebase that was already quite large. I provided ideas and help on how certain systems, such as the abilities, navmesh and rendering, could be implemented and answered questions where needed throughout the block. These systems were needed for our sprint goal, and I contributed heavily to the integration of a varied number of systems.
+Function arguments are only allowed in limited forms. Parameters can only be of the form Value, Ref, ConstRef, Ptr, ConstPtr, or RValue. A pointer to a pointer for example is not supported. If your codebase has a lot of pointers to pointers or references to pointers, this runtime reflection system may not be the one for you.
 
-I worked on cross-platform support, which made it possible to include PS5 as one of our features next sprint.
+### Strengths
 
-### *"The goal of this sprint is to have a level, made using our own toolchain, in which a player can shoot AI enemies using abilities, which runs on a PC and a PS5 using a PBR rendering pipeline and dynamic lights."*
-
-I directly contributed to the sprint goal by developing the utility AI system together with Alfonso. We were able to create AI behaviour and demonstrated this during the demo. 
-
-I separated the Engine from the Game, as we had reached a stage where we had logic too specific to be part of the engine.
-
-In order to improve our QA pipeline, I added automated unit tests as part of our GitHub checks.
-
-### *Our sprint goal is to have a wave-based combat demo where the player can choose their abilities to fight against animated enemies in an illuminated level with vertical elements.*
-
-I worked on improving the physics system by introducing verticality and various optimisations. This allowed us to create the vertical elements in our illuminated level.
-
-I improved the level editor by allowing the user to copy and paste entities. This made it significantly easier for Alfonso to work on the level and was a feature that was appreciated throughout the block by VAs and DPs.
-
-I improved our product by introducing icons, a custom style and a custom font, making the editor visually more pleasing to work with. 
-
-Part of our goal was for the player to be able to choose their abilities, I created a UI navigation system to allow the player to interact with the UI. I added asset duplication and renaming, which made it easier for Amalia to create all the abilities.
-
-### *Our sprint goal is to have refined 3Cs in a well-designed and visually consistent level in which you fight AI-controlled enemies, made in our engine's toolchains.*
-
-I assisted the gameplay programmers by resolving any bugs they ran into. I improved various workflows by implementing a large amount of feature requests made by users.
-
-![](/img/projects/y2/coral/Sprint4FixesAndPolish.png)
-
-By improving the workflows, I helped contribute to a more pleasant user experience and indirectly to a well-designed demo.
-
-## Conclusion
-
-I expanded my domain knowledge by learning how to utilise threading and asynchronous operations for a more performant application and a better user experience. 
-
-I contributed to improving and creating various parts of the engine, such as the level editor, the content pipeline, the visual scripts, the physics, the AI system and UI navigation. The level editor, visual scripts and importer system were especially well received during the showcase day and became important selling points of our engine, and show that my contributions have pushed the boundaries of this project.
-
-My contributions are robust, complete, and scalable, such as when implementing the physics system. I made optimisations where needed to ensure the system would scale to fit our needs. I prioritised tasks as needed and was able to recognise that certain features, such as the BVHs, were not necessary for our sprint goal. 
-
-I applied my knowledge of algorithms and data structures to come up with creative solutions to complex problems, such as the automatic generation of the navmesh. 
-
-I have contributed to a technically impressive game engine and demo game, and have shown, and improved, my programming skills and domain knowledge while serving the goals of the project.
+The best part of our runtime reflection system? It supports 'fictional' types, types that have no C++ equivalent. This helped greatly with implementing the next feature, Visual Scripting!
 
 # Visual Scripting
+
+I spent around eight weeks on implementing visual scripting. The backend was made entirely from scratch, while the frontend used existing ImGui plugins.
 
 ## What can this tool do?
 
@@ -445,45 +368,6 @@ The scripting tool is designed to be general purpose. There is a wide variety of
 ![](/img/projects/y2/coral/W8_Demo2.gif)
 
 *The result of the above timelapse. A simple top-down game. The user can walk around, collect coins, and purchase weapons. Crates can be destroyed to acquire more coins. Once again, **everything** was implemented through scripts.*
-
-**Easy to embed your types**
-
-Types can be easily reflected and exposed to the scripting tool. The reflection system is capable of reflecting every class, including their constructor, baseclasses, private fields and functions.
-
-```cpp
-class ParticleEmitterComponent
-	: public ExampleBaseClass
-{
-public:
-	ParticleEmitterComponent(uint32 numOfParticles);
-
-	void PlayFromStart(bool destroyExistingParticles);
-
-private:
-	glm::vec3 mMinInitialLocalPosition{};
-
-	friend ReflectAccess;
-	static MetaType Reflect();
-	REFLECT_AT_START_UP(ParticleEmitterComponent);
-};
-
-Engine::MetaType Engine::ParticleEmitterComponent::Reflect()
-{
-	MetaType type = MetaType{ MetaType::T<ParticleEmitterComponent>{}, MetaType::Base<ExampleBaseClass>{}, MetaType::Ctor<uint32>{} };
-	type.GetProperties().Add(COMPONENT).props.Add(SCRIPTABLE);
-
-	type.AddField(&ParticleEmitterComponent::mMinInitialLocalPosition, "mMinInitialLocalPosition").GetProperties().Add(SCRIPTABLE);
-	type.AddFunc(&ParticleEmitterComponent::PlayFromStart, "PlayFromStart", "", "DestroyExistingParticles").GetProperties().Add(SCRIPTABLE).Add(CALL_FROM_EDITOR);
-	type.AddFunc(&ParticleEmitterComponent::DidParticleJustSpawn, "DidParticleJustSpawn", "", "particle").GetProperties().Add(SCRIPTABLE);
-	return type;
-}
-```
-
-No static reflection or code-generating tools (anymore), everything is pure C++ and almost entirely macro-free. This makes the tool easy to use by other programmers.
-
-![](/img/projects/y2/coral/W8_ReflectedCPPInScriptEditor.png)
-
-*The reflected fields and functions, as seen in the script editor*
 
 **Scripts can be interacted with from C++**
 
@@ -577,14 +461,7 @@ But no need to remember to check for null constantly; if you ever forget, a help
 
 *Reroute nodes can be used to clean up your scripts*
 
-### Limits
-
-**Arguments in limited form**
-
-Parameters can only be of the form Value, Ref, ConstRef, Ptr, ConstPtr, or RValue. A pointer to a pointer for example is not supported. If your codebase has a lot of pointers to pointers or references to pointers, this runtime reflection system may not be the one for you.
-
 ## How does it work?
-
 
 The Visual Scripting uses a node based interpreter. I follow the execution links while recursively walking up the tree where needed to obtain the outputs from any pure nodes. 
 
@@ -595,6 +472,8 @@ In the end I decided against it, it's an additional layer of complexity that mak
 The node based interpreter still benefits from plenty of optimisations, for example by caching outputs, allocating on a stack and using RVO. I have additional optimizations for trivial types, by for example avoiding the indirection of invoking the copy constructor when a memcpy will suffice.
 
 ## Optimisations
+
+I have regularly optimised Coral Engine throughout the year. I tracked some optimisations I made to the visual scripting interpreter over the course of one week.
 
 ### Workflow
 
@@ -877,7 +756,141 @@ Every single time a function is invoked, we call malloc to store the return valu
 There would ideally only be one call to malloc at the very start of the program. A stack pointer would indicate where we should store our next value. We would use return value optimization to directly store the returned value at that position in the stack. At the end of each function, we simply roll back the pointer to the position it was in when we entered the function, calling the destructor only for the non-trivially destructible types.
 
 
-### Prefabs
+
+
+# Physics
+
+Coral Engine has a custom 2D physics system. While the system was created by [Amzy](https://www.linkedin.com/in/amalia-amzy-zarcu-001b57295/), I made various contributions over the course of development.
+
+## Terrain height
+
+We initially to have a level with vertical elements, but our physics system only supported 2 dimensions! 
+
+This task was interesting as I was not involved with its original creation, and I had to adhere to the definitions of done already in place.
+
+![](/img/projects/y2/coral/PhysicsVerticalityTask.png)
+
+We have a very simple physics implementation. One constraint we have is that all of our colliders are 2D; the user does not need to specify the height of a cylinder. But now that we would be walking on the terrain, we need to know the height of the colliders beneath our feet.
+
+I decided to use a very simple approach; iterating over the colliders, getting the height of the collider based only on its position, and then choosing the highest collider that overlaps the given 2D point.
+
+```cpp
+float CE::Physics::GetHeightAtPosition(glm::vec2 position2D) const
+{
+	float highestHeight = -std::numeric_limits<float>::infinity();
+
+	GetHeightAtPosition<TransformedDiskColliderComponent>(position2D, highestHeight);
+	GetHeightAtPosition<TransformedAABBColliderComponent>(position2D, highestHeight);
+	GetHeightAtPosition<TransformedPolygonColliderComponent>(position2D, highestHeight);
+
+	return highestHeight;
+}
+
+template <typename ColliderType>
+void CE::Physics::GetHeightAtPosition(glm::vec2 position, float& highestHeight) const
+{
+	const Registry& reg = mWorld.get().GetRegistry();
+
+	auto view = reg.View<const TransformComponent, const PhysicsBody2DComponent, const ColliderType>();
+
+	// Don't do .each, as we may be able to do an early out, preventing us from
+	// having to retrieve the other components at all.
+	for (entt::entity entity : view)
+	{
+		// Only colliders in the terrain layer influence the height
+		if (view.template get<const PhysicsBody2DComponent>(entity).mRules.mLayer != CollisionLayer::Terrain)
+		{
+			continue;
+		}
+
+		const glm::vec3 worldPos = view.template get<const TransformComponent>(entity).GetWorldPosition();
+		const float height = worldPos[Axis::Up];
+
+		if (height > highestHeight
+			&& AreOverlapping(view.template get<const ColliderType>(entity), position))
+		{
+			highestHeight = height;
+		}
+	}
+}
+```
+
+In order to make this method viable, I made sure to optimise the physics system by creating TransformedColliders; otherwise, we would have to calculate tens of thousands of world matrices, which slowed our program down immensely. Now, we only update the TransformedColliders once per frame.
+
+```
+template <typename Collider, typename TransformedCollider>
+void CE::PhysicsSystem::UpdateTransformedColliders(World& world)
+{
+	Registry& reg = world.GetRegistry();
+	const auto collidersWithoutTransformed = reg.View<Collider>(entt::exclude_t<TransformedCollider>{});
+	reg.AddComponents<TransformedCollider>(collidersWithoutTransformed.begin(), collidersWithoutTransformed.end());
+
+	const auto transformedWithoutColliders = reg.View<TransformedCollider>(entt::exclude_t<Collider>{});
+	reg.RemoveComponents<TransformedCollider>(transformedWithoutColliders.begin(), transformedWithoutColliders.end());
+
+	const auto colliderView = reg.View<TransformComponent, Collider, TransformedCollider>();
+
+	for (auto [entity, transform, collider, transformedCollider] : colliderView.each())
+	{
+		transformedCollider = collider.CreateTransformedCollider(transform);
+	}
+}
+```
+
+Once we had a *relatively* efficient way of obtaining the height at a given position, the rest of the system was a series of small adjustments; only allowing physics bodies to move if the height at the current position roughly matched the height at their desired position.
+
+My contributions to this task are now fast enough to suit our needs. I initially expected to have to implement a BVH to reduce the overall complexity and designed the architecture with this idea in mind, but I was surprised to see that this did not turn out to be necessary. Even with the many colliders in our demos, we did not experience physics to be a performance bottleneck. In fact, the physics had become significantly faster overall, mainly due to the introduction of AABBs serving as early outs for polygon checks, and by only transforming the colliders once. It would not be beneficial to the sprint goal if I dedicated additional time to premature optimisation.
+
+There was one item missing from the list of DoDs, which was incorporating the new vertical elements into the navigation system, since we do not want our AI to think they can walk off a steep ledge, only to get stuck. I discussed this with the original assignee and added this issue to the original task.
+
+The navmesh we were using was generated based on 2D colliders. We would have to make major changes to both the libraries we use and the information we pass to those libraries if we wanted to create a 3D navmesh. I am not well versed with navmeshes, nor would we have the time to implement such a feature. So instead, I used the flood-fill algorithm to find edges that are too steep, and told the navmesh library that these edges were obstacles.
+
+```cpp
+std::queue<glm::vec2> open{};
+open.emplace(terrainStart);
+
+struct Vec2Hasher
+{
+	size_t operator() (const glm::vec2 point) const
+	{
+		return static_cast<size_t>(glm::fract(sin(glm::dot(point, glm::vec2(12.9898, 78.233))) * 43758.5453) * static_cast<float>(std::numeric_limits<size_t>::max()));
+	}
+};
+
+std::unordered_set<glm::vec2, Vec2Hasher> closed{};
+closed.reserve(mMaxNumOfTerrainSamples);
+
+while (!open.empty())
+{
+	glm::vec2 current = open.front();
+	open.pop();
+
+	if (closed.find(current) != closed.end())
+	{
+		continue;
+	}
+	closed.emplace(current);
+
+	// Test the terrain heights at our current position and compare that to the positions
+	// surrounding it, and adding holes in the navmesh if the height difference is too great.
+
+	// We also add the neighbours to open if they are still located on the navmesh
+}
+```
+
+I've left only the aspects that are related to algorithms and data structures. I use ```queue``` as its First-In-First-Out logic matches the requirements of the floodfill algorithm. I keep track of which points we have already processed using an ```unorderded_set```. I experimented with using a plain ```vector``` as it has a much faster insertion time, but since we are always performing more lookups than insertions, the ```unordered_set``` proved to be much faster. 
+
+![](/img/projects/y2/coral/PhysicsHeightDemo.gif)
+
+My contribution was clearly visible in the demo and allowed for the creation of more interesting levels.
+
+## BVH
+
+We were hoping to create a game with thousands of enemies, and even more colliders. Our brute-force approach would no longer hold up. I have written a BVH before for my [raytracing project](/projects/spider-sling.html), and used my old code and knowledge to optimise the physics in Coral Engine.
+
+![](/img/projects/y2/coral/bvh.gif)
+
+# Prefabs
 
 I read the Game Engine Architecture book during the holiday. In it, they described prefabs as a solution for designers; they do not have to write or compile any C++ code to create an entity factory, instead, they simply describe a collection of components and default values.
 
@@ -912,7 +925,6 @@ for (const DiffedPrefab& diffedPrefab : diffedPrefabs)
 	}
 }
 ```
-
 
 # Utility AI
 
@@ -952,7 +964,6 @@ This implementation can fulfil all the requirements we had in mind. Alfonso agre
 ## Did we make the right decision?
 
 I had overestimated the simplicity of utility AI. It can be quite tricky to come up with a suitable evaluation for a given state, and it is likely we will run into that struggle more as time goes on. A finite state machine would have similar issues when scaled up but would have ultimately given the user more control. If we had more time, an FSM would have been a better decision, but as it stands, a utility AI implementation will have to do. 
-
 As for our implementation, it is not immediately intuitive for a C++ programmer to *know* that the events exist without reading the documentation, asking for help, or looking at example code. It is not immediately clear that the binding happens in the reflect function. I think the alternative, of having a base class, would have made this more intuitive to brand-new users. We did not consider the increased intuitiveness that the base-class implementation API offered, and this is something we should have considered more. 
 
 We spent time discussing the various options which saved us from running into various issues down the road. Our current implementation was relatively simple and was able to utilise a lot of functionality already in the engine. In the end, I think we made the right decision.

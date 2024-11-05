@@ -5,7 +5,7 @@ name: "Coral Engine"
 
 Coral Engine began as a personal project during a summer holiday. Over time, it evolved into a full-fledged engine featuring **visual scripting** and a **robust editor**. From the start, the goal was to create a simple, accessible API for developers while ensuring the engine remained intuitive for designers.
 
-After seven months of solo development, I was joined by five talented programmers to enhance Coral Engine, making it production-ready. We used it to develop **[Lichgate](https://buas.itch.io/lichgate)**. The designers who joined our team were able to utilise its capabilities to create their own prototypes, assets and gameplay features.
+After seven months of solo development, I was joined by five talented programmers to enhance Coral Engine, making it production-ready. We used it to develop [Lichgate](/projects/lichgate.html). The designers who joined our team were able to utilise its capabilities to create their own prototypes, assets and gameplay features.
 
 I continued working on Coral Engine for several months, ridding it of some technical debt that had built up over the course of development.
 

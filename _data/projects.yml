@@ -20,7 +20,7 @@
   primary-image: projects/y2/coral/trailer_preview.gif
   main-page-video: projects/y2/coral/CoralTrailer.mp4
   engine: C++
-  team_size: Started as solo, grew to 10
+  team_size: 1-10
   platforms: Windows | PS5
   duration: 14 Months
   brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!

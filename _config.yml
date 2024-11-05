@@ -72,8 +72,11 @@ defaults:
       path: ""
       type: posts
     values:
+      permalink: /blog/:title/
       tags:
         - Other # Add a default tag to all posts
+ 
+        
 
 # Disable highlighting to use highlightJS instead
 # highlighter: none # Not supported by GitHub Pages

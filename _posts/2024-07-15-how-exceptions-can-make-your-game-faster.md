@@ -3,6 +3,7 @@ layout: post
 title: "How exceptions make your game faster"
 date: 2024-07-15
 tags: C++
+permalink: 2024/07/15/how-exceptions-can-make-your-game-faster.html
 ---
 
 Exceptions are a powerful feature in C++, yet rarely used in game programming. Their usage is even advised against in game development courses and studies, with a commonly cited reason being performance. 

@@ -35,7 +35,7 @@ I continued working on Coral Engine for several months, ridding it of some techn
 
 # Games Created with Coral Engine
 
-- [Lichgate](https://buas.itch.io/lichgate)
+- [Lichgate](/projects/lichgate.html)
 
 # Engine Architecture
 

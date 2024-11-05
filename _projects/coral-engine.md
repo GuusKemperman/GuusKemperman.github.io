@@ -925,7 +925,7 @@ for (const DiffedPrefab& diffedPrefab : diffedPrefabs)
 
 I wanted to describe our AI design discussion, as they neatly followed the usual steps taken when developing a new feature.
 
-### Requirements
+## Requirements
 
 We wanted a simple way to create complex AI behaviour in our engine. I had a few discussions with Alfonso and Alexandru on what such a system requires.
 
@@ -934,7 +934,7 @@ We wanted a simple way to create complex AI behaviour in our engine. I had a few
 3. Designers should be able to select which states a particular type of AI could ever be in.
 4. You should be able to write states both in the engine project and in the game project.
 
-### User workflow
+## User workflow
 
 A common approach to AI is to use finite-state machines. These can quickly grow quite large and difficult to manage without a proper FSM editor, which is out of the scope of our current block. The transitions need to handle various edge cases, and the list of conditions specifying when to transition can grow quite large and will often miss certain edge cases.
 
@@ -942,7 +942,7 @@ We looked at utility AI. It is similar to an FSM, except the transitions are han
 
 We decided to go with the utility AI. 
 
-### Implementation
+## Implementation
 
 We needed an interface for calling the appropriate functions. 
 

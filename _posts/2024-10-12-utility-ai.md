@@ -5,8 +5,6 @@ date: 2024-11-05
 tags: Coral
 ---
 
-# Utility AI
-
 I wanted to describe our AI design discussion, as they neatly followed the usual steps taken when developing a new feature.
 
 ## Requirements

@@ -5,8 +5,6 @@ date: 2024-11-05
 tags: Coral
 ---
 
-# Content pipeline
-
 I spent a lot of time on the content pipeline, the importing, editing and loading of assets.
 
 ## Importer pipeline

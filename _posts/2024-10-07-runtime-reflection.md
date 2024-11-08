@@ -5,8 +5,6 @@ date: 2024-11-05
 tags: Coral
 ---
 
-# Runtime reflection
-
 Types can be easily reflected and exposed to the scripting tool. The reflection system is capable of reflecting every class, including their constructor, baseclasses, private fields and functions.
 
 Let's say you have this imaginary class:

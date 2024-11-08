@@ -81,9 +81,11 @@
   start: September 2021
   end: October 2021
   game_link: https://guuskemperman.itch.io/rts-game-2d
+  code_link: https://github.com/GuusKemperman/RTS2D
   details_link: "/projects/rts-2D.html"
   primary-image: projects/y1/blocka/large.gif
   secondary-image: projects/y1/blocka/small.png
+  main-page-video: "projects/y1/blocka/Week 7 - main menu.mp4"
   engine: C++
   team_size: Solo
   platforms: Windows

@@ -5,8 +5,6 @@ date: 2024-11-05
 tags: Coral
 ---
 
-# Visual Scripting Optimisations
-
 I have regularly optimised Coral Engine throughout the year. I tracked some optimisations I made to the visual scripting interpreter over the course of one week.
 
 ## Workflow

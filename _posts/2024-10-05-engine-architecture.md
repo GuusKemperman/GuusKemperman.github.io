@@ -5,8 +5,6 @@ date: 2024-11-05
 tags: Coral
 ---
 
-# Engine Architecture
-
 I have iterated many times on the engine architecture before reaching a 'stable' point that could be built upon.
 
 ## Ownership

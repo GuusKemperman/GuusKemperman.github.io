@@ -5,8 +5,6 @@ date: 2024-11-05
 tags: Coral
 ---
 
-# Visual Scripting
-
 I spent around eight weeks on implementing visual scripting. The backend was made entirely from scratch, while the frontend used existing ImGui plugins.
 
 ## What can this tool do?

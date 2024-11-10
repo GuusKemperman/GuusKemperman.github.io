@@ -22,7 +22,23 @@ The behaviour behind each individual unit is relatively simple. The underlying s
 
 I support several unit types, with different ground troops and flying vehicles. Each unit type can be defined in a .config file, making the system incredibly easy to extend with new unit types.
 
-![](/img/projects/y1/blocka/aiconfig.png)
+```
+entity {
+	military {
+		smalltank {
+			mass = 1.0
+			maxturn = 45.0
+			maxforce = 40.0
+			maxspeed = 60.0
+			maxhealth = 2.0
+			spritetype = smalltank
+			turrettype = smallcannon
+			explosiontype = medium
+			collisionlayer = 00000001
+		}
+	}
+}
+```
 
 Besides individual behaviour, AI can also work together and form groups. I am incredibly happy with the movement system, a system that took several iterations to get right. I implemented autonomous steering behavior, which ended up looking really natural. Their movement inside a formation also works really well, even with different types of units.
 
@@ -51,8 +67,6 @@ The in-game UI featured simple sprite-rendering, buttons, a dynamic cursor, and 
 ![Dynamic cursor](/img/projects/y1/blocka/Week 7 - Dynamic cursor_Segment_0_gif.gif)
 
 The layout of a canvas was not hardcoded, but could instead be loaded from a configuration file, making it easily adjustable.
-
-![](/img/projects/y1/blocka/uiconfig.png)
 
 # Physics
 

@@ -64,8 +64,10 @@
   start: November 2021
   end: January 2022
   game_link: https://guuskemperman.itch.io/rts-game-3d
+  code_link: https://github.com/GuusKemperman/RTS3D
   details_link: "/projects/rts-3D.html"
   primary-image: projects/y1/blockb/large.gif
+  main-page-video: "projects/y1/blockb/trailer.mp4"
   secondary-image: projects/y1/blockb/small.png
   engine: C++ | OpenGL
   team_size: Solo

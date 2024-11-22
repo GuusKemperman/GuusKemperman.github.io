@@ -280,9 +280,9 @@ h1, h4 {
     height: 100%;
     object-fit: cover; /* Ensures the video fills the container */
 }
-/* 
+
 img {
     width: 100%;
     height: auto; /* Maintain aspect ratio */
 }
- */
+

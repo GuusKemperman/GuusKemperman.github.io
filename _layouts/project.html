@@ -12,6 +12,8 @@ layout: default
     <video class="project-media" controls>
         <source src="../img/{{ project.main-page-video }}" type="video/mp4">
     </video>
+    {% elsif project.main-page-image %}
+    <img class="project-media" src="../img/{{ project.main-page-image }}">
     {% elsif project.primary-image %}
     <img class="project-media" src="../img/{{ project.primary-image }}">
     {% elsif project.primary-video %}

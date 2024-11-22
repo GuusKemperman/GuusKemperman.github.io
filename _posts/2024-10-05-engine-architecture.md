@@ -56,11 +56,9 @@ The image above shows the pros and cons of each approach. In the end, we decided
 
 I was responsible for separating the engine and the game. The game is a separate project from the engine. I've learned an important lesson on managing a large quantity of platforms and configurations; I've learned how to use property sheets to avoid repetition. While this took a while to set up, it has made the project easier to configure.
 
-![](/img/projects/y2/coral/PropertySheets.png)
-
-There are assets that are unique to each game, but also common assets that are shared between games.
-
-![](/img/projects/y2/coral/EngineAndGameAssets.png)
+| ![](/img/projects/y2/coral/PropertySheets.png) | ![](/img/projects/y2/coral/EngineAndGameAssets.png) |
+|---|---|
+| Property sheets overriding changes only for their specific platform or configuration. | There are assets that are unique to each game, but also common assets that are shared between games. |
 
 ### Did we make the right decision?
 
@@ -72,7 +70,10 @@ While the separation of engine and game on the C++ side has not paid off during 
 
 We have multiple configurations to allow the user to choose whether they want optimisations and/or the editor.
 
-![](/img/projects/y2/coral/Configurations.png)
+- EditorDebug
+- Debug
+- EditorRelease
+- Release
 
 We want to deliver a well-optimised release build to the designers and artists, while new features are tested in the debug configurations.
 
@@ -90,11 +91,10 @@ The rendering architecture of the engine had been mostly neglected during the in
 
 Since we expected this project to last at least four more weeks, possibly twelf, it was justified to allocate resources to refactor and improve the rendering backend. Marcin, one of our graphics programmers, proposed a new architecture and discussed it with me, as I was very involved with the initial implementation and overall engine architecture.
 
-![](/img/projects/y2/coral/RenderRefactorInitial.png)
+![](/img/projects/y2/coral/RenderRefactorFinal.png)
 
 His implementation was well thought out but required some adjustments. He got rid of all the buffers owned by the world and made them all shared instead. I pointed out that there is definitely still data that needs to be unique per world; their framebuffers, the size and position of the viewport and the debug lines buffer. We discussed some alternative solutions and ended up deciding on the GPUWorld itself being responsible for the rendering, and accessing the shared resources in Engine::Renderer as needed.
 
-![](/img/projects/y2/coral/RenderRefactorFinal.png)
 
 ## Conclusion
 

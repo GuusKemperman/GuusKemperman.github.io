@@ -17,34 +17,13 @@ In sprint four part of our sprint goal was to refine our engine's toolchains and
 
 I had always found multi-threading to be too bug-prone for it to be worth it. Often the computation needed for collecting the jobs and creating the threads led to insignificant performance improvements. In this block, I learned about and applied asynchronous operations; a thread gets launched to perform an expensive task, while the main thread continuously updates the engine, occasionally checking if the result is ready yet. It makes the application more responsive and leads to performance improvements that would otherwise not be possible. The use of multi-threading makes more sense to me now.
 
-```cpp
-mImportFutures.emplace_back(
-	ImportFuture
-	{
-		fileToImport,
-		std::string{ reasonForImporting },
-		std::async(std::launch::async, 
-			[fileToImport, importer, isCancelled = mWasImportingCancelled]() -> Importer::ImportResult
-			{
-				if (*isCancelled)
-				{
-					return std::nullopt;
-				}
-
-				return importer->Import(fileToImport);
-			})
-	});
-```
-
 Asynchronously processing the files has led to significant performance improvements, it is around 8x faster. The system duly informs the user that it is performing work.
 
 ![](/img/projects/y2/coral/ImportingWindow.gif)
 
-The simplicity of the importing process has become a selling point towards artists.
+The importing workflow became quite streamlined, it was even possible to reimport your assets and watch them update, live in the editor.
 
 ![](/img/projects/y2/coral/ImportingWorkflow.gif)
-
-Any assets can be reimported at runtime while keeping any unsaved changes in our editor intact.
 
 ## Editing pipeline
 
@@ -74,46 +53,7 @@ Our engine supports an 'undo' feature for all assets. A simple feature, but comp
 ![](..//img/projects/y2/coral/DestructiveUndoRedo.gif)
 *Even destroyed components and entities can be brought back in the exact same state*
 
-In the first iteration, I implemented this using the command pattern. Each edit is defined using a Do and Undo function. For most edits this is trivial; if we move an object to X, we can just as easily move it back to Y. But for destructive edits, this is trickier; if we destroy a component, we no longer have the information necessary to bring it back. In the destroy entities edit below, I resolved this by serializing the state of the entity at the time of destruction.
-
-```
-struct DestroyEntities :
-	public DoUndo
-{
-	DestroyEntities(Registry& registry, std::vector<entt::entity> entitiesToDestroy) :
-		mRegistry(registry),
-		mEntitiesToDestroy(std::move(entitiesToDestroy))
-	{
-		for (auto entity : mEntitiesToDestroy)
-		{
-			mSerializedEntitiesToRestore.emplace_back();
-			Archiver::Serialize(registry, entity, mSerializedEntitiesToRestore.back());
-		}
-	}
-
-	void Do() override
-	{
-		for (auto entity : mEntitiesToDestroy)
-		{
-			mRegistry.DestroyAlongWithChildren(entity);
-		}
-	}
-
-	void Undo() override
-	{
-		for (const auto& entityToRestory : mSerializedEntitiesToRestore)
-		{
-			Archiver::Deserialize(mRegistry, entityToRestory);
-		}
-	}
-
-	Registry& mRegistry;
-	std::vector<entt::entity> mEntitiesToDestroy{};
-	std::vector<GSONObject> mSerializedEntitiesToRestore{};
-};
-```
-
-This quickly got out of hand; it was difficult to maintain, and it was easy to make mistakes.
+In the first iteration, I implemented this using the command pattern. Each edit is defined using a Do and Undo function. For most edits this is trivial; if we move an object to X, we can just as easily move it back to Y. But for destructive edits, this is trickier; if we destroy a component, we no longer have the information necessary to bring it back. It can be resolved by serialising the component before destroying it, but it's not ideal. There are a wide variety of different actions the user can do and undo, and it can be both tedious and error-prone to maintain the different edge cases.
 
 I decided to switch to the memento pattern, where you save different versions of your asset to memory in order to restore them later. Because we are using the memento pattern, the undo system is universal; if you are able to save your asset to a stream, your asset editor will have undo functionality.
 

@@ -45,10 +45,10 @@ I am quite happy with the asset editing system. It abstracts a lot of the comple
 
 Our engine supports an 'undo' feature for all assets. A simple feature, but complicated to implement!
 
-![](..//img/projects/y2/coral/ParentingAndSimpleDoUndo.gif)
+![](/img/projects/y2/coral/ParentingAndSimpleDoUndo.gif)
 *Transform components can have parents and a variable number of children. Each action can be undone using CTRL_Z or through the undo button.*
 
-![](..//img/projects/y2/coral/DestructiveUndoRedo.gif)
+![](/img/projects/y2/coral/DestructiveUndoRedo.gif)
 *Even destroyed components and entities can be brought back in the exact same state*
 
 In the first iteration, I implemented this using the command pattern. Each edit is defined using a Do and Undo function. For most edits this is trivial; if we move an object to X, we can just as easily move it back to Y. But for destructive edits, this is trickier; if we destroy a component, we no longer have the information necessary to bring it back. It can be resolved by serialising the component before destroying it, but it's not ideal. There are a wide variety of different actions the user can do and undo, and it can be both tedious and error-prone to maintain the different edge cases.

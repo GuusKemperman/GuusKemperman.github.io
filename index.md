@@ -1,7 +1,7 @@
 ﻿---
 layout: page
 title: 
-description: Various projects created over the years
+description: Portfolio of Guus Kemperman, an engine programmer specializing in scripting and runtime reflection.
 ---
 
 {%- assign resume = site.data.resume -%}

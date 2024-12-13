@@ -19,7 +19,7 @@ linkedin_username: Guus Kemperman
 timezone: Etc/UTC # GitHub uses UTC. This is to force dev environment to match
 future: false # GitHub Pages will publish future posts if this isn't set to false
 
-description: My portfolio and resume, a collection of blogs and projects
+description: Portfolio of Guus Kemperman, an engine programmer specializing in scripting and runtime reflection.
 
 show_excerpts: false
 

@@ -1,4 +1,21 @@
-﻿- name: Lichgate
+﻿
+- name: Coral Engine
+  start: July 2023
+  end: August 2024
+  code_link: https://github.com/GuusKemperman/CoralEngine
+  details_link: "/projects/coral-engine.html"
+  primary-video: projects/y2/coral/trailer_preview.mp4
+  main-page-video: projects/y2/coral/CoralTrailer.mp4
+  engine: C++
+  team_size: 1-10
+  platforms: Windows | PS5
+  duration: 14 Months
+  brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!
+  contribution: Designed core architecture | Custom Visual Scripting | Physics | Assets management & More!
+  tags: 
+    - highlighted
+
+- name: Lichgate
   start: April 2024
   end: July 2024
   code_link: https://github.com/GuusKemperman/CoralEngine
@@ -11,20 +28,6 @@
   duration: 8 Weeks
   brief-description: Lichgate - a relentless survivor, action rogue-like where you must grow stronger to vanquish the undead - made with our custom-built Coral Engine!
   contribution: AI Navigation | Procedural Terrain
-
-- name: Coral Engine
-  start: July 2023
-  end: August 2024
-  code_link: https://github.com/GuusKemperman/CoralEngine
-  details_link: "/projects/coral-engine.html"
-  primary-image: projects/y2/coral/trailer_preview.gif
-  main-page-video: projects/y2/coral/CoralTrailer.mp4
-  engine: C++
-  team_size: 1-10
-  platforms: Windows | PS5
-  duration: 14 Months
-  brief-description: Coral Engine is a game engine we wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!
-  contribution: Designed core architecture | Custom Visual Scripting | Physics | Assets management & More!
 
 - name: Turbo Tails
   start: April 2022

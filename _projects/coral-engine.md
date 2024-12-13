@@ -57,19 +57,8 @@ I continued working on Coral Engine for several months, ridding it of some techn
 </div>
 <hr>
 
-
-
 # Games Created with Coral Engine
 
 - [Lichgate](/projects/lichgate.html)
 
-
-<hr>
-<div style="text-align: center; font-size: 1.5em; font-style: italic; margin: 20px 0;">
-    "Your engine work looks incredible. Seriously, you guys did an amazing job. It looks so easy to work with!"
-</div>
-<div style="text-align: center; font-size: 1em; font-style: normal; margin: 5px 0;">
-    Genna Khudilaynen, Student Game Design @ BUAS
-</div>
-<hr>
 

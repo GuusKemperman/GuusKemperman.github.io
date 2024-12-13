@@ -75,7 +75,6 @@
                 {%- when "Facebook"  -%}<img src="/img/socialicons/facebook.svg">
                 {%- when "LinkedIn"  -%}<img src="/img/socialicons/linkedin.svg">
                 {%- when "Instagram" -%}<img src="/img/socialicons/instagram.svg">
-                {%- when "Website"   -%}<img src="/img/socialicons/website.svg">
                 {%- endcase -%}
             </a>
             {%- endfor -%}
@@ -85,11 +84,6 @@
     <!-- Summary -->
     <div class="executive-summary" itemprop="description"><p>{{ resume.header.intro }}</p></div>
     <!-- Contact me button -->
-    {%- if resume.contact.email -%}
-    <div>
-        <a href="mailto:{{ resume.contact.email }}" class="contact-button no-print" itemprop="email">Contact me</a>
-    </div>
-    {%- endif -%}
 </header>
 
 {%- if resume.sections.skills -%}

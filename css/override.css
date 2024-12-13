@@ -164,16 +164,19 @@ h1, h4 {
     color: black; /* Ensure visited links remain black */
 }
 
+.project-card.highlighted {
+  flex: 1 1 100%; /* Take up the full row */
+}
 .project-card:hover {
     transform: scale(1.02); /* Scale on hover */
     text-decoration: none; /* Remove underline on hover */
     color: black; /* Ensure visited links remain black */
-
 }
 
 .project-card:visited {
     color: black; /* Make all links black */
 }
+
 
 .intro {
     width: 100%;

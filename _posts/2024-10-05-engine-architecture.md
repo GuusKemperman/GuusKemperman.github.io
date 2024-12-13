@@ -9,18 +9,15 @@ I have iterated many times on the engine architecture before reaching a 'stable'
 
 ## Ownership
 
-![](/img/projects/y2/coral/EngineOwnershipDiagram.png)
+![](/img/projects/y2/coral/EngineOwnershipCleanedUp.png)
 
-[//]: # (TODO: Add better image)
+There is a clear separation of concerns embedded in the architecture of this engine. There are three types of systems; EngineSubsystems, EditorSystems, and regular systems present in the ECS. They own their own resources to fullfill their own responsibilities with minimum communication between them.
 
-Not the most beautiful or accurate diagram, as it was drawn live during a presentation. Horizontal arrows between subsystems indicate communication, e.g. the editor getting an asset from the asset manager, while vertical arrows indicate ownership.
+Each regular system in the ECS works in isolation from the other ECS systems. I specifically did not expose a function to get a pointer to a system inside of the registry to encourage this separation. 
 
-## Separation of concerns
+The same applies to editor systems; A level editor does not know or interact in any way with a prefab editor, or another level editor.
 
-There is a clear separation of concerns embedded in the architecture of this engine. There are three types of systems; EngineSubsystems, EditorSystems, and regular systems present in the ECS. 
-Each regular system in the ECS works in isolation from the other ECS systems. I specifically did not expose a function to get a pointer to a system inside of the registry to encourage this separation. The same applies to editor systems; A level editor does not know or interact in any way with a prefab editor, or another level editor.
-
-The only exception is EngineSubsystems. These are essentially singletons, that can be accessed from anywhere in the engine, even other subsystems; The editor subsystem may retrieve an asset from the asset manager to open it for edit. They still have a clear separation of concern, with little overlap between them. I have improved upon this further during this block, moving some of the editor-only importing logic from the asset manager (EngineSubsystem) to a dedicated importer system (EditorSystem).
+The only exception is EngineSubsystems. These are essentially singletons, that can be accessed from anywhere in the engine, even other subsystems; The editor subsystem may retrieve an asset from the asset manager to open it for edit. They still have a clear separation of concern, with little overlap between them.
 
 ## Cross-platform
 

@@ -75,8 +75,10 @@ defaults:
       permalink: /blog/:title/
       tags:
         - Other # Add a default tag to all posts
- 
-        
+
+# Remove the .html, for easier markdown linking
+permalink: pretty
+
 
 # Disable highlighting to use highlightJS instead
 # highlighter: none # Not supported by GitHub Pages

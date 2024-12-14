@@ -54,7 +54,7 @@ Their collaboration goes further than just movement; each unit will alert nearby
 
 # Rendering
 
-Similarly to my [Snow Man's Land project](/projects/snow-mans-land.html), this game was rendered entirely by the CPU, which means that every frame I was responsible for letting my program plot each individual pixel. 
+Similarly to my [Snow Man's Land project](/projects/snow-mans-land), this game was rendered entirely by the CPU, which means that every frame I was responsible for letting my program plot each individual pixel. 
 
 A CPU is not fantastic at rendering (that's why they invented the GPU!), and a lot of optimisations were required to get to a point where we can render thousands of units at a stable FPS. There was even some room for fancy visual effects:
 
@@ -76,7 +76,7 @@ This was the first time I was faced with the sheer overhead of handling thousand
 
 It sped up the collisions tremendously! In hindsight, I should have stuck with a simple 2D grid; I had a fixed world-size and all my units were the same size. The memory usage would have been higher, but it would have been much faster.
 
-A benefit from having a software renderer is that you work closely with the actual pixels. In [Snow Man's Land](/projects/snow-mans-land.html) I used this to build snowmen pixel-by-pixel, and I found another great use-case for this game; pixel perfect collision!
+A benefit from having a software renderer is that you work closely with the actual pixels. In [Snow Man's Land](/projects/snow-mans-land) I used this to build snowmen pixel-by-pixel, and I found another great use-case for this game; pixel perfect collision!
 
 ![Pixel Perfect Collision](/img/projects/y1/blocka/Week 4 - Pixel collision_gif.gif)
 

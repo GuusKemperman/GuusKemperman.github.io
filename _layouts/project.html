@@ -10,18 +10,18 @@ layout: default
 
     {% if project.main-page-video %}
     <video class="project-media" controls>
-        <source src="../img/{{ project.main-page-video }}" type="video/mp4">
+        <source src="/img/{{ project.main-page-video }}" type="video/mp4">
     </video>
     {% elsif project.main-page-image %}
-    <img class="project-media" src="../img/{{ project.main-page-image }}">
+    <img class="project-media" src="/img/{{ project.main-page-image }}">
     {% elsif project.primary-image %}
-    <img class="project-media" src="../img/{{ project.primary-image }}">
+    <img class="project-media" src="/img/{{ project.primary-image }}">
     {% elsif project.primary-video %}
     <video class="project-media" controls>
-        <source src="../img/{{ project.primary-video }}" type="video/mp4">
+        <source src="/img/{{ project.primary-video }}" type="video/mp4">
     </video>
     {% endif %}
-
+    
     <div class="project-tags">
         <p>
             {% if project.engine %}

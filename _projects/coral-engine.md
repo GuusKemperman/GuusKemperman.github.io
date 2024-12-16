@@ -3,30 +3,11 @@ layout: project
 name: "Coral Engine"
 ---
 
-
-<hr>
-<div style="text-align: center; font-size: 1.5em; font-style: italic; margin: 20px 0;">
-    "Best Engine to come out of BUAS yet!"
-</div>
-<div style="text-align: center; font-size: 1em; font-style: normal; margin: 5px 0;">
-    Bojan Endrovski, Lecturer @ Breda University of Applied Sciences
-</div>
-<hr>
-
 Coral Engine began as a personal project during a summer holiday. Over time, it evolved into a full-fledged engine featuring **visual scripting** and a **robust editor**. From the start, the goal was to create a simple, accessible API for developers while ensuring the engine remained intuitive for designers.
 
 After seven months of solo development, I was joined by five talented programmers to enhance Coral Engine, making it production-ready. We used it to develop [Lichgate](/projects/lichgate). The designers who joined our team were able to utilise its capabilities to create their own prototypes, assets and gameplay features.
 
 I continued working on Coral Engine for several months, ridding it of some technical debt that had built up over the course of development.
-
-<hr>
-<div style="text-align: center; font-size: 1.5em; font-style: italic; margin: 20px 0;">
-    "It's incredibly impressive what was achieved in such a short amount of time!"
-</div>
-<div style="text-align: center; font-size: 1em; font-style: normal; margin: 5px 0;">
-    Xan Hisam, Associate Tech Designer @ Splash Damage
-</div>
-<hr>
 
 # My Contributions
 
@@ -47,15 +28,6 @@ I continued working on Coral Engine for several months, ridding it of some techn
 - *Project management*: I **managed** the team of programmers, overseeing task distribution and ensuring alignment.
 - *Frontend*: I played a large part in utilising ImGui to create an accessible interface for designers, including the content browser and most editor windows.
 
-
-<hr>
-<div style="text-align: center; font-size: 1.5em; font-style: italic; margin: 20px 0;">
-    "Amazing work! The UI looks really professional, and the functionality seems equally impressive! I wouldn’t have thought it only took you one year!"
-</div>
-<div style="text-align: center; font-size: 1em; font-style: normal; margin: 5px 0;">
-    Mykola Tsetsiurskyi, QA @ Ubisoft
-</div>
-<hr>
 
 # Games Created with Coral Engine
 

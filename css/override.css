@@ -139,6 +139,44 @@ body, p, ul, ol {
     color: #555;
 }
 
+.project-tags-wrapping {
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping between tags */
+  gap: 10px; /* Space between tags */
+
+}
+
+.project-tags-wrapping .tag {
+  display: inline-flex; /* Keeps icon and text on the same line */
+  align-items: center; /* Vertically align the icon and text */
+  gap: 5px; /* Space between the icon and the text */
+  font-size: 125%;
+  flex: 1 1 calc(33.333% - 10px); /* Default: 3 items per row */
+  min-width: 50px; /* Prevent tags from shrinking too small */
+  max-width: calc(33.333% - 10px); /* Ensure consistent width */
+  justify-content: center; /* Center all tags in their respective rows */
+  white-space: nowrap
+}
+
+@media (max-width: 800px) {
+  .project-tags-wrapping {
+    justify-content: space-between; /* Adjust for medium screens */
+  }
+  .project-tags-wrapping .tag {
+    flex: 1 1 calc(50% - 10px); /* Two items per row */
+    max-width: calc(50% - 10px); /* Ensure consistent alignment */
+  }
+}
+
+@media (max-width: 600px) {
+  .project-tags-wrapping .tag {
+    flex: 1 1 100%; /* Full width for each tag on small screens */
+    max-width: 100%; /* Prevent unnecessary shrinking */
+  }
+}
+
+
 h1, h4 {
     margin-bottom: 10px;
 }

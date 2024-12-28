@@ -18,6 +18,15 @@ After seven months of solo development, I was joined by five talented programmer
 
 I continued working on Coral Engine for several months, ridding it of some technical debt that had built up over the course of development.
 
+<hr>
+<div style="text-align: center; font-size: 1.5em; font-style: italic; margin: 20px 0;">
+    "It's incredibly impressive what was achieved in such a short amount of time!"
+</div>
+<div style="text-align: center; font-size: 1em; font-style: normal; margin: 5px 0;">
+    Xan Hisam, Associate Tech Designer @ Splash Damage
+</div>
+<hr>
+
 # My Contributions
 
 - *[Engine Architecture](/blog/engine-architecture)*: Designed and iterated the **core architecture** from concept to release.

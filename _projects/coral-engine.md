@@ -30,7 +30,7 @@ I continued working on Coral Engine for several months, ridding it of some techn
 # My Contributions
 
 - *[Engine Architecture](/blog/engine-architecture)*: Designed and iterated the **core architecture** from concept to release.
-- *[Content Pipeline](/blog/content-pipeline)*: Created a system for importing, editing assets and efficiently managing resources in a **multi-threaded** environment.
+- *[Asset management](/blog/asset-management)*: Created a system for importing, editing assets and efficiently managing resources in a **multi-threaded** environment.
 - *[Runtime reflection](/blog/runtime-reflection)*: Created a system to represent both C++ and Visual Script classes through a unified interface.
 - *[Visual Scripting](/blog/visual-scripting)*: Built a performant node-based **visual-scripting interpreter** from scratch, fully integrated with the ECS system (EnTT).
 - *[Optimisations](/blog/visual-scripting-optimisations)*: I have consistently benchmarked, profiled and accordingly optimised the worst bottlenecks.

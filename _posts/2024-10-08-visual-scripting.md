@@ -37,7 +37,9 @@ You can also go the other way; call and access script functions and fields from 
 
 I designed the workflow and the editor to be similar to Unreal Blueprints. I used the [Node Editor in ImGui](https://github.com/thedmd/imgui-node-editor) library as a starting point.
 
-I created a responsive and **context aware search bar**, greatly improving ease of use and development speed. The searching happens fully **asynchronously**. Options that are picked more frequently, or options that make more sense given the existing function, are ranked higher. 
+**Context aware search**
+
+I created a responsive and context aware search bar, greatly improving ease of use and development speed. The searching happens fully **asynchronously**. Options that are picked more frequently, or options that make more sense given the existing function, are ranked higher. 
 
 <div class="video-as-gif-container">
   <video autoplay loop muted playsinline>
@@ -45,9 +47,13 @@ I created a responsive and **context aware search bar**, greatly improving ease 
   </video>
 </div>
 
+**Shortcuts**
+
 I included useful shortcuts; nodes can be copied and pasted, allowing for rapid refactoring and expansion of your scripts. Every action can be undone/redone. Reroute nodes can be used to clean up your scripts
 
 ![](/img/projects/y2/coral/W6_CopyCutPasteDuplicateUndo.gif)
+
+**Errors**
 
 Any runtime or compile time errors in your scripts will be printed to the console. Pressing it navigates the focus directly to the source of the error.
 

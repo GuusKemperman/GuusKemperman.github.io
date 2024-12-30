@@ -267,23 +267,5 @@ I went from O(N) to O(1). which allows for the execution of larger functions.
 
 The tool is designed for simple prototyping and gameplay, yet the scripts were still executed at 50fps when faced with 10'000 enemies.
 
-## Discussion
 
-**Missed measurements**
-
-I cache the results of pure nodes; if no impure node has run, we can assume there are no side-effects to the state that would affect the return value of a pure node. Caching return values is likely the largest optimization I have implemented, but because they were part of my very first working implementation, I have no measurements to back this up.
-
-**Future optimizations**
-
-Profiling supports that allocating and freeing many small chunks of memory is currently the largest cost.
-
-![](/img/projects/y2/coral/W7_FutureNonTrivialOptimizationStackAlloc.png)
-This call is in most cases a malloc and memset.
-
-![](/img/projects/y2/coral/W7_FutureNonTrivialOptimizationStack.png)
-This calls free();
-
-Every single time a function is invoked, we call malloc to store the return value. If the cached return value is out of date and we need to run the function again, we are freeing the original value, and calling malloc again. 
-
-There would ideally only be one call to malloc at the very start of the program. A stack pointer would indicate where we should store our next value. We would use return value optimization to directly store the returned value at that position in the stack. At the end of each function, we simply roll back the pointer to the position it was in when we entered the function, calling the destructor only for the non-trivially destructible types.
 

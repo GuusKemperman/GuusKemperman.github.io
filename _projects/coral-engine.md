@@ -36,7 +36,7 @@ I continued working on Coral Engine for several months, ridding it of some techn
 - *[Optimisations](/blog/visual-scripting-optimisations)*: I have consistently benchmarked, profiled and accordingly optimised the worst bottlenecks.
 - *Event handling*: Developed an powerful, easy-to-use event system.
 - *[Physics](/blog/physics)*: Helped created a 2D **physics** system with **optimized** collision handling.
-- *[Prefab System](/blog/prefabs)*: Implemented a system similar to [**Unity's prefabs**](https://docs.unity3d.com/Manual/Prefabs.html), allowing entity euse.
+- *[Prefab System](/blog/prefabs)*: Implemented a system similar to [**Unity's prefabs**](https://docs.unity3d.com/Manual/Prefabs.html), allowing entity reuse.
 - *Level editor*: Developed a **user-friendly editor** for level design, included tools for quickly transforming objects and undoing changes.
 - *Particle system*:  Created an extendable, **data-oriented** particle system.
 - *Serialization*: Designed a serialization system with backward compatibility.
@@ -51,4 +51,4 @@ I continued working on Coral Engine for several months, ridding it of some techn
 
 - [Lichgate](/projects/lichgate)
 
-
+    

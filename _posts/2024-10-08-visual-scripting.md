@@ -5,128 +5,73 @@ date: 2024-11-05
 tags: Coral
 ---
 
-I spent around eight weeks on implementing visual scripting. The backend was made entirely from scratch, while the frontend used existing ImGui plugins.
+I spent around ten weeks on implementing visual scripting. I aimed to replicate the functionality and workflow of Blueprints, to make gameplay programming accessible to non-technical designers. 
 
 ## What can this tool do?
 
-**Demo**
+I ensured that you can write a game entirely using C++, entirely using scripts or a mix of both. This allows programmers to develop complicated or computationally expensive gameplay elements, while designers can prototype and rapidly iterate using the scripting tool. 
 
-The scripting tool is designed to be general purpose. There is a wide variety of games that can be implemented using this tool. I have created three very simple demos of various complexities to show what is possible through scripts.
+The visual scripting enabled designers to implement player movement and the *many* abilities featured in Lichgate, all without needing assistance of programmers. 
 
-![](/img/projects/y2/coral/W4_MovingAndSpawningPrefabsDemo.gif)
+In the end, more than ~90% of the gameplay in Lichgate was achieved through visual scripting, powered by 156 different scripts. 
 
-*The player movement implemented through scripts. Pressing spacebar spawns prefabs around the player, showcasing that scripts can reference and use assets*
+<div class="video-as-gif-container">
+  <video autoplay loop muted playsinline>
+    <source src="/img/projects/y2/coral/DifferentScripts.mp4" type="video/mp4">
+  </video>
+</div>
 
-![](/img/projects/y2/coral/W7_StressTestEnvironment.gif)
+The tool supports for-loops, while-loops, branches (if/else), getting & setting variables, function calls, and events.
 
-*A very simple demo. Enemies move around from point to point, and select a new random point once their target has been reached. The user can shoot and kill enemies, who are then respawned. Everything was implemented through scripts, including the enemy behaviour, the player movement, the collision and the respawning of the enemies.*
+**Script Components**
 
-![](/img/projects/y2/coral/W8_Timelapse.gif)
+Scripts can be added as components to entities. To achieve this, I [made some modifications](https://github.com/GuusKemperman/CoralEngine/blob/39a86d7ff667518a458fa276a4fa1fa8066d8de5/Source/World/Registry.cpp#L25) to **[EnTT](https://github.com/skypjack/entt)**, the ECS library that we used. Now, script components are stored in the same way as C++ components. You don't need to handle both C++ and script classes for the inspector and serializer, because you access them using the same interface!
 
-*A timelapse showing the creation of the demo intended for the showcase day. The demo took 1:40 hours to make.*
+**C++ Bindings**
 
-![](/img/projects/y2/coral/W8_Demo2.gif)
+I made the API for exposing C++ to scripting as simple as could be, using the [runtime reflection](/blog/runtime-reflection) system I'd written earlier. And ofcourse, scripts can always interact and communicate with other scripts.
 
-*The result of the above timelapse. A simple top-down game. The user can walk around, collect coins, and purchase weapons. Crates can be destroyed to acquire more coins. Once again, **everything** was implemented through scripts.*
+You can also go the other way; call and access script functions and fields from C++. This was especially useful for writing and maintaining the dozens of **unit-tests** that tested the visual script interpreter. 
 
-**Scripts can be interacted with from C++**
+## Editor
 
-There is no distinction between a reflected C++ class and a compiled script once they are inside the runtime reflection system, which means you do not need to write more code to account for the script components; a function that serializes components by iterating over their members does not need to know or care whether the underlying component is a script or a C++ class, it just serializes it. I wrote my own runtime reflection system to achieve this.
+I designed the workflow and the editor to be similar to Unreal Blueprints. I used the [Node Editor in ImGui](https://github.com/thedmd/imgui-node-editor) library as a starting point.
 
-Script functions can be easily called. Error checking has been left out for brevity's sake.
+I created a responsive and **context aware search bar**, greatly improving ease of use and development speed. The searching happens fully **asynchronously**. Options that are picked more frequently, or options that make more sense given the existing function, are ranked higher. 
 
-```cpp
-const MetaType& const type = *MetaManager::Get().TryGetType(scriptName);
+<div class="video-as-gif-container">
+  <video autoplay loop muted playsinline>
+    <source src="/img/projects/y2/coral/ScriptEditor.mp4" type="video/mp4">
+  </video>
+</div>
 
-for (int32 i = 0; i < 10; i++)
-{
-	FuncResult constructResult = type->Construct();
-	MetaAny& instance = constructResult.GetReturnValue();
-
-	const MetaFunc& const func = *type->TryGetFunc(funcName);
-	FuncResult result = func(instance, i);
-
-	if (*result.GetReturnValue().As<int32>() != i)
-	{
-		return Result::FAILURE;
-	}
-}
-
-return Result::SUCCESS;
-```
-
-**Scripts can interact with other scripts**
-
-![](/img/projects/y2/coral/W3_IsOdd.png)
-
-*Script functions can be called from other script functions. Here IsEven is a function created using scripts and is called from an IsOdd function.*
-
-**Mix and match**
-
-You can write a game entirely using C++, entirely using scripts or a mix of both. You can call and access C++ functions and fields from scripts, and call and access script functions from C++. This allows programmers to develop complicated or computationally expensive gameplay elements, while designers can prototype and rapidly iterate using the scripting tool.
-
-**Searching**
-
-![](/img/projects/y2/coral/W5_Searching.gif)
-
-*A search bar has been implemented to speed up development*
-
-**Direct integration with entt**
-
-The components live inside of an ```entt::storage``` specialized for script components.  There is no indirection, the memory layout is the exact same as if the component were a C++ class. Possibly even better, because unlike in C++, the order of the fields are shuffled to minimise padding.
-
-![](/img/projects/y2/coral/W4_ScriptAddedAsComponent.png)
-
-*Scripts can have hold data. They can be added as a component to entt::registry*
-
-You do not have to take into account the edge case of script components anywhere in your code. ```entt::registry``` offers the ```storage()``` function to iterate over all the storages. This is useful when you want to inspect or serialize a registry. Since our scripts are stored inside one of these, they can be accessed through the call to storage.
-
-```cpp
-void Engine::Archiver::Serialize(const Registry& registry, BinaryGSONObject& gsonObject)
-{
-	for (auto&& typeStoragePair : registry.Storage())
-	{	
-		// We can use the same function to serialize both C++ classes and 
-		// script classes.
-		SerializeStorage(registry, gsonObject, typeStoragePair);
-	}
-}
-```
-
-**Undo, redo, copy, cut, paste and duplicate**
-
- A selection of nodes and links can be copied and pasted, allowing for rapid refactoring and expansion of your scripts. If you ever make a mistake, each action can be undone/redone using CTRL+Z/CTRL+Y. The do-undo has been implemented using the memento pattern.
+I included useful shortcuts; nodes can be copied and pasted, allowing for rapid refactoring and expansion of your scripts. Every action can be undone/redone. Reroute nodes can be used to clean up your scripts
 
 ![](/img/projects/y2/coral/W6_CopyCutPasteDuplicateUndo.gif)
 
-**Errors and checks**
-
-I have written and mantained around a dozen unit tests using the visual scripting tool. They allow me to catch mistakes and bugs early on.
-
-The return value of functions can be checked and validated using the IsNull node.
-
-![](/img/projects/y2/coral/W4_GettingTransformAndIsNullCheck.png)
-
-*If the user does not have a transform, IsNull would return true in the script above.*
-
-But no need to remember to check for null constantly; if you ever forget, a helpful message will be printed to the console. Some errors can even be caught at compile time, making your scripts less error-prone.
+Any runtime or compile time errors in your scripts will be printed to the console. Pressing it navigates the focus directly to the source of the error.
 
 ![](/img/projects/y2/coral/W5_LogMessageTakesYouToError.gif)
 
-*Pressing it navigates the focus directly to the source of the error.*
+## Virtual Machine
 
-**Reroutes**
+The Visual Scripting uses a node based interpreter. The virtual machine can be found in it's entirety in [VirtualMachine.cpp](https://github.com/GuusKemperman/CoralEngine/blob/main-lite/Source/Core/VirtualMachine.cpp).
 
-![](/img/projects/y2/coral/W6_After.png)
+**Type erasure**
 
-*Reroute nodes can be used to clean up your scripts*
+Everything in the virtual machine is, from a C++ perspective, completely type-erased. C++ objects are represented using a ```MetaAny```, essentially a ```void*``` with some additional type information. To give the virtual machine the ability to still call C++ functions using these, I used C++ **templates**. For those interested, a significantly simplified standalone implementation can be found below.
 
-## How does it work?
+<iframe width="100%" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGISQBspK4AMngMmAByPgBGmMQgAKxmpAAOqAqETgwe3r7%2BQemZjgJhEdEscQnJtpj2JQxCBEzEBLk%2BfoG19dlNLQRlUbHxSSkKza3t%2BV3j/YMVVaMAlLaoXsTI7BzmAMypxEzALEwA1AKbJhoAgrvhyN5YJyY7blReDA7ZYs/YlzdmOzuD0wTxehgAnj8/rcPsDQW4AG6YBwkKHXP73JgKBQnK4xcYHBwAMXepnRAHYrOiNABOAiYFipAz055uAjg1KMVgggAqpBOmQAXpgAPoEE4ASTRN1ps0cyBOPJOcgYqSYyAA1kJwsB6BA0AxxgKCOgQCAkSjiKzxqaQBCoWYAicWsAFEtobSTJSPTTLjSDUabWb7Y7nQxwaCACLO4iukyJCxSxKR55UmW%2B2nETAEdYMY22iEi0TjVk8n4QCHunZpv1elPU9P0xnMkGs9mc5hsE4AJWz/PbXLYADoR7jYwp%2BULRQQR0PJQx8JsFNK/XK8Aqg3bw/OEagNZgJc39QJAyazW8Pg1Wb2CBAruPZ1XfqGL58BDzUBKGLv96QfX6A3FTcLSIK0Xk3e0dmfJ0XQnf9ZTPEBwiwVQRSUABHLxGAuF4v0XTAFFnH53WpX1vVIv0sxzYg81fBoPy/H9MAgFU1U1bUjHoVl71dfk8PXAjy1gpZH1Tf9yXrGUrlSLwYlodcQB9JsmSYFkXgHTsQRvfsOUHTBZzHOMoJ9PECXVAgSQ%2BCBNzo7Jr2zO8HxHJ8TlfJYTkUijaXCJjiAgeCM19BNX3jSNj0NIDEJA1FwMQyDoJjV13IAWh%2BfNg3DALa3I9Na09BDbWOfcRWQzBUIwrCPkwa08GFVAqFnRykrSirsOq70JLErzAso7Ncx3PcDyPV9%2BVgydMEwtqqxrfKeokkjcpy7LJJ9CDt1QTkDlAiAlnC09bWisC3DWyFjNDYSTkA8SZsCqj%2Bp8wa/OErrFpW659jwBFVPYVbENsgRrTi8M9sig7kVAwGC0ys6Ahch79ytDqU2raFOpRhtwiAnwIEx51%2BSoWhUFUk4YgWr00xOSmTjumjnSeSwSZeusPSuXHjnCHbUYpqmbNJBoTgHdARRCyl6YCBQfCeNHucp0yCEJCzSWdfF5fM4XSXJgXdKF18peRmX0q3CMswl2hxWeaMmBVhX1aszWTs1rgND1ycgchUXEiHDQqD1utpr%2BKnqb62mTqLLECFZTHyxNrwzf9ilIw4FZaE4RJeD8DgtFIVBODcaxrAFNYNlbAEeFIAhNCTlYNVGIdySdgJAgCHYAi4AAORJEn0ThJHTyvs84XgFBADRy8rlY4FgJAyuRLxQPIShYOUQw6iEBBUAAdwzsu0EZOhVOyZeIloNfN4zrPd9SOgRgRZBUlSEUES4GkRRbcYRVURvSEv6/iEiblB7f1QHvegxAADyc9T5b37jPZAPFh4cF4LApo%2BAM68H4IIEQYh2BSBkIIRQKh1CZx0HoAwRgUD50sPoPA%2BJ4AQE0iARgBACCkCRAkeW7wNRLBWBtBoCCAD0QZTCWGsG/AgvBUBsOIHgLAw9IArGIO8RwbAPyeDkTtVY6xNh6BtOEI%2Bq917QO4LwDeBxUicB4MnVOfdiEDw4NgVQs9QInE/pIE4LAFC3xOE/GkQ4xEnAgHnERVCTi4EICQemOwuBLF4BXYh3DSAIEwEwLACQNE10kOSIcZg240h2IkHYLcdhtykF3FOHBe6kHPhIwBw9R5xK0Ak8pZgbFZxzogse8SVhsMyM4SQQA"></iframe>
 
-The Visual Scripting uses a node based interpreter. I follow the execution links while recursively walking up the tree where needed to obtain the outputs from any pure nodes. 
+The actual implementation of ```MetaFunc``` is more complete, it includes type-safety and various optimisations. I extended C++ [copy-elision](https://en.cppreference.com/w/cpp/language/copy_elision) to construct the return value of nodes directly into the right place in the stack, without having to copy or move the variable at all. 
 
-I initially wanted to go for a bytecode based approach; it's a subject I'd been interested in for a while and one I wanted to learn more about. There is an opportunity for an optimization pass to shift more of the workload to compile time. 
+The full implementation can be found here:
+- [MetaFuncFwd.h](https://github.com/GuusKemperman/CoralEngine/blob/main-lite/Include/Meta/Fwd/MetaFuncFwd.h)
+- [MetaFuncImpl.h](https://github.com/GuusKemperman/CoralEngine/blob/main-lite/Include/Meta/Impl/MetaFuncImpl.h)
+- [MetaFunc.cpp](https://github.com/GuusKemperman/CoralEngine/blob/main-lite/Source/Meta/MetaFunc.cpp)
 
-In the end I decided against it, it's an additional layer of complexity that makes the system more difficult to debug and extend. The idea was that if the performance was lacking, there might be more benefit to transpiling to C++, or to use LLVM directly. 
+**Graph traversal**
 
-The node based interpreter still benefits from plenty of optimisations, for example by caching outputs, allocating on a stack and using RVO. I have additional optimizations for trivial types, by for example avoiding the indirection of invoking the copy constructor when a memcpy will suffice. More on this in the next blog, visual scripting optimisations!
+For traversing the graph, I follow the execution links (the white lines), which indicate the order to execute nodes in. The output of these executed nodes are stored directly on a stack. Variables stored in this stack can be passed on to future nodes that need to be executed. 
+
+Pure nodes, nodes without an execution link, are executed whenever it's output is required for another node. Because pure nodes do not modify the state of the world or engine, their results are cached; no need to call that function again until we run a impure node and the state of the world or engine changes.

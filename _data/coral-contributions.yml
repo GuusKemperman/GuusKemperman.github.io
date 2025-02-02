@@ -1,0 +1,61 @@
+- name: Visual Scripting
+  description: Built a performant node-based <strong>visual-scripting interpreter</strong> from scratch, fully integrated with the ECS system (EnTT).
+  details_link: "/blog/visual-scripting"
+  thumbnail-vid: /img/projects/y2/coral/DifferentScripts.mp4
+  tags: highlighted
+
+- name: Engine Architecture
+  description: Designed and iterated the <strong>core architecture</strong> from concept to release.
+  details_link: "/blog/engine-architecture"
+  thumbnail-img: /img/projects/y2/coral/EngineOwnershipCleanedUp.png
+
+- name: Asset Management
+  description: Created a system for importing, editing assets and efficiently managing resources in a <strong>multi-threaded</strong> environment.
+  details_link: "/blog/asset-management"
+  thumbnail-img: /img/projects/y2/coral/ImporterPipeline.png
+
+- name: Physics
+  description: "Helped create a 2D <strong>physics</strong> system with <strong>optimized</strong> collision handling."
+  details_link: "/blog/physics"
+  thumbnail-img: /img/projects/y2/coral/bvh.gif
+
+- name: Runtime Reflection
+  description: Created a system to represent both C++ and Visual Script classes through a unified interface.
+  details_link: "/blog/runtime-reflection"
+
+- name: Optimisations
+  description: I have consistently benchmarked, profiled, and accordingly optimized the worst bottlenecks.
+  details_link: "/blog/visual-scripting-optimisations"
+  thumbnail-img: /img/projects/y2/coral/CacheFuncLookUpBench.png
+
+- name: Utility AI
+  description: Created a framework for state-based <strong>AI</strong> behavior.
+  details_link: "/blog/utility-ai"
+
+- name: Prefab System
+  description: Implemented a system similar to <strong>Unity's prefabs</strong>, allowing entity reuse.
+  details_link: "/blog/prefabs"
+
+- name: Level Editor
+  description: Developed a <strong>user-friendly editor</strong> for level design, including tools for quickly transforming objects and undoing changes.
+
+- name: Particle System
+  description: Created an extendable, <strong>data-oriented</strong> particle system.
+
+- name: Serialization
+  description: Designed a serialization system with backward compatibility.
+
+- name: Event Handling
+  description: Developed a powerful, easy-to-use event system.
+
+- name: Unit Test Framework
+  description: Created a lightweight framework for quickly creating tests in-engine.
+
+- name: CI/CD
+  description: Set up <strong>GitHub Actions</strong> for automatic compilation, testing, and distribution.
+
+- name: Project Management
+  description: I <strong>managed</strong> the team of programmers, overseeing task distribution and ensuring alignment.
+
+- name: Frontend
+  description: I played a large part in utilizing ImGui to create an accessible interface for designers, including the content browser and most editor windows.

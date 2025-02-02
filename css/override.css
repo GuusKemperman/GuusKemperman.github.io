@@ -177,9 +177,7 @@ body, p, ul, ol {
 }
 
 
-h1, h4 {
-    margin-bottom: 10px;
-}
+
 
 .project-grid {
     max-width: 1200px; /* Take up the full width of the page */
@@ -189,30 +187,63 @@ h1, h4 {
     justify-content: center;
 }
 
-.project-card {
-    flex: 1 1 max(400px, calc(50% - 100px)); /* Take up half of the row, minus gap space */
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    position: relative;
-    display: block;
-    text-decoration: none;
-    transition: transform 0.2s;
-    color: black; /* Ensure visited links remain black */
+.project-grid h1, h4 {
+  margin-bottom: 10px;
 }
+
+.project-card {
+  flex: 1 1 max(400px, calc(50% - 100px)); /* Take up half of the row, minus gap space */
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  position: relative;
+  display: block;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  color: black; /* Ensure visited links remain black */
+  cursor: pointer;
+}
+
+.project-card.narrow {
+  flex: 1 1 max(300px, calc(33% - 100px)); /* Adjusted flex */
+}
+
+.project-card.narrow h1 {
+  font-size: 2.0rem;
+}
+
+.project-card.narrow p {
+  font-size: 1.25rem;
+}
+
 
 .project-card.highlighted {
   flex: 1 1 100%; /* Take up the full row */
 }
+
+/* Hover effect for clickable cards */
 .project-card:hover {
-    transform: scale(1.02); /* Scale on hover */
-    text-decoration: none; /* Remove underline on hover */
-    color: black; /* Ensure visited links remain black */
+  transform: scale(1.02); /* Scale on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  text-decoration: none; /* Remove underline on hover */
+  color: black; /* Ensure visited links remain black */
 }
 
 .project-card:visited {
-    color: black; /* Make all links black */
+  color: black; /* Make all links black */
+}
+
+/* Styling for non-clickable cards */
+.project-card.narrow.no-link {
+  cursor: default; /* Indicate non-interactivity */
+  opacity: 0.85;  /* Slightly dim to signal a disabled state */
+
+}
+
+.project-card.narrow.no-link:hover {
+  transform: none; /* No scaling on hover */
+  box-shadow: none; /* No shadow on hover */
 }
 
 

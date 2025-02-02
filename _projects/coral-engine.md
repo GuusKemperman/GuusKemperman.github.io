@@ -27,24 +27,49 @@ I continued working on Coral Engine for several months, ridding it of some techn
 </div>
 <hr>
 
-# My Contributions
+# <span style="display: block; text-align: center;">My Contributions</span>
 
-- *[Engine Architecture](/blog/engine-architecture)*: Designed and iterated the **core architecture** from concept to release.
-- *[Asset management](/blog/asset-management)*: Created a system for importing, editing assets and efficiently managing resources in a **multi-threaded** environment.
-- *[Runtime reflection](/blog/runtime-reflection)*: Created a system to represent both C++ and Visual Script classes through a unified interface.
-- *[Visual Scripting](/blog/visual-scripting)*: Built a performant node-based **visual-scripting interpreter** from scratch, fully integrated with the ECS system (EnTT).
-- *[Optimisations](/blog/visual-scripting-optimisations)*: I have consistently benchmarked, profiled and accordingly optimised the worst bottlenecks.
-- *Event handling*: Developed an powerful, easy-to-use event system.
-- *[Physics](/blog/physics)*: Helped created a 2D **physics** system with **optimized** collision handling.
-- *[Prefab System](/blog/prefabs)*: Implemented a system similar to [**Unity's prefabs**](https://docs.unity3d.com/Manual/Prefabs.html), allowing entity reuse.
-- *Level editor*: Developed a **user-friendly editor** for level design, included tools for quickly transforming objects and undoing changes.
-- *Particle system*:  Created an extendable, **data-oriented** particle system.
-- *Serialization*: Designed a serialization system with backward compatibility.
-- *Unit Test Framework*: Created a light-weight framework for quickly creating tests in-engine.
-- *CI/CD*: Set up **GitHub Actions** for automatic compilation, testing, and distribution.
-- *[Utility AI](/blog/utility-ai)*: Created a framework for state-based **AI** behaviour.
-- *Project management*: I **managed** the team of programmers, overseeing task distribution and ensuring alignment.
-- *Frontend*: I played a large part in utilising ImGui to create an accessible interface for designers, including the content browser and most editor windows.
+<div class="project-grid">
+  {% for item in site.data.coral-contributions %}
+    {% assign link = item.details_link %}
+    {% if item.details_link %}
+      {% assign link = item.details_link %}
+    {% elsif item.game_link %}
+      {% assign link = item.game_link %}
+    {% elsif item.code_link %}
+      {% assign link = item.code_link %}
+    {% endif %}
+
+   {% if link %}
+  <a href="{{ link }}" class="project-card narrow{% if item.tags contains 'highlighted' %} highlighted{% endif %}" 
+     style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9; position: relative; display: block; text-decoration: none; transition: transform 0.2s;">
+{% else %}
+  <div class="project-card narrow no-link {% if item.tags contains 'highlighted' %} highlighted{% endif %}" 
+     style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f0f0f0; position: relative; display: block; text-decoration: none; transition: transform 0.2s;">
+{% endif %}
+
+  <h1>{{ item.name }}</h1>
+
+  {% if item.thumbnail-img %}
+    <br><img class="project-media" src="{{ item.thumbnail-img }}" style="width: 100%; height: auto;">
+  {% elsif item.thumbnail-vid %}
+  <div class="video-as-gif-container">
+    <video autoplay loop muted playsinline>
+      <source src="{{ item.thumbnail-vid }}" type="video/mp4">
+    </video>
+  </div>
+  {% endif %}
+  
+  <p>{{ item.description }}</p>
+
+{% if link %}
+  </a>
+{% else %}
+  </div>
+{% endif %}
+
+  {% endfor %}
+</div>
 
 
 # Games Created with Coral Engine

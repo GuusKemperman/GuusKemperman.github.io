@@ -17,7 +17,7 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
       <h2>{{ resume.header.current_title }}</h2>
       <p>{{ resume.header.intro }}</p>
 
-    <a href="/resume.html" class="read-more">Read more</a>
+    <a href="/resume" class="read-more">Read more</a>
 
     </div>
   </div>
@@ -49,7 +49,7 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
       {% endif %}
 
       <h4><em>{{ item.brief-description }}</em></h4>
-      
+
       <div class="project-tags">
         <p>🔧 <strong>Engine/Tools:</strong> {{ item.engine }}</p>
         <p>👥 <strong>Team Size:</strong> {{ item.team_size }}</p>

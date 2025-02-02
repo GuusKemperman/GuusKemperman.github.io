@@ -22,6 +22,7 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
     </div>
   </div>
 </section>
+
 <div class="project-grid">
   {% for item in site.data.projects %}
     {% assign link = item.details_link %}
@@ -36,18 +37,19 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
     <a href="{{ link }}" class="project-card{% if item.tags contains 'highlighted' %} highlighted{% endif %}" 
        style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9; position: relative; display: block; text-decoration: none; transition: transform 0.2s;">
       <h1><strong>{{ item.name }} ({{ item.end }})</strong></h1>
-      <h4><em>{{ item.brief-description }}</em></h4>
 
       {% if item.primary-image %}
-        <br><img class="project-media" src="../img/{{ item.primary-image }}" style="width: 100%; height: auto;">
+        <br><img class="project-media" src="{{ item.primary-image }}" style="width: 100%; height: auto;">
       {% elsif item.primary-video %}
       <div class="video-as-gif-container">
         <video autoplay loop muted playsinline>
-          <source src="../img/{{ item.primary-video }}" type="video/mp4">
+          <source src="{{ item.primary-video }}" type="video/mp4">
         </video>
       </div>
       {% endif %}
 
+      <h4><em>{{ item.brief-description }}</em></h4>
+      
       <div class="project-tags">
         <p>🔧 <strong>Engine/Tools:</strong> {{ item.engine }}</p>
         <p>👥 <strong>Team Size:</strong> {{ item.team_size }}</p>

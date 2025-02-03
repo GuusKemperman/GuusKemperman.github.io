@@ -31,6 +31,16 @@ Scripts can be added as components to entities. To achieve this, I [made some mo
 
 I made the API for exposing C++ to scripting as simple as could be, using the [runtime reflection](/blog/runtime-reflection) system I'd written earlier. And ofcourse, scripts can always interact and communicate with other scripts.
 
+```cpp
+type.AddField(&Player::Health, "Health")
+  .GetProperties()
+    .Add(Props::sIsScriptableTag);
+
+type.AddFunc(&Player::Respawn, "Respawn")
+  .GetProperties()
+    .Add(Props::sIsScriptableTag)
+```
+
 You can also go the other way; call and access script functions and fields from C++. This was especially useful for writing and maintaining the dozens of **unit-tests** that tested the visual script interpreter. 
 
 ## Editor

@@ -31,6 +31,8 @@
 - name: Utility AI
   description: Created a framework for state-based <strong>AI</strong> behavior.
   details_link: "/blog/utility-ai"
+  thumbnail-img: /img/projects/y2/coral/UtilityAIFast.png
+
 
 - name: Prefab System
   description: Implemented a system similar to <strong>Unity's prefabs</strong>, allowing entity reuse.

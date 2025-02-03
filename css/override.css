@@ -205,6 +205,11 @@ body, p, ul, ol {
   cursor: pointer;
 }
 
+.project-card img {
+  image-rendering: -webkit-optimize-contrast; /* For WebKit browsers */
+  transform: translateZ(0.1px); /* Separate compositing layer */
+}
+
 .project-card.narrow {
   flex: 1 1 max(300px, calc(33% - 100px)); /* Adjusted flex */
 }

@@ -38,12 +38,12 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
        style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9; position: relative; display: block; text-decoration: none; transition: transform 0.2s;">
       <h1><strong>{{ item.name }} ({{ item.end }})</strong></h1>
 
-      {% if item.primary-image %}
-        <br><img class="project-media" src="{{ item.primary-image }}" style="width: 100%; height: auto;">
-      {% elsif item.primary-video %}
+      {% if item.thumbnail-img %}
+        <br><img class="project-media" src="{{ item.thumbnail-img }}" style="width: 100%; height: auto;">
+      {% elsif item.thumbnail-vid %}
       <div class="video-as-gif-container">
         <video autoplay loop muted playsinline>
-          <source src="{{ item.primary-video }}" type="video/mp4">
+          <source src="{{ item.thumbnail-vid }}" type="video/mp4">
         </video>
       </div>
       {% endif %}

@@ -14,13 +14,14 @@ layout: default
     </video>
     {% elsif project.main-page-image %}
     <img class="project-media" src="{{ project.main-page-image }}">
-    {% elsif project.primary-image %}
-    <img class="project-media" src="{{ project.primary-image }}">
-    {% elsif project.primary-video %}
+    {% elsif project.thumbnail-img %}
+    <img class="project-media" src="{{ project.thumbnail-img }}">
+    {% elsif project.thumbnail-vid %}
     <video class="project-media" controls>
-        <source src="{{ project.primary-video }}" type="video/mp4">
+        <source src="{{ project.thumbnail-vid }}" type="video/mp4">
     </video>
     {% endif %}
+
     <div class="project-tags-wrapping">
         {% if project.engine %}
         <div class="tag">🔧 <strong>Engine/Tools:</strong> {{ project.engine }}</div>

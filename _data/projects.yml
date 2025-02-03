@@ -4,7 +4,7 @@
   end: August 2024
   code_link: https://github.com/GuusKemperman/CoralEngine
   details_link: "/projects/coral-engine"
-  primary-video: /img/projects/y2/coral/trailer_preview.mp4
+  thumbnail-vid: /img/projects/y2/coral/trailer_preview.mp4
   main-page-video: /img/projects/y2/coral/CoralTrailer.mp4
   engine: C++
   team_size: 1-10
@@ -21,7 +21,7 @@
   code_link: https://github.com/GuusKemperman/CoralEngine
   game_link: https://buas.itch.io/lichgate 
   details_link: "/projects/lichgate"
-  primary-image: /img/projects/y2/lichgate/lichgate.gif
+  thumbnail-img: /img/projects/y2/lichgate/lichgate.gif
   engine: Coral Engine
   team_size: 10
   platforms: Windows | PS5
@@ -34,7 +34,7 @@
   end: June 2022
   game_link: https://gennakh.itch.io/turbo-tails
   details_link: "/projects/turbo-tails"
-  primary-image: /img/projects/y1/blockd/large.gif
+  thumbnail-img: /img/projects/y1/blockd/large.gif
   secondary-image: /img/projects/y1/blockd/small.png
   engine: Unreal
   team_size: 13
@@ -50,7 +50,7 @@
   end: April 2022
   game_link: https://guuskemperman.itch.io/spider-sling
   details_link: "/projects/spider-sling"
-  primary-image: /img/projects/y1/blockc/game-short.gif
+  thumbnail-img: /img/projects/y1/blockc/game-short.gif
   main-page-image: /img/projects/y1/blockc/game-full.gif
   engine: C++ | OpenGL
   team_size: Solo
@@ -69,7 +69,7 @@
   game_link: https://guuskemperman.itch.io/rts-game-3d
   code_link: https://github.com/GuusKemperman/RTS3D
   details_link: "/projects/rts-3D"
-  primary-image: /img/projects/y1/blockb/large.gif
+  thumbnail-img: /img/projects/y1/blockb/large.gif
   main-page-video: "/img/projects/y1/blockb/trailer.mp4"
   secondary-image: /img/projects/y1/blockb/small.png
   engine: C++ | OpenGL
@@ -88,7 +88,7 @@
   game_link: https://guuskemperman.itch.io/rts-game-2d
   code_link: https://github.com/GuusKemperman/RTS2D
   details_link: "/projects/rts-2D"
-  primary-image: /img/projects/y1/blocka/large.gif
+  thumbnail-img: /img/projects/y1/blocka/large.gif
   secondary-image: /img/projects/y1/blocka/small.png
   main-page-video: "/img/projects/y1/blocka/Week 7 - main menu.mp4"
   engine: C++
@@ -109,7 +109,7 @@
   end: May 2021
   game_link: https://guuskemperman.itch.io/snow-mans-land
   details_link: "/projects/snow-mans-land"
-  primary-image: /img/projects/intakeassignment/large.png
+  thumbnail-img: /img/projects/intakeassignment/large.png
   secondary-image: /img/projects/intakeassignment/small.png
   engine: C++
   team_size: Solo

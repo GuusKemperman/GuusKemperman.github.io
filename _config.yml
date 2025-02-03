@@ -82,6 +82,6 @@ permalink: pretty
 
 # Disable highlighting to use highlightJS instead
 # highlighter: none # Not supported by GitHub Pages
-# kramdown:
-#   syntax_highlighter_opts:
-#     disable: true
+kramdown:
+  syntax_highlighter_opts:
+    disable: true

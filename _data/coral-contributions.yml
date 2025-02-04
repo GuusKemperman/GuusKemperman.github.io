@@ -19,9 +19,10 @@
   details_link: "/blog/physics"
   thumbnail-img: /img/projects/y2/coral/bvh.gif
 
-- name: Runtime Reflection
+- name: Reflection System
   description: Created a system to represent both C++ and Visual Script classes through a unified interface.
   details_link: "/blog/runtime-reflection"
+  thumbnail-img: /img/projects/y2/coral/ReflectionThumbnail.png
 
 - name: Optimisations
   description: I have consistently benchmarked, profiled, and accordingly optimized the worst bottlenecks.
@@ -33,19 +34,21 @@
   details_link: "/blog/utility-ai"
   thumbnail-img: /img/projects/y2/coral/UtilityAIFast.png
 
-
 - name: Prefab System
   description: Implemented a system similar to <strong>Unity's prefabs</strong>, allowing entity reuse.
   details_link: "/blog/prefabs"
+  thumbnail-vid: /img/projects/y2/coral/PrefabUpdating.mp4
 
 - name: Level Editor
   description: Developed a <strong>user-friendly editor</strong> for level design, including tools for quickly transforming objects and undoing changes.
+  thumbnail-vid: /img/projects/y2/coral/LevelEditor.mp4
 
 - name: Particle System
   description: Created an extendable, <strong>data-oriented</strong> particle system.
+  thumbnail-vid: /img/projects/y2/coral/ParticlesThumbnail.mp4
 
 - name: Serialization
-  description: Designed a serialization system with backward compatibility.
+  description: Designed a serialization system for assets and levels with backwards compatibility.
 
 - name: Event Handling
   description: Developed a powerful, easy-to-use event system.

@@ -13,7 +13,7 @@ I have iterated many times on the engine architecture before reaching a 'stable'
 
 There is a clear separation of concerns embedded in the architecture of this engine. There are three types of systems; EngineSubsystems, EditorSystems, and regular systems present in the ECS. They own their own resources to fullfill their own responsibilities with minimum communication between them.
 
-Each regular system in the ECS works in isolation from the other ECS systems. I specifically did not expose a function to get a pointer to a system inside of the registry to encourage this separation. 
+Each regular system in the ECS works in isolation from the other ECS systems. I specifically did not expose a function to get a pointer to a system inside the registry to encourage this separation. 
 
 The same applies to editor systems; A level editor does not know or interact in any way with a prefab editor, or another level editor.
 
@@ -44,7 +44,7 @@ In some cases, you want different class layouts per platform (e.g., buffers, sha
 #endif
 ```
 
-In other cases, we achieved a similar effect by having a baseclass serve as a platform agnostic interface, with platform specific derived classes.
+In other cases, we achieved a similar effect by having a baseclass serve as a platform-agnostic interface, with platform specific derived classes.
 
 ## Engine & Game seperation
 

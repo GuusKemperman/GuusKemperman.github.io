@@ -3,7 +3,7 @@ layout: project
 name: "Turbo Tails"
 ---
 
-This award-winning game was created by a talented team of fifteen individuals over eight weeks. It received the Best Y1 Game 2023 award from industry professionals and the best tech award from BUAS staff. During the project, I honed my skills in using the scrum methodology, collaborating in a multi-disciplinary team, and developing with Unreal Engine. My key responsibilities were AI, the weapons, and UI development.
+This award-winning game was created by a talented team of fifteen individuals over eight weeks. It received the Best Y1 Game 2023 award from industry professionals and the best tech award from BUAS staff. During the project, I honed my skills in using the scrum methodology, collaborating in a multidisciplinary team, and developing with Unreal Engine. My key responsibilities were AI, the weapons, and UI development.
 
 My communication with the team in general went well, especially for the first time working in a gamedev team. I gained a lot of positive feedback during peer reviews regarding my reliability and helpfulness.
 
@@ -35,7 +35,7 @@ The weapons are each quite different. To make the system as modular as possible,
 
 *The pink car is the only human character. The AI are able to use weapons, stay on track and take shortcuts*
 
-The AI were frequently re-balanced as gameplay evolved. I ensure that the behaviour could be easily adjusted through a couple of simple variables. This opened up the doors later for an interesting feature that quickly goes unnoticed: each mouse has a **distinct personality**! Some mice have a more aggressive playstyle, they'll use weapons quicker and will take the ramp shortcut whenever they can. Others just got their drivers license, and still strugle with driving in a straight line. 
+The AI were frequently re-balanced as gameplay evolved. I ensure that the behaviour could be easily adjusted through a couple of simple variables. This opened up the doors later for an interesting feature that quickly goes unnoticed: each mouse has a **distinct personality**! Some mice have a more aggressive playstyle, they'll use weapons quicker and will take the ramp shortcut whenever they can. Others just got their driver's license, and still strugle with driving in a straight line. 
 
 ## Weapons
 
@@ -59,7 +59,7 @@ I created the main menu, the pause menu and the splash screen. Each menu include
   </video>
 </div>
 
-I contributed to the HUD. I created UI for aiming the airstrikes. I implemented colourblind support by adding hovering numbers that follow each car.
+I contributed to the HUD by creating the UI for aiming the airstrikes. I added colourblind support by adding hovering numbers that follow each car.
 
 ![](/img/projects/y1/blockd/color-blind.png)
 

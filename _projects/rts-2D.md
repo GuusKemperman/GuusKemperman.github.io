@@ -8,7 +8,7 @@ It is incredibly satisfying to watch thousands of AI fight against eachother.
 
 # Features
 
-- *[AI](#ai)*: Thousands of AI autonomously battling eachother.
+- *[AI](#ai)*: Thousands of AIs autonomously battling eachother.
 - *[Renderer](#renderer)*: A software renderer written entirely on the CPU.
 - *[UI](#ui)*: A lightweight UI system made specifically for this game.
 - *[Physics](#physics)*: A custom physics implementation capable of supporting thousands of units.
@@ -20,7 +20,7 @@ The behaviour behind each individual unit is relatively simple. The underlying s
 
 ![First real battle](/img/projects/y1/blocka/Week 5 - First real battle_Segment_0_gif.gif)
 
-I support several unit types, with different ground troops and flying vehicles. Each unit type can be defined in a .config file, making the system incredibly easy to extend with new unit types.
+I support several unit types, with different ground troops and flying vehicles. Each unit type can be defined in a config file, making the system incredibly easy to extend with new unit types.
 
 ```
 entity {
@@ -82,7 +82,7 @@ A benefit from having a software renderer is that you work closely with the actu
 
 I essentially draw both sprites to a local buffer. If one sprite is drawing to a pixel that has already been drawn before, you have found an overlap. To make these collisions more efficient, I first use a quadtree and simple box collisions to see if pixel-perfect is even needed.
 
-The game is still able to run at more than one hundred fps with a thousand units on screen. While I know there are still a lot of optimizations I could make for the next block, the performance between my intake assignment and this project has improved so much that I would consider the performance an achievement already.
+The game is still able to run at more than one hundred fps with a thousand units on screen. While I know there are still a lot of optimisations I could make for the next block, the performance between my intake assignment and this project has improved so much that I would consider the performance an achievement already.
 
 # Editor
 

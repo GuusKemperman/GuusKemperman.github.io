@@ -9,7 +9,7 @@ An action rogue-like where you must grow stronger to vanquish the undead. Lichga
 
 While I was mostly focused on maintaining and improving Coral Engine throughout this project, I also contributed directly towards the game.
 
-- *[Flowfields](#flowfields)*: Implemented an optimized flowfield algorithm for **AI** navigation.
+- *[Flowfields](#flowfields)*: Implemented an optimised flowfield algorithm for **AI** navigation.
 - *[Procedural Generation Tool](#procedural-generation-tool)*: Developed tools for Level designers for generating endless, **procedural levels**.
 
 # Flowfields

@@ -9,7 +9,7 @@ I have regularly optimised Coral Engine throughout the year. I tracked some opti
 
 ## Workflow
 
-I created a small tool for benchmarks. It runs the level for 1 real-world minute and measures the average delta time. Each benchmark ran with various amounts of enemies. This allowed me to accurately and consistently measure the result of my optimizations. After each change, I ran the benchmark to confirm it had a positive effect. I use Visual Studio's profiler to determine the most problematic areas.
+I created a small tool for benchmarks. It runs the level for 1 real-world minute and measures the average delta time. Each benchmark ran with various amounts of enemies. This allowed me to accurately and consistently measure the result of my optimisations. After each change, I ran the benchmark to confirm it had a positive effect. I use Visual Studio's profiler to determine the most problematic areas.
 
 ## Benchmark
 
@@ -36,7 +36,7 @@ Standard deviation (Ns): How dispersed the delta time is in relation to the mean
 
 ![](/img/projects/y2/coral/W7_ProfilingFuncDetails.png)
 
-I analyze the overview to figure out which functions require the most optimization. I thoroughly examine the function calls that took up the highest total CPU time to figure out which lines require the most optimizing, and if there is any low-hanging fruit that can be easily optimized.
+I analyze the overview to figure out which functions require the most optimisation. I thoroughly examine the function calls that took up the highest total CPU time to figure out which lines require the most optimizing, and if there is any low-hanging fruit that can be easily optimised.
 
 ## std::vector in a hot-loop
 
@@ -117,7 +117,7 @@ return *existingCachedValue;
 
 **Before** 
 
-All the operations to go find a node, pin, or link by its id were O(N), it was a simple, but slow, linear search.
+All the operations to go find a node, pin, or link by its ID were O(N), it was a simple, but slow, linear search.
 
 ![](/img/projects/y2/coral/W7_InefficientGetConnectedLinks.png)
 
@@ -129,7 +129,7 @@ The percentages were low in the profiler, but they showed up in several differen
 
 **After**
 
-By not erasing elements from the container but instead marking them as null, we can start using the Id as an index to the element in the array.
+By not erasing elements from the container but instead marking them as null, we can start using the ID as an index to the element in the array.
 
 ```cpp
 void Engine::ScriptFunc::RemoveLink(LinkId linkId)
@@ -146,7 +146,7 @@ void Engine::ScriptFunc::RemoveLink(LinkId linkId)
 }
 ```
 
-We no longer have to sort the cache by the pin id at the start, because all the pins will already be sorted in a contiguous buffer.
+We no longer have to sort the cache by the pin ID at the start, because all the pins will already be sorted in a contiguous buffer.
 
 ```cpp
 Engine::VirtualMachine::VMContext::CachedValue& Engine::VirtualMachine::FindCachedValue(VMContext& context,
@@ -165,7 +165,7 @@ Engine::VirtualMachine::VMContext::CachedValue& Engine::VirtualMachine::FindCach
 | Average deltatime (Ns)  	| 6.28E+05 	| 5.78E+06 	| 5.78E+07 	| 5.99E+08 	| 1.10E+10 	|
 | Standard deviation (Ns) 	| 1.43E+05 	| 9.51E+05 	| 6.09E+06 	| 2.25E+08 	| 1.19E+10 	|
 
-## POD optimization
+## POD optimisation
 
 **Before**
 
@@ -208,7 +208,7 @@ struct TypeInfo
 static_assert(sizeof(TypeInfo) == 8);
 ```
 
-This opens up a lot of doors in other places for optimization by avoiding lookups and function calls for POD.
+This opens up a lot of doors in other places for optimisation by avoiding lookups and function calls for POD.
 
 ```cpp
 // We only have to invoke the destructor if this type is not trivially destructible
@@ -261,9 +261,9 @@ I now only look up the address once during the compilation stage.
 
 ![](/img/projects/y2/coral/W7_ForLoopGraph.png)
 
-The total performance improvement was 718.87%. I spend around two days on optimization.
+The total performance improvement was 718.87%. I spend around two days on optimisation.
 
-I went from O(N) to O(1). which allows for the execution of larger functions. 
+I went from O(N) to O(1), which allows for the execution of much larger functions. 
 
 The tool is designed for simple prototyping and gameplay, yet the scripts were still executed at 50fps when faced with 10'000 enemies.
 

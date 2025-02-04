@@ -11,18 +11,18 @@ The goal of this project was to develop a game for the Raspberry Pi, to prepare 
 - *[OpenGL](#opengl)*: My first experience with OpenGL and graphics programming.
 - *[Seamless Texture Repetition](#seamless-texture-repetition)*: An technically complex technique used to reduce texture repetition.
 - *[Serialization](#serialization)*: Perfect serialization of all entity types.
-- *[File compression](#file-compression)*: Algorithms & Custom containers development.
+- *[File compression](#file-compression)*: Algorithms & developing custom containers.
 - *[Procedural-generation](#procedural-generation)*: Procedural levels and units.
 
 # Cross Platform
 
-Working with the Raspberry Pi exclusively proved to be quite cumbersome, as everyday it took time to set up, the compilation time was incredibly slow and it was tedious to record content. I decided to take an extra step beyond the requirements of this project and support a Windows build as well. 
+Working with the Raspberry Pi exclusively proved to be quite cumbersome, as everyday it took time to set up, the compilation time was incredibly slow, and it was tedious to record content. I decided to take an extra step beyond the requirements of this project and support a Windows build as well. 
 
-I used a few static libraries for input, graphics and physics. I'd never built a binary library myself, but I learned how to build the necessary libraries on Windows. 
+I used a few static libraries for input, graphics and physics, although I had never built a binary library myself. I learned how to build the necessary libraries on Windows.
 
 My primitive approach to cross-platform support was to have two seperate projects in a .sln file. It worked, but it's ofcourse tedious to maintain two seperate projects when adding/removing files. I learned the basics of cross-platform development, along with the knowledge of what to do different in future projects.
 
-The final result was a game that I could develop on Windows, and only deploy on the Pi when needed. This sped up development *tremendously*, compilation times dropped from 5-10 minutes on the Pi to around 30 seconds on PC!
+The final result was a game that I could develop on Windows, and only deploy on the Pi when needed. This sped up development *tremendously*, compilation times dropped from 5–10 minutes on the Pi to around 30 seconds on PC!
 
 # OpenGL
 
@@ -58,7 +58,7 @@ I achieved seamless tiling by sampling from multiple virtual texture variations,
 
 # Serialization
 
-I am proud of my serialization system, especially since it seemed like the greatest challenge to me at the start of this block. The system can serialise arbirtrary data, including pointers and relations between different entities using entity ids. 
+I am proud of my serialization system, especially since it seemed like the greatest challenge to me at the start of this block. The system can serialize arbirtrary data, including pointers and relations between different entities using entity IDs. 
 
 <div class="video-as-gif-container">
   <video autoplay loop muted playsinline>
@@ -66,7 +66,7 @@ I am proud of my serialization system, especially since it seemed like the great
   </video>
 </div>
 
-While it worked great, it required the user to write OnSave/OnLoad functions for each entity type to specify which members to serialise. This led to a lot of code repetition, and is something I hope to learn from for future projects.
+While it worked great, it required the user to write OnSave/OnLoad functions for each entity type to specify which members to serialize. This led to a lot of code repetition, and is something I hope to learn from for future projects.
 
 # File compression
 
@@ -88,5 +88,5 @@ For the procedural generation of units, I create a random combination of bodies 
 
 ![](/img/projects/y1/blockb/ProceduralUnits.png)
 
-I designed the turret's and unit's behavior to be completely independent from one another, which allows each unit to have a variable number of turrets.
+I designed the turret's and unit's behavior to be completely independent of one another, which allows each unit to have a variable number of turrets.
 

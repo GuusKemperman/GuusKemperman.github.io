@@ -7,7 +7,7 @@ tags: Coral
 
 > *Runtime reflection: the ability to dynamically inspect, access, and modify an object's type information, properties, and methods at runtime, enabling features like serialization, scripting integration, and editor tooling.*
 
-I wrote a custom runtime reflection system for Coral Engine. The reflection system is capable of reflecting classes (both C\++ classes and [fictional types](#fictional-types)), their constructors, baseclasses, fields and functions.
+I wrote a custom runtime reflection system for Coral Engine. The reflection system is capable of reflecting classes (both C\++ classes and [fictional types](#fictional-types)), their constructors, base classes, fields and functions.
 
 ## Reflecting API
 
@@ -110,7 +110,7 @@ for (const MetaFunc& func : componentClass.EachFunc())
 
 The engine uses the functionality that it needs, e.g., getting and setting fields, without having to use any templates or worry about the implementation details of these classes. The best part? Some of these MetaTypes may not even represent C\++ classes; they represent **'fictional' types**, types that do not have a C++ equivalent! The unified interface for C\++ and fictional types allowed [visual scripts](/blog/visual-scripting) to be seamlessly integrated with the rest of the engine, something that would not have been possible through existing runtime reflection libraries.
 
-In order to create a interface for both C\++ and fictional types, I designed fictional types to closely mimick how C\++ classes work. 
+In order to create an interface for both C\++ and fictional types, I designed fictional types to closely mimick how C\++ classes work. 
 A class in C\++ is *mostly* just a buffer, with different offsets representing different subobjects inside that object.
 
 ![](/img/projects/y2/coral/PlayerLayout.png)
@@ -121,6 +121,6 @@ I used the same principle to represent fictional types. To, for example, constru
 
 The runtime reflection system has by far been the most defining system for the success of Coral Engine. It heavily influenced how code was structured, it enabled modular, generic and clean code. The visual scripting, one of the most useful tools, would not have been possible without it.
 
-The full implementation can be found here on github:
+The full implementation can be found here on GitHub:
 - [include/meta](https://github.com/GuusKemperman/CoralEngine/tree/main-lite/Include/Meta)
 - [source/meta](https://github.com/GuusKemperman/CoralEngine/tree/main-lite/Source/Meta)

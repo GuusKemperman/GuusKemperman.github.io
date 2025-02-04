@@ -29,7 +29,7 @@ Scripts can be added as components to entities. To achieve this, I [made some mo
 
 **C++ Bindings**
 
-I made the API for exposing C++ to scripting as simple as could be, using the [runtime reflection](/blog/runtime-reflection) system I'd written earlier. And ofcourse, scripts can always interact and communicate with other scripts.
+I made the API for exposing C++ to scripting as simple as could be, using the [runtime reflection](/blog/runtime-reflection) system I'd written earlier. And of course, scripts can always interact and communicate with other scripts.
 
 ```cpp
 type.AddField(&Player::Health, "Health")
@@ -71,7 +71,7 @@ Any runtime or compile time errors in your scripts will be printed to the consol
 
 ## Virtual Machine
 
-The Visual Scripting uses a node based interpreter. The virtual machine can be found in it's entirety in [VirtualMachine.cpp](https://github.com/GuusKemperman/CoralEngine/blob/main-lite/Source/Core/VirtualMachine.cpp).
+The Visual Scripting uses a node based interpreter. The virtual machine can be found in its entirety in [VirtualMachine.cpp](https://github.com/GuusKemperman/CoralEngine/blob/main-lite/Source/Core/VirtualMachine.cpp).
 
 **Type erasure**
 
@@ -90,4 +90,4 @@ The full implementation can be found here:
 
 For traversing the graph, I follow the execution links (the white lines), which indicate the order to execute nodes in. The output of these executed nodes are stored directly on a stack. Variables stored in this stack can be passed on to future nodes that need to be executed. 
 
-Pure nodes, nodes without an execution link, are executed whenever it's output is required for another node. Because pure nodes do not modify the state of the world or engine, their results are cached; no need to call that function again until we run a impure node and the state of the world or engine changes.
+Pure nodes, nodes without an execution link, are executed whenever its output is required for another node. Because pure nodes do not modify the state of the world or engine, their results are cached; no need to call that function again until we run an impure node and the state of the world or engine changes.

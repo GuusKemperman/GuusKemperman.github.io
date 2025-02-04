@@ -14,7 +14,7 @@ The importing pipeline is something I created very early on in the project. The 
 
 ![](/img/projects/y2/coral/ImporterPipeline.png)
 
-The importing produces .asset files, containing the asset in binary format along with some useful metadata. Importing large asset packs took quite long though, which I fixed by asynchronously importing the files. The importing became around 8x faster AND the editor remains responsive! I even made it possible to reimport your assets and watch them update, live in the editor.
+The importing produces ```.asset``` files, containing the asset in binary format along with some useful metadata. Importing large asset packs took quite long though, which I fixed by asynchronously importing the files. The importing became around 8x faster AND the editor remains responsive! I even made it possible to reimport your assets and watch them update, live in the editor.
 
 ![](/img/projects/y2/coral/ImportingWorkflow.gif)
 

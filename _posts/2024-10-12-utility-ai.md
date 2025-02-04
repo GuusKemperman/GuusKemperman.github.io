@@ -44,7 +44,7 @@ I focused on **reusing existing systems** to implement the utility AI system; th
 
 ## Optimising Evaluation
 
-The intuitive approach for choosing the next state is by going over each entity and evaluating each of it's components.  
+The intuitive approach for choosing the next state is by going over each entity and evaluating each of its components.  
 
 ![](/img/projects/y2/coral/UtilityAISlow.png)
 
@@ -58,4 +58,4 @@ By sequentially accessing components of the same type, the iteration was sped up
 
 ## Conclusion
 
-In the end, I was able to create an easy to use system that was cheap to implement. It was performant enough to support thousands of enemies at a stable FPS in Lichgate with the utility AI system being barely a blip on the profiler.
+In the end, I was able to create an easy-to-use system that was cheap to implement. It was performant enough to support thousands of enemies at a stable FPS in Lichgate with the utility AI system being barely a blip on the profiler.

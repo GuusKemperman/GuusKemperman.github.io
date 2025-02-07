@@ -9,7 +9,7 @@ layout: default
     <h4><em>{{ project.start }} - {{ project.end }}</em></h4>
 
     {% if project.main-page-video %}
-    <video class="project-media" controls>
+    <video class="project-media" controls autoplay loop muted>
         <source src="{{ project.main-page-video }}" type="video/mp4">
     </video>
     {% elsif project.main-page-image %}
@@ -17,7 +17,7 @@ layout: default
     {% elsif project.thumbnail-img %}
     <img class="project-media" src="{{ project.thumbnail-img }}">
     {% elsif project.thumbnail-vid %}
-    <video class="project-media" controls>
+    <video class="project-media" controls autoplay loop muted>
         <source src="{{ project.thumbnail-vid }}" type="video/mp4">
     </video>
     {% endif %}

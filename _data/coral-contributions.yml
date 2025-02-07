@@ -26,7 +26,7 @@
 
 - name: Optimisations
   description: I have consistently benchmarked, profiled, and accordingly optimized the worst bottlenecks.
-  details_link: "/blog/visual-scripting-optimisations"
+  details_link: "/blog/optimisations"
   thumbnail-img: /img/projects/y2/coral/CacheFuncLookUpBench.png
 
 - name: Utility AI

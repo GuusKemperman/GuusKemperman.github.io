@@ -13,7 +13,7 @@ I ensured that you can write a game entirely using C++, entirely using scripts o
 
 The visual scripting enabled designers to implement player movement and the *many* abilities featured in Lichgate, all without needing assistance of programmers. 
 
-In the end, more than ~90% of the gameplay in Lichgate was achieved through visual scripting, powered by 156 different scripts. 
+In the end, more than 90% of the gameplay in Lichgate was achieved through visual scripting, powered by 156 different scripts. 
 
 <div class="video-as-gif-container">
   <video autoplay loop muted playsinline>

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Visual Scripting Optimisations"
+title: "Optimisations"
 date: 2024-11-05
 tags: Coral
 ---
@@ -22,8 +22,6 @@ The environment consisted of enemies moving from point to point.
 The behavior of an individual enemy.
 
 **Initial benchmark**
-
-![](/img/projects/y2/coral/InitialBench.png)
 
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
@@ -65,8 +63,6 @@ We know the number of inputs that the node has, so we can easily reduce this to 
 
 **Final result: 18.26% faster**
 
-![](/img/projects/y2/coral/AllocaBench.png)
-
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
 | Average deltatime (Ns)  	| 1.11E+00 	| 1.01E+01 	| 1.00E+02 	| 9.86E+02 	| 1.17E+04 	|
@@ -105,8 +101,6 @@ return *existingCachedValue;
 ```
 
 **Final result: 29.64% faster**
-
-![](/img/projects/y2/coral/FasterCacheBench.png)
 
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
@@ -157,8 +151,6 @@ Engine::VirtualMachine::VMContext::CachedValue& Engine::VirtualMachine::FindCach
 ```
 
 **Final result: 20.81% faster**
-
-![](/img/projects/y2/coral/IdRefactoringBench.png)
 
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
@@ -229,8 +221,6 @@ if (!mTypeInfo.mIsTriviallyDestructible)
 
 **Final result: 142.35% faster**
 
-![](/img/projects/y2/coral/PODBench.png)
-
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
 | Average deltatime (Ns)  	| 2.70E+05 	| 2.51E+06 	| 2.51E+07 	| 2.51E+08 	| 3.09E+09 	|
@@ -248,8 +238,6 @@ I now only look up the address once during the compilation stage.
 
 **Final result: 35.57% faster**
 
-![](/img/projects/y2/coral/CacheFuncLookUpBench.png)
-
 | N                       	| 1e2      	| 1e3      	| 1e4      	| 1e5      	| 1e6      	|
 |-------------------------	|----------	|----------	|----------	|----------	|----------	|
 | Average deltatime (Ns)  	| 2.25E+05 	| 2.03E+06 	| 2.02E+07 	| 2.08E+08 	| 2.18E+09 	|
@@ -261,7 +249,7 @@ I now only look up the address once during the compilation stage.
 
 ![](/img/projects/y2/coral/W7_ForLoopGraph.png)
 
-The total performance improvement was 718.87%. I spend around two days on optimisation.
+The total performance improvement was 718.87%, achieved over the course of two days.
 
 I went from O(N) to O(1), which allows for the execution of much larger functions. 
 

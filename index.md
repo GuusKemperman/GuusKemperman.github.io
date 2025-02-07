@@ -64,6 +64,3 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
 
 ----
 
-{% if site.comments_repo %}
-{% include comments.html %}
-{% endif %}

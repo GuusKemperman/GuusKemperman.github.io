@@ -10,8 +10,8 @@
   team_size: Solo for 8 months & Team of 10 for 6 months
   platforms: Windows | PS5
   duration: 14 Months
-  brief-description: Coral Engine is a game engine I wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!
-  contribution: Designed core architecture | Custom Visual Scripting | Physics | Assets management & More!
+  brief-description: Coral Engine began as a personal passion project during a summer holiday. Over time, it evolved into a full-fledged engine featuring <strong>visual scripting</strong> and a <strong>robust editor</strong>. After eight months of solo development, I was joined by five talented programmers to prepare for the development of Lichgate. Three designers joined our team and were able to utilise its capabilities to create their own prototypes, assets and gameplay features.
+  contribution: Designed core architecture | Runtime Reflection | Visual scripting | Serialization | Prefabs | Editor | Asset management | Physics | Particles | Optimisations | And much more!
   tags: 
     - highlighted
 
@@ -43,11 +43,9 @@
   num_artists: 6
   platforms: Windows
   duration: 8 Weeks
-  brief-description: A 4 player mouse racing game with chaotic weapons
+  brief-description: A 4 player mouse racing game with chaotic weapons. It received the Best Y1 Game 2023 award from industry professionals and the Best Tech award from BUAS staff.
   contribution: Designed AI | Local Multiplayer | UI | Core systems
-  full-description: >
-    This award-winning game was created by a talented team of fifteen individuals over eight weeks. It received the Best Y1 Game 2023 award from industry professionals and the best tech award from BUAS staff. During the project, I honed my skills in using the scrum methodology, collaborating in a multi-disciplinary team, and developing with Unreal Engine. My key responsibilities encompassed AI, the weapons, local multi-player, and UI development.
-
+    
 - name: Spider Sling
   start: Febuary 2022
   end: April 2022
@@ -59,12 +57,8 @@
   team_size: Solo
   platforms: Windows
   duration: 8 Weeks
-  brief-description: A 2D GPU Raytraced game where you try to survive for as long as possible
+  brief-description: A game where you try to survive for as long as possible, created in a custom highly <strong>optimised 2D GPU Raytracing framework</strong>.
   contribution: Optimisations | Physics | Graphics
-  full-description: >
-    Through my work on this project, I gained experience in areas important for optimizing games, such as multi-threading, caches and GP-GPU. By implementing these techniques and technologies, I was able to create a highly efficient raytracer that can handle tens of thousands of objects with ease, while also supporting advanced features such as reflections.
-    <br><br>
-    To achieve the high performance for this raytracer, I employed a BVH, as well as a subdivisible screen-space grid to quickly eliminate areas that do not require raytracing.
 
 - name: RTS 3D
   start: November 2021

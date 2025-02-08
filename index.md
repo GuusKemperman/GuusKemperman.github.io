@@ -48,9 +48,10 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
       </div>
       {% endif %}
 
-      <h4><em>{{ item.brief-description }}</em></h4>
+      <h4>{{ item.brief-description }}</h4>
 
       <div class="project-tags">
+        <p>🧠 <strong>Contributions:</strong> {{ item.contribution }}</p>
         <p>🔧 <strong>Engine/Tools:</strong> {{ item.engine }}</p>
         
         <p>👥 <strong>Team Size:</strong>
@@ -73,7 +74,6 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
         </p>
         <p>💻 <strong>Platforms:</strong> {{ item.platforms }}</p>
         <p>⏳ <strong>Duration:</strong> {{ item.duration }}</p>
-        <p>🧠 <strong>Contribution:</strong> {{ item.contribution }}</p>
         {% if project.code_link %}
         <div class="tag">
             <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">

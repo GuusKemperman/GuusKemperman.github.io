@@ -7,7 +7,7 @@
   thumbnail-vid: /img/projects/y2/coral/trailer_preview.mp4
   main-page-video: /img/projects/y2/coral/CoralTrailer.mp4
   engine: C++
-  team_size: 1-10
+  team_size: Solo for 8 months & Team of 10 for 6 months
   platforms: Windows | PS5
   duration: 14 Months
   brief-description: Coral Engine is a game engine I wrote from scratch in C++. It features a level editor, visual scripting and much more. It's my largest project yet!
@@ -23,7 +23,8 @@
   details_link: "/projects/lichgate"
   thumbnail-img: /img/projects/y2/lichgate/lichgate.gif
   engine: Coral Engine
-  team_size: 10
+  num_programmers: 6
+  num_designers: 3
   platforms: Windows | PS5
   duration: 8 Weeks
   brief-description: Lichgate - a relentless survivor, action rogue-like where you must grow stronger to vanquish the undead - made with our custom-built Coral Engine!
@@ -37,7 +38,9 @@
   thumbnail-img: /img/projects/y1/blockd/large.gif
   secondary-image: /img/projects/y1/blockd/small.png
   engine: Unreal
-  team_size: 13
+  num_programmers: 3
+  num_designers: 4
+  num_artists: 6
   platforms: Windows
   duration: 8 Weeks
   brief-description: A 4 player mouse racing game with chaotic weapons

@@ -144,7 +144,9 @@ body, p, ul, ol {
   display: flex;
   flex-wrap: wrap; /* Allow wrapping between tags */
   gap: 10px; /* Space between tags */
-
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .project-tags-wrapping .tag {
@@ -159,6 +161,12 @@ body, p, ul, ol {
   white-space: nowrap
 }
 
+.project-tags-wrapping .tag.double {
+  flex: 1 1 calc(66.666% - 10px);
+  max-width: calc(66.666% - 10px);
+  white-space: pre-wrap;
+}
+
 @media (max-width: 800px) {
   .project-tags-wrapping {
     justify-content: space-between; /* Adjust for medium screens */
@@ -166,6 +174,11 @@ body, p, ul, ol {
   .project-tags-wrapping .tag {
     flex: 1 1 calc(50% - 10px); /* Two items per row */
     max-width: calc(50% - 10px); /* Ensure consistent alignment */
+  }
+
+  .project-tags-wrapping .tag.double {
+    flex: 1 1 calc(100% - 10px);
+    max-width: calc(100% - 10px);
   }
 }
 
@@ -175,9 +188,6 @@ body, p, ul, ol {
     max-width: 100%; /* Prevent unnecessary shrinking */
   }
 }
-
-
-
 
 .project-grid {
     max-width: 1200px; /* Take up the full width of the page */

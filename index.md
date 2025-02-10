@@ -15,7 +15,7 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
       <h1>{{ resume.header.name }} {{ resume.header.suffix }}</h1>
       <h2>{{ resume.header.current_title }}</h2>
       <p>{{ resume.header.intro }}</p>
-      <a href="/assets/GuusKemperman.pdf" class="read-more" draggable="false" selectable="false">Read Full Resume</a>
+      <a href="/assets/GuusKemperman.pdf" class="read-more" draggable="false" selectable="false">Resume</a>
     </div>
   </div>
 </section>

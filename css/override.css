@@ -333,9 +333,9 @@ body, p, ul, ol {
 
 .read-more {
   display: block;             /* Make the button a block-level element */
-  width: 250px;               /* Set a fixed, wider width */
+  width: 60%;               /* Set a fixed, wider width */
   margin: 20px auto;          /* Center it horizontally with auto margins */
-  padding: 15px 20px;         /* Adjust padding for a larger clickable area */
+  padding: 6px 20px;         /* Adjust padding for a larger clickable area */
   color: black;               /* Text color */
   text-decoration: none;      /* Remove underline */
   font-size: 1.25rem;

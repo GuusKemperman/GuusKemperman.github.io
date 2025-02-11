@@ -213,6 +213,7 @@ body, p, ul, ol {
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
   color: black; /* Ensure visited links remain black */
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* Add a subtle shadow */
 }
 
 .project-card img {
@@ -240,7 +241,7 @@ body, p, ul, ol {
 /* Hover effect for clickable cards */
 .project-card:hover {
   transform: scale(1.02); /* Scale on hover */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1); /* Add a subtle shadow */
   text-decoration: none; /* Remove underline on hover */
   color: black; /* Ensure visited links remain black */
 }
@@ -252,8 +253,8 @@ body, p, ul, ol {
 /* Styling for non-clickable cards */
 .project-card.narrow.no-link {
   cursor: default; /* Indicate non-interactivity */
-  opacity: 0.85;  /* Slightly dim to signal a disabled state */
-
+  opacity: 0.6;  /* Slightly dim to signal a disabled state */
+  box-shadow: none; /* Add a subtle shadow */
 }
 
 .project-card.narrow.no-link:hover {

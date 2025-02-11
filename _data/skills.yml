@@ -30,14 +30,21 @@
 - skill: Unreal
   description: "2 years of Unreal C++ experience"
   icon-svg: /img/socialicons/unreal.svg
+  tags: 
+    - white-bg
 
 - skill: Optimising
   description: "I love optimising! Able to identify bottlenecks through profiling. Experienced with Data Oriented Design, multi-threading, and the occasional SIMD."
   icon-svg: /img/socialicons/optimise.png
+  tags: 
+    - white-bg
 
 - skill: Engine Development
   description: "3 years of dedicated experience developing frameworks and engines, focused on creating systems that are not only powerful and flexible but also intuitive and simple to use. I thrive on the challenge of transforming complex problems into reusable, scalable solutions that stand the test of time. "
   icon-svg: /img/socialicons/engine.png
+  tags: 
+    - white-bg
+    
 # - skill: STL, ImGui & Entt Libraries
 #   description: "3-5 years of extensive usage, I actively follow their development"
 # - skill: Cross-platform development

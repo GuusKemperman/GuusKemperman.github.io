@@ -16,18 +16,19 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
       <h2>{{ resume.header.current_title }}</h2>
       <p>{{ resume.header.intro }}</p>
       <div class="skills-container">
-        {% for skill in site.data.skills %}
-        <div class="skill-item">
-          <div class="skill-icon">
-              <img src="{{ skill.icon-svg }}" alt="{{ skill.skill }} icon" class="skill-img">
-          </div>
-          <div class="skill-description">
-            <h4>{{ skill.skill }}</h4>
-            <p>{{ skill.description }}</p>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
+  {% for skill in site.data.skills %}
+  <div class="skill-item">
+    <div class="skill-icon{% if skill.tags contains 'white-bg' %} white-bg{% endif %}">
+      <img src="{{ skill.icon-svg }}" alt="{{ skill.skill }} icon" class="skill-svg">
+    </div>
+    <div class="skill-description">
+      <h4>{{ skill.skill }}</h4>
+      <p>{{ skill.description }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
       <a href="/assets/GuusKemperman.pdf" class="read-more" draggable="false" selectable="false">Resume</a>
     </div>
   </div>

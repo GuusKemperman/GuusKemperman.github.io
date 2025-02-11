@@ -380,6 +380,7 @@ img {
 .skills-container {
   display: flex;
   justify-content: center;
+  align-items: center;  /* Center items vertically */
   gap: 2rem;
   flex-wrap: nowrap;
   padding: 1rem;
@@ -392,6 +393,7 @@ img {
   position: relative;
   flex: 1;
   transition: transform 0.3s ease;
+  justify-content: center;
 }
 
 /* On hover, raise the item (and its tooltip) above siblings */
@@ -408,6 +410,17 @@ img {
   aspect-ratio: 1;  /* Maintains a square shape */
   cursor: pointer;
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.skill-icon.white-bg {
+  width: 80%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Optional: add some padding if you want extra space around the icon */
+  padding: 20%;
 }
 
 /* SVG fills its container */

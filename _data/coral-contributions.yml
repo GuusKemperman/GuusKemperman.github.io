@@ -27,7 +27,7 @@
 - name: Optimisations
   description: I have consistently benchmarked, profiled, and accordingly optimized the worst bottlenecks.
   details_link: "/blog/optimisations"
-  thumbnail-img: /img/projects/y2/coral/CacheFuncLookUpBench.png
+  thumbnail-img: /img/projects/y2/coral/W7_GameplayGraph.png
 
 - name: Utility AI
   description: Created a framework for state-based <strong>AI</strong> behavior.

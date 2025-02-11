@@ -22,7 +22,7 @@ Our game featured many enemies. Rather than calculating thousands of paths, I us
   </video>
 </div>
 
-The flowfield moves with the player and is updated asynchronously. The flowfield has multiple level of, allowing the flowfield to extend a greater distance while only being calculated at a lower resolution.
+The flowfield moves with the player and is updated asynchronously. The flowfield has multiple level of detail, allowing the flowfield to extend a greater distance while only being calculated at a lower resolution.
 
 I later made a prototype for **3D flowfields** in **Unreal Engine**, allowing agents to navigate any surface.
 

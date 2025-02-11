@@ -30,8 +30,6 @@
 - skill: Unreal
   description: "2 years of Unreal C++ experience"
   icon-svg: /img/socialicons/unreal.png
-  tags: 
-    - white-bg
 
 # - skill: Optimising
 #   description: "I love optimising! Able to identify bottlenecks through profiling. Experienced with Data Oriented Design, multi-threading, and the occasional SIMD."

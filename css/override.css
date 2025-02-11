@@ -332,29 +332,31 @@ body, p, ul, ol {
 
 
 .read-more {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    color: black; /* Change text color to black */
-    text-decoration: none; /* Remove underline */
-    font-size: 1.25rem;
-    border: 2px solid black; /* Add a black border */
-    border-radius: 4px;
-    position: relative; /* Positioning for the arrow */
-    transition: color 0.3s, border-color 0.3s;
+  display: block;             /* Make the button a block-level element */
+  width: 250px;               /* Set a fixed, wider width */
+  margin: 20px auto;          /* Center it horizontally with auto margins */
+  padding: 15px 20px;         /* Adjust padding for a larger clickable area */
+  color: black;               /* Text color */
+  text-decoration: none;      /* Remove underline */
+  font-size: 1.25rem;
+  border: 2px solid black;    /* Black border */
+  border-radius: 25px;        /* Increased rounded edges */
+  text-align: center;         /* Center the text within the button */
+  position: relative;         /* For arrow positioning if needed */
+  transition: color 0.3s, border-color 0.3s;
 }
 
 .read-more:hover {
-    color: #555; /* Slightly change color on hover */
-    border-color: #555; /* Change border color on hover */
+  color: #555;                /* Change text color on hover */
+  border-color: #555;         /* Change border color on hover */
 }
 
 .read-more:hover::after {
-    transform: translateX(5px); /* Move arrow slightly on hover */
+  transform: translateX(5px); /* Move arrow slightly on hover */
 }
 
 .read-more:visited {
-    color: black; /* Keep link color consistent */
+  color: black;               /* Maintain consistent link color */
 }
 
 .video-as-gif-container {
@@ -461,6 +463,13 @@ img {
 /* Mobile optimization */
 @media (max-width: 768px) {
   .skills-container {
-    justify-content: flex-start;
+    /* This effectively “removes” the container in the layout,
+       so its children render as if they weren’t wrapped. */
+       visibility: hidden;
+       clear: both;
+       float: left;
+       margin: 10px auto 5px 20px;
+       width: 28%;
+       display: none;
   }
 }

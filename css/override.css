@@ -414,7 +414,8 @@ img {
 
 .skill-icon.white-bg {
   width: 80%;
-  background-color: rgb(255, 255, 255);
+  background: url('/img/socialicons/white-bg.png') no-repeat center center;
+  background-size: cover;
   border-radius: 50%;
   display: flex;
   align-items: center;

@@ -373,4 +373,94 @@ img {
     width: 100%;
     height: auto; /* Maintain aspect ratio */
 }
+/* Updated styles.css */
+/* Container: full width with horizontal scrolling if needed */
+.skills-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  padding: 1rem;
+  position: relative;      /* Ensure proper positioning context */
+  z-index: 1;              /* Lower than tooltip’s z-index */
+}
 
+/* Each skill item fills available space equally */
+.skill-item {
+  position: relative;
+  flex: 1;
+  transition: transform 0.3s ease;
+}
+
+/* On hover, raise the item (and its tooltip) above siblings */
+.skill-item:hover {
+  z-index: 10;
+}
+
+/* 
+  Scale the icon to fill the skill item.
+  Remove fixed dimensions and use aspect-ratio for a square shape.
+*/
+.skill-icon {
+  width: 100%;
+  aspect-ratio: 1;  /* Maintains a square shape */
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* SVG fills its container */
+.skill-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+/* 
+  Tooltip styling.
+  We use a very high z-index so it overlays even elements outside the skills container.
+*/
+.skill-description {
+  position: absolute;
+  z-index: 9999;           /* Ensure tooltip overlays other elements */
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  background: rgba(0, 0, 0, 1.0);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.skill-description h4 {
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+/* Hover: reveal tooltip and add subtle icon effects */
+.skill-item:hover .skill-description {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.skill-item:hover .skill-icon {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .skills-container {
+    justify-content: flex-start;
+  }
+}

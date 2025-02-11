@@ -20,6 +20,23 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
   </div>
 </section>
 
+
+<!-- skills.html -->
+<div class="skills-container">
+  {% for skill in site.data.skills %}
+  <div class="skill-item">
+    <div class="skill-icon">
+        <img src="{{ skill.icon-svg }}" alt="{{ skill.skill }} icon" class="skill-img">
+    </div>
+    <div class="skill-description">
+      <h4>{{ skill.skill }}</h4>
+      <p>{{ skill.description }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
 <div class="project-grid">
   {% for item in site.data.projects %}
     {% assign link = item.details_link %}

@@ -23,8 +23,14 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
         
         <div class="skill-item">
           <div class="skill-icon{% if skill.tags contains 'white-bg' %} white-bg{% endif %}">
-            <img src="{{ skill.icon-svg }}" alt="{{ skill.skill }} icon" class="skill-svg">
-          </div>
+            <picture>
+              <!-- Show dark icon in dark mode -->
+              <source srcset="{{ skill.icon-dark }}" media="(prefers-color-scheme: dark)">
+              <!-- Show light icon in light mode -->
+              <source srcset="{{ skill.icon-light }}" media="(prefers-color-scheme: light)">
+              <!-- Fallback for browsers that don't support picture element -->
+              <img src="{{ skill.icon-darklight }}" alt="{{ skill.skill }} icon" class="skill-svg">
+            </picture>          </div>
           <div class="skill-description">
             <h4>{{ skill.skill }}</h4>
             <p>{{ skill.description }}</p>
@@ -41,9 +47,6 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
     </div>
   </div>
 </section>
-
-
-
 
 <div class="project-grid">
   {% for item in site.data.projects %}

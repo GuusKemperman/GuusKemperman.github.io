@@ -80,7 +80,6 @@
     This is the first cross-platform I've created, able to run on a Windows PC, but also on any Raspberry Pi; a cheaper way of becoming familiar with console-programming. I gained experience in hardware rendering and OpenGL. More advanced topics, such as instancing, animations and procedural textures were used. I learned my way around ImGui and the Bullet Physics library. The terrain and forests are procedurally generated, with a basic level editor to tweak the parameters as needed. The entire gamestate can be serialized to a compressed file, to be loaded in again at a later time.
 
 - name: RTS 2D
-  role: Developer
   start: September 2021
   end: October 2021
   game_link: https://guuskemperman.itch.io/rts-game-2d
@@ -94,7 +93,7 @@
   platforms: Windows
   duration: 8 Weeks
   brief-description: A CPU rendered 2D RTS game
-  contribution: Graphics | AI
+  contribution: Graphics | AI | Physics
 
   full-description: >
     I used autonomous steering combined with a finite state machine to achieve realistic behaviour with coordination among the units, allowing them to move inside enormous formations.
@@ -102,10 +101,10 @@
     Acceleration structures were utilized to allow battles between thousands of units.
 
 - name: Snow man's land
-  role: Developer
   start: December 2020
   end: May 2021
   game_link: https://guuskemperman.itch.io/snow-mans-land
+  code_link: https://github.com/GuusKemperman/SnowMansLand
   details_link: "/projects/snow-mans-land"
   thumbnail-img: /img/projects/intakeassignment/large.png
   secondary-image: /img/projects/intakeassignment/small.png
@@ -113,11 +112,10 @@
   team_size: Solo
   platforms: Windows
   duration: 7 Months
-  brief-description: The project that got me accepted into BUAS. Build snowmen, shoot snowballs and destroy the enemy igloos!
+  brief-description: This was my first game written in C++, and the project that got me accepted into BUAS. Build snowmen, shoot snowballs and destroy the enemy igloos!
   contribution: Graphics | AI | UI | Audio | Procedural generation
 
   full-description: >
-    This way my first game written in C++.
     The CPU based rendering required significant optimization and introduced me to the workings of rasterization.
     I gained a lot of experience with UI programming during this project.
     Implementing the AI's behaviour familiarised me with AI-programming and pathfinding algorithms.

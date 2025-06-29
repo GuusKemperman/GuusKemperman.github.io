@@ -1,4 +1,5 @@
 ﻿
+
 - name: Coral Engine
   start: July 2023
   end: August 2024
@@ -14,6 +15,22 @@
   contribution: Designed core architecture | Runtime Reflection | Visual scripting | Serialization | Prefabs | Editor | Asset management | Physics | Particles | Optimisations | And much more!
   tags: 
     - highlighted
+
+- name: Umbra Mortis
+  start: September 2024
+  end: July 2025
+  game_link: https://store.steampowered.com/app/3365870/Umbra_Mortis/
+  details_link: "/projects/umbra-mortis"
+  thumbnail-vid: /img/projects/y3/umbramortis/Thumbnail.mp4
+  main-page-video: /img/projects/y3/umbramortis/FullTrailer.mp4
+  engine: Unreal
+  num_programmers: 6
+  num_designers: 6
+  num_artists: 10
+  platforms: Windows
+  duration: 10 Months
+  brief-description: Defeat hordes of enemies alongside your friends in this <strong>multiplayer</strong> cooperative FPS game.
+  contribution: Multiplayer programming | Objectives system & Tools | Development Tools | Core gameplay systems
 
 - name: Lichgate
   start: April 2024
@@ -120,3 +137,20 @@
     I gained a lot of experience with UI programming during this project.
     Implementing the AI's behaviour familiarised me with AI-programming and pathfinding algorithms.
     The wave function collapse algorithm is utilized by the level editor to determine the visual design of the tilemap.
+
+# - name: Check out more of my projects on GitHub!
+#   details_link: "https://github.com/GuusKemperman"
+#   thumbnail-img: /img/projects/intakeassignment/large.png
+#   secondary-image: /img/projects/intakeassignment/small.png
+#   engine: C++
+#   team_size: Solo
+#   platforms: Windows
+#   duration: 7 Months
+#   brief-description: This was my first game written in C++, and the project that got me accepted into BUAS. Build snowmen, shoot snowballs and destroy the enemy igloos!
+#   contribution: Graphics | AI | UI | Audio | Procedural generation
+
+#   full-description: >
+#     The CPU based rendering required significant optimization and introduced me to the workings of rasterization.
+#     I gained a lot of experience with UI programming during this project.
+#     Implementing the AI's behaviour familiarised me with AI-programming and pathfinding algorithms.
+#     The wave function collapse algorithm is utilized by the level editor to determine the visual design of the tilemap.

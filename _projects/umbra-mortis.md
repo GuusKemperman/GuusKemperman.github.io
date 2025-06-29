@@ -3,16 +3,18 @@ layout: project
 name: "Umbra Mortis"
 ---
 
-I chose to get more experience with working in Unreal and multiplayer programming. 
+Umbra Mortis is a 1-3 player coop FPS shooter, where you fight hordes of zombies in the streets of Venice. 
 
-This project has taught me a lot about the subtle difficulties with networking and replication. I've gained experience with navigating large codebases like Unreal, while working in a moderately sized team.
+It was amazing to get experience with Unreal's networking and multiplayer programming systems, and all the challenges that came with them. I was lucky enough to be able to work together in an amazing team of 22 developers, collaborating closely and achieving our goal of a succesful Steam release.
 
-- Optimising enemy navigation, created efficient local avoidance for 3D environemnts
-- Created development tools, such as the objectives system, cheat menu, analytics, automated crash reports & improved logging
-- Gameplay features, such as the homing bell, an AI director, spectating and the functionality behind many widgets and triggerable events in the level.
-- Bug fixing, mainly replication related issues, giving me a lot of insight into multiplayer programming and leading to an incredibly stable build on release
+# My Contributions
 
-This page is still under construction, with more details about my contributions coming soon. In the meantime, feel free to check out our game on Steam:
+- Created development tools, such as the objectives system, cheat menu, analytics, automated crash reports & improved logging.
+- Gameplay features, such as the homing bell, an AI director, spectating, as well as the functionality behind many widgets and triggerable events in the level.
+- Optimising enemy navigation, created efficient local avoidance for 3D environments.
+- Bug fixing, mainly replication related issues, leading to an incredibly stable build on release.
+
+This page is still under construction, with more details about my contributions coming soon. In the meantime, feel free to check out our game on Steam!
 
 <div style="text-align: center;">
   <iframe 

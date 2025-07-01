@@ -5,7 +5,7 @@ name: "Umbra Mortis"
 
 Umbra Mortis is a 1-3 player coop FPS shooter, where you fight hordes of zombies in the streets of Venice. 
 
-It was amazing to get experience with Unreal's networking and multiplayer programming systems, and all the challenges that came with them. I was lucky enough to be able to work together in an amazing team of 22 developers, collaborating closely and achieving our goal of a succesful Steam release.
+It was amazing to get experience with Unreal's networking and multiplayer programming systems, and all the challenges that came with them. I was lucky enough to be able to work together in an amazing team of 22 developers, collaborating closely and achieving our goal of a successful Steam release.
 
 # My Contributions
 

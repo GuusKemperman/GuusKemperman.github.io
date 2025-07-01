@@ -29,7 +29,7 @@
   num_artists: 10
   platforms: Windows
   duration: 10 Months
-  brief-description: Defeat hordes of enemies alongside your friends in this <strong>multiplayer</strong> cooperative FPS game.
+  brief-description: Umbra Mortis is a 1-3 player coop FPS shooter made in Unreal Engine, where you fight hordes of zombies in the streets of Venice.
   contribution: Multiplayer programming | Objectives system & Tools | Development Tools | Core gameplay systems
 
 - name: Lichgate

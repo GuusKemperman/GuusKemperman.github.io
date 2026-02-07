@@ -6,12 +6,12 @@
   description: "Followed the Creative Media and Game Technologies (CMGT) course at Breda University of Applied Sciences."
 
 - start: "September 2025"
-  end: "February 2026"
+  end: "January 2026"
   company: "Behaviour Interactive"
   role: "Tools & Gameplay Intern"
   description: "Contributed to an unnannounced project. I gained experience in Unity, C#, multiplayer mobile development, and a deeper understanding of improving game dev pipelines."
 
-- start: "2026"
+- start: "February 2026"
   end: "Present"
   company: "Remedy Entertainment"
   role: "Junior Engine Programmer"

@@ -1,0 +1,23 @@
+
+- start: "September 2021"
+  end: "July 2026"
+  company: "Breda University of Applied Sciences"
+  role: "Programming Student"
+  description: "Followed the Creative Media and Game Technologies (CMGT) course at Breda University of Applied Sciences."
+
+- start: "September 2025"
+  end: "February 2026"
+  company: "Behaviour Interactive"
+  role: "Tools & Gameplay Intern"
+  description: "Contributed to an unnannounced project. I gained experience in Unity, C#, multiplayer mobile development, and a deeper understanding of improving game dev pipelines."
+
+- start: "2026"
+  end: "Present"
+  company: "Remedy Entertainment"
+  role: "Junior Engine Programmer"
+  description: "Contributing to Northlight engine as part of the core engine team, with a focus on improving the scripting system. My main responsibilities include bug fixing, optimising, and adding any features required to support the game teams."
+
+
+
+
+

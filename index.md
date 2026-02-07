@@ -48,6 +48,24 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
   </div>
 </section>
 
+<!-- Add this after the intro section -->
+<section class="experience-section">
+  <div class="experience-grid">
+    {% for entry in site.data.experience %}
+      <div class="experience-card">
+        <div class="experience-header">
+          <h1><strong>{{ entry.company }}</strong></h1>
+          <p><strong>{{ entry.role }}</strong></p>
+          <p class="experience-dates">{{ entry.start }} - {{ entry.end }}</p>
+        </div>
+        <div class="experience-description">
+          <p>{{ entry.description }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
 <div class="project-grid">
   {% for item in site.data.projects %}
     {% assign link = item.details_link %}
@@ -111,7 +129,3 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
     </a>
   {% endfor %}
 </div>
-
-
-----
-

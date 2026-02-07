@@ -23,9 +23,9 @@ layout: default
     {% endif %}
 
     <div class="project-tags-wrapping">
-        <div class="tag">🔧 <strong>Engine/Tools:</strong> {{ project.engine }}</div>
-        <div class="tag">💻 <strong>Platforms:</strong> {{ project.platforms }}</div>
-        <div class="tag">⏳ <strong>Duration:</strong> {{ project.duration }}</div>
+        <div class="tag"><strong>Engine/Tools:</strong> {{ project.engine }}</div>
+        <div class="tag"><strong>Platforms:</strong> {{ project.platforms }}</div>
+        <div class="tag"><strong>Duration:</strong> {{ project.duration }}</div>
         {% if project.code_link %}
         <div class="tag">
             <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -36,22 +36,22 @@ layout: default
         {% endif %}
 
         {% if project.num_programmers %}
-        <div class="tag">👨‍💻 <strong>Programmers:</strong> {{ project.num_programmers }}</div>
+        <div class="tag"><strong>Programmers:</strong> {{ project.num_programmers }}</div>
         {% endif %}
 
         {% if project.num_designers %}
-        <div class="tag">🤹 <strong>Designers:</strong> {{ project.num_designers }}</div>
+        <div class="tag"><strong>Designers:</strong> {{ project.num_designers }}</div>
         {% endif %}
 
         {% if project.num_artists %}
-        <div class="tag">👨‍🎨 <strong>Artists:</strong> {{ project.num_artists }}</div>
+        <div class="tag"><strong>Artists:</strong> {{ project.num_artists }}</div>
         {% endif %}
 
         {% if project.team_size %}
             {% if project.team_size == "Solo" %}
-                <div class="tag">👥 <strong>Team Size:</strong> {{ project.team_size }}</div>
+                <div class="tag"><strong>Team Size:</strong> {{ project.team_size }}</div>
             {% else %}
-                <div class="tag double">👥 <strong>Team Size:</strong> {{ project.team_size }}</div>
+                <div class="tag double"><strong>Team Size:</strong> {{ project.team_size }}</div>
             {% endif %}
         {% endif %}
 

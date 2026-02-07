@@ -3,7 +3,7 @@ header:
   name: Guus Kemperman
   display_contact_info: true
   current_title: Engine Programmer
-  intro: Hi, I'm Guus! A soon-to-be graduate from Breda University of Applied Sciences, with experience working on commercial engines, while balancing (overly) ambitious personal projects in my free time. I have deep, practical knowledge of C++ and robust problem-solving skills. I am confident I'm able to solve any problem thrown at me. This is matched by strong communication skills and a genuine enthusiasm for contributing as part of a larger team.
+  intro: Hi, I'm Guus! A soon-to-be graduate from <b>Breda University of Applied Sciences</b> with experience working on <b>commercial engines</b>, while balancing (overly) ambitious personal projects in my free time. I have deep, practical knowledge of C++ and robust problem-solving skills. This is matched by <b>strong communication skills</b> and a genuine enthusiasm for contributing as part of a larger team.
 
 contact:
   email: guus.kemperman@gmail.com

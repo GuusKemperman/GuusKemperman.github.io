@@ -8,7 +8,7 @@
   team_size: Core engine team
   thumbnail-img: /img/projects/y4/northlight/banner-small-no-text.png
   main-page-image: /img/projects/y4/northlight/banner-large.png
-  platforms: Windows | PS5 | Xbox Series
+  platforms: PS5 | Xbox Series | Windows
   brief-description: Northlight is Remedy Entertainment's in-house engine, powering Alan Wake 2 and Control Resonant. As part of the core engine team I focus on the scripting system, making Lua <strong>fast</strong> and <strong>stable</strong> across every game built on the engine.
   contribution: Scripting | Performance | Static analysis | Tooling | Stability
   tags:
@@ -19,7 +19,7 @@
   end: Present
   duration: Ongoing
   details_link: "/projects/control-resonant"
-  engine: Northlight | C++ | Lua
+  engine: Northlight
   thumbnail-img: /img/projects/y4/control-resonant/small-banner-without-title.png
   main-page-image: /img/projects/y4/control-resonant/banner-with-title.jpg
   platforms: PS5 | Xbox Series | Windows

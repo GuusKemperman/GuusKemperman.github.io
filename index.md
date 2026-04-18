@@ -82,7 +82,7 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
       <h1><strong>{{ item.name }} ({{ item.end }})</strong></h1>
 
       {% if item.thumbnail-img %}
-        <br><img class="project-media" src="{{ item.thumbnail-img }}" style="width: 100%; height: auto;">
+        <img class="project-media" src="{{ item.thumbnail-img }}" style="width: 100%; height: auto;">
       {% elsif item.thumbnail-vid %}
       <div class="video-as-gif-container">
         <video autoplay loop muted playsinline>

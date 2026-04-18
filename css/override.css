@@ -371,6 +371,12 @@ body, p, ul, ol {
     object-fit: cover; /* Ensures the video fills the container */
 }
 
+/* Match .project-media sizing so img and video thumbnails leave equal space below */
+.project-grid .video-as-gif-container {
+    aspect-ratio: 16 / 9;
+    margin-bottom: 15px;
+}
+
 img {
     width: 100%;
     height: auto; /* Maintain aspect ratio */

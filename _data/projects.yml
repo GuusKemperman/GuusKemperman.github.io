@@ -1,4 +1,28 @@
 ﻿
+- name: Northlight
+  start: February 2026
+  end: Present
+  details_link: "/projects/northlight"
+  engine: C++ | Lua (Luau)
+  team_size: Core engine team
+  thumbnail-img: /img/projects/y4/northlight/banner-small-no-text.png
+  main-page-image: /img/projects/y4/northlight/banner-large.png
+  platforms: Windows | PS5 | Xbox Series
+  brief-description: Northlight is Remedy Entertainment's in-house engine, powering Alan Wake 2 and Control Resonant. As part of the core engine team I focus on the scripting system, making Lua <strong>fast</strong> and <strong>stable</strong> across every game built on the engine.
+  contribution: Scripting | Performance | Static analysis | Tooling | Stability
+  tags:
+    - highlighted
+
+- name: Control Resonant
+  start: February 2026
+  end: Present
+  details_link: "/projects/control-resonant"
+  engine: Northlight | C++ | Lua (Luau)
+  thumbnail-img: /img/projects/y4/control-resonant/small-banner-without-title.png
+  main-page-image: /img/projects/y4/control-resonant/banner-with-title.jpg
+  platforms: PS5 | Xbox Series | Windows
+  brief-description: Control Resonant is Remedy Entertainment's upcoming sequel to <em>Control</em>, built on the Northlight engine. As a Junior Engine Programmer I contribute to the game's frame-rate targets through <strong>performance work</strong>, a <strong>custom sampling Luau profiler</strong>, and <strong>script-level optimisations</strong>.
+  contribution: Performance | Custom profiling tools | Lua integration | Cross-team support
 
 - name: Coral Engine
   start: July 2023
@@ -13,8 +37,6 @@
   duration: 14 Months
   brief-description: Coral Engine began as a personal passion project during a summer holiday. Over time, it evolved into a full-fledged engine featuring <strong>visual scripting</strong> and a <strong>robust editor</strong>. After eight months of solo development, I was joined by five talented programmers to prepare for the development of Lichgate. Three designers joined our team and were able to utilise its capabilities to create their own prototypes, assets and gameplay features.
   contribution: Designed core architecture | Runtime Reflection | Visual scripting | Serialization | Prefabs | Editor | Asset management | Physics | Particles | Optimisations | And much more!
-  tags: 
-    - highlighted
 
 - name: Umbra Mortis
   start: September 2024

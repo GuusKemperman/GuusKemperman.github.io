@@ -17,10 +17,10 @@ I joined Remedy Entertainment's core engine team in February 2026 as a Junior En
 
 # My Contributions
 
-- *[Lua Loading Performance](#lua-loading-performance)*: A 20x deserialisation speedup and a 44% reduction in serialised bundle size, including a subtle C++ string-corruption bug fix along the way.
-- *[Thread-Safe Lua Loading](#thread-safe-lua-loading)*: Static analysis over the Lua AST to auto-identify thread-safe functions, enabling asynchronous script loading.
-- *[Lua Throttling](#lua-throttling)*: Spreading script loading across frames to smooth out delivery.
-- *[Property Blocks in C++](#property-blocks-in-c)*: Halving script-initialisation time in shipping builds.
+- *[Script Entity Serialization](#script-entity-serialization)*: A 20x deserialisation speedup and a 44% reduction in serialised bundle size, including a subtle C++ string-corruption bug fix along the way.
+- *[Asynchronous loading](#asynchronous-loading)*: Static analysis over the Lua AST to auto-identify thread-safe functions, enabling asynchronous script loading.
+- *[Throttled Loading](#throttled-loading)*: Spreading script loading across frames to smooth out delivery.
+- *[Optimized Script Properties](#optimized-script-properties)*: Halving script-initialisation time in shipping builds.
 - *[Stability & Quality](#stability--quality)*: Live-edit crash fixes, better diagnostics, and automated test coverage for the trickier analysis code.
 
 # Script Entity Serialization
@@ -33,7 +33,7 @@ I rewrote the serialization to use a **custom binary format**: a **single heap a
 
 The most interesting part of this work wasn't the format itself, but a bug that surfaced only once loading got fast. The new path was corrupting memory in a way that only reproduced under specific conditions. Tracking it down meant reading through our C++ string implementation and eventually finding a case where a **small-buffer optimisation** interacted badly with embedded null bytes in binary payloads. Fixing it required a careful patch to a very widely-used class, which was paired with a large amount of unit tests.
 
-# Asynchronous loading
+# Asynchronous Loading
 
 Script loading on the main thread competes with rendering and gameplay for the same frame budget, and a 60 FPS target leaves very little room for it. Moving loading **off the main thread** gets it out of the way entirely. The catch is that any Lua binding authored in C++ might touch shared state in a way that would race against the game loop, and a **data race** in a shipping build is exactly the kind of bug that's hard to reproduce and easy to miss.
 
@@ -51,7 +51,7 @@ My solution was to isolate 'islands': groups of entities whose scripts only refe
 
 The stuttering has been **completely eliminated**, and no game has had to change any of its content to benefit.
 
-# Property Blocks in C++
+# Optimized Script Properties
 
 Northlight scripts expose configurable fields to designers: the values that show up in the editor as tweakable parameters on a component or entity. These are declared as *property blocks* inside the Lua source: structured metadata describing each field's type, default, range, and tooltip. Historically there was quite some overhead every time a script entity was loaded, which meant paying a cost on every launch for a piece of information that is not actually consumed when outside of editor context.
 

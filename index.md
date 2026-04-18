@@ -97,7 +97,7 @@ description: Portfolio of Guus Kemperman, an engine programmer specializing in s
         <p><strong>Contributions:</strong> {{ item.contribution }}</p>
         <p><strong>Engine/Tools:</strong> {{ item.engine }}</p>
         
-        <p><strong>Team Size:</strong>
+        <p><strong>Team:</strong>
 
         {% if item.team_size %}
             {{ item.team_size }}

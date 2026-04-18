@@ -35,7 +35,7 @@
   team_size: Solo for 8 months & Team of 10 for 6 months
   platforms: Windows | PS5
   duration: 14 Months
-  brief-description: Coral Engine began as a personal passion project during a summer holiday. Over time, it evolved into a full-fledged engine featuring <strong>visual scripting</strong> and a <strong>robust editor</strong>.
+  brief-description: Coral Engine began as a personal passion project during a summer holiday. Over time, it evolved into a full-fledged engine featuring <strong>visual scripting</strong> and a <strong>robust editor</strong>. After eight months of solo development, I was joined by five talented programmers to prepare for the development of Lichgate.
   contribution: Designed core architecture | Runtime Reflection | Visual scripting | Serialization | Prefabs | Editor | Asset management | Physics | Particles | Optimisations | And much more!
 
 - name: Umbra Mortis

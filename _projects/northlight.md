@@ -1,6 +1,6 @@
 ---
 layout: project
-name: "Northlight"
+name: "Northlight Engine"
 ---
 
 I joined Remedy Entertainment's core engine team in February 2026 as a Junior Engine Programmer. Northlight is Remedy's in-house engine, powering titles like Alan Wake 2 and Control Resonant. My focus is the scripting system: specifically, making Lua loading **fast**, **safe**, and **stable** for every game built on the engine.
@@ -37,7 +37,7 @@ The most interesting part of this work wasn't the format itself, but a bug that 
 
 Script loading on the main thread competes with rendering and gameplay for the same frame budget, and a 60 FPS target leaves very little room for it. Moving loading **off the main thread** gets it out of the way entirely. The catch is that any Lua binding authored in C++ might touch shared state in a way that would race against the game loop, and a **data race** in a shipping build is exactly the kind of bug that's hard to reproduce and easy to miss.
 
-I added a `@thread-safe` attribute to the C++ binding layer so individual bindings can be marked, and built a static analysis pass over **Luau's Abstract Syntax Tree** that walks every engine-facing callback and checks whether it, or anything it calls transitively, ever touches a binding that isn't thread-safe.
+I added a `@thread-safe` attribute to the C++ binding layer so individual bindings can be marked, and built a static analysis pass over **Lua's Abstract Syntax Tree** that walks every engine-facing callback and checks whether it, or anything it calls transitively, ever touches a binding that isn't thread-safe.
 
 The check runs at **build time**, so a regression that would introduce a data race gets caught before it reaches a reviewer, not after it ships.
 
@@ -55,7 +55,7 @@ The stuttering has been **completely eliminated**, and no game has had to change
 
 Northlight scripts expose configurable fields to designers: the values that show up in the editor as tweakable parameters on a component or entity. These are declared as *property blocks* inside the Lua source: structured metadata describing each field's type, default, range, and tooltip. Historically there was quite some overhead every time a script entity was loaded, which meant paying a cost on every launch for a piece of information that is not actually consumed when outside of editor context.
 
-I used Luau's Abstract Syntax Tree to identify these propert blocks, and removed them from the scripts at **export time**. This **halved script-initialisation time** in shipping builds, with no visible change to the authoring experience. It's a small architectural shift that turned a recurring per-launch cost into a one-time build cost.
+I used Lua's Abstract Syntax Tree to identify these propert blocks, and removed them from the scripts at **export time**. This **halved script-initialisation time** in shipping builds, with no visible change to the authoring experience. It's a small architectural shift that turned a recurring per-launch cost into a one-time build cost.
 
 # Stability & Quality
 

@@ -2,6 +2,7 @@
 - name: Northlight Engine
   start: February 2026
   end: Present
+  duration: Ongoing
   details_link: "/projects/northlight"
   engine: C++ | Lua
   team_size: Core engine team
@@ -16,6 +17,7 @@
 - name: Control Resonant
   start: February 2026
   end: Present
+  duration: Ongoing
   details_link: "/projects/control-resonant"
   engine: Northlight | C++ | Lua
   thumbnail-img: /img/projects/y4/control-resonant/small-banner-without-title.png

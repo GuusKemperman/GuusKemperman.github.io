@@ -5,15 +5,14 @@ name: "Northlight Engine"
 
 I joined Remedy Entertainment's core engine team in February 2026 as a Junior Engine Programmer. Northlight is Remedy's in-house engine, powering titles like Alan Wake 2 and Control Resonant. My focus is the scripting system: specifically, making Lua loading **fast**, **safe**, and **stable** for every game built on the engine.
 
-<!-- TODO: Confirm with Jussi that this quote is OK to publish before pushing live. If not, drop the attribution block and use an unattributed paraphrase. -->
-<!-- <hr>
+<hr>
 <div style="text-align: center; font-size: 1.5em; font-style: italic; margin: 20px 0;">
-    "Guus has very independently studied our engine using source code and documentation and learned how key parts work, remarkably well and quickly, and used that information to submit bug fixes and significant, measurable performance improvements."
+    "Guus learned how key parts work remarkably well and quickly, and used that information to submit significant, measurable performance improvements."
 </div>
 <div style="text-align: center; font-size: 1em; font-style: normal; margin: 5px 0;">
     Jussi Sammaltupa, Senior Engine Programmer &amp; Core Team Lead @ Remedy Entertainment
 </div>
-<hr> -->
+<hr>
 
 # My Contributions
 

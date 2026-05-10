@@ -35,7 +35,7 @@ In the early days of prototyping our game, I added a feature for supporting thou
   <div style="flex: 1; text-align: center;">
     <div style="position: relative; width: 100%; padding-top: 56.25%; /* 16:9 Aspect Ratio */ overflow: hidden;">
       <video autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-        <source src="/img/projects/y2/lichgate/SingleSpider.mp4" type="video/mp4">
+        <source src="/img/projects/y2/lichgate/Singleagent.mp4" type="video/mp4">
       </video>
     </div>
     <p style="margin-top: 8px; font-size: 1rem; color: #555;">A single agent using the flowfield to move along any nearby surface towards the target.</p>
@@ -44,15 +44,15 @@ In the early days of prototyping our game, I added a feature for supporting thou
   <!-- Second Video with Caption -->
   <div style="flex: 1; text-align: center;">
     <div style="position: relative; width: 100%; padding-top: 56.25%; /* 16:9 Aspect Ratio */ overflow: hidden;" onclick="this.querySelector('img').style.filter='none'; this.querySelector('span').style.display='none';">
-      <img src="/img/projects/y2/lichgate/FinalSpidersInBucket.gif" alt="Spiders" style="filter: blur(10px); position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+      <img src="/img/projects/y2/lichgate/FinalagentsInBucket.gif" alt="agents" style="filter: blur(10px); position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
       <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; background: rgba(0, 0, 0, 0.7); padding: 5px 10px; border-radius: 5px; font-size: 1.2rem; text-align: center;">⚠️ Arachnophobia Warning: Click to view</span>
     </div>
-    <p style="margin-top: 8px; font-size: 1rem; color: #555;">A swarm of spiders, climbing along walls and on eachother to reach the target.</p>
+    <p style="margin-top: 8px; font-size: 1rem; color: #555;">A swarm of agents, climbing along walls and on eachother to reach the target.</p>
   </div>
 </div>
 
-Since the spiders follow a fixed flow-field, *most* of the time, they do not care about the player's position; they just follow the flow field. In order to reduce bandwidth usage, the player positions would be collected on the server at small intervals, which would be sent back to the client with an instruction to generate a new flowfield  using the more up-to-date information, and to swap it inat a specific time. This led to the flowfields being consistently synced across the clients: thousands of spiders synced at the cost of sending only a handfull of bytes periodically.
+Since the agents follow a fixed flow-field, *most* of the time, they do not care about the player's position; they just follow the flow field. In order to reduce bandwidth usage, the player positions would be collected on the server at small intervals, which would be sent back to the client with an instruction to generate a new flowfield  using the more up-to-date information, and to swap it inat a specific time. This led to the flowfields being consistently synced across the clients: thousands of agents synced at the cost of sending only a handfull of bytes periodically.
 
-There is a caveat to this: Spiders consistently move to the position the player was at *just a second ago*. They are acting on slightly out of date information. My solution? Slowly change their behaviour to have them move towards directly the player once they start getting very close to the player. The spiders are marked as 'dirty', and their positions are now temporarily fully replicated.
+There is a caveat to this: agents consistently move to the position the player was at *just a second ago*. They are acting on slightly out of date information. My solution? Slowly change their behaviour to have them move towards directly the player once they start getting very close to the player. The agents are marked as 'dirty', and their positions are now temporarily fully replicated.
 
 In the end, this feature was scrapped due to design and artist restrictions for our game. I shared the prototype with another team, who used it as a starting point for their steam release [Oh Bugger](https://store.steampowered.com/app/3365900/Oh_Bugger/).

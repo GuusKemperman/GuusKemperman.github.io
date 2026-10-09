@@ -3,31 +3,34 @@ layout: project
 name: "Control Resonant"
 ---
 
-Control Resonant is Remedy Entertainment's upcoming sequel to *Control*, built on the Northlight engine. My day-to-day is engine work, but the motivating target for a lot of that work is the frame-rate budget on Control Resonant specifically. This page covers the game-facing outcomes of my engine work, along with the custom profiling tool and script-level optimisations I built to drive them.
-
+Control Resonant is Remedy Entertainment's sequel to *Control*, built on the Northlight engine. From February to September 2026, much of my engine work focused on its frame rate.
 # My Contributions
 
-- *[Eliminating Multi-Frame Stalls](#eliminating-multi-frame-stalls)*: Collapsing loading-stage script work from multi-frame stalls into something that no longer registers on a frame-time graph.
-- *[A Sampling-Based Lua Profiler](#a-sampling-based-Lua-profiler)*: Built a custom profiler to identify Lua bottlenecks in second-to-second gameplay.
-- *[Script-Level Performance Wins](#script-level-performance-wins)*: A 10% improvement in second-to-second Lua script performance, driven by data from the profiler above.
-- *[Cross-Project Coordination](#cross-project-coordination)*: Rolling engine-wide changes into Control Resonant alongside Remedy's other projects.
+- *[Seamless Area Transitions](#seamless-area-transitions)*: Helped optimise the game's seamless area transitions, cutting a 240ms freeze down to at most 5ms.
+- *[Script-Level Performance Wins](#script-level-performance-wins)*: Improved second-to-second Lua performance by 10%.
 
-# Eliminating Multi-Frame Stalls
+# Seamless Area Transitions
 
-One of the most visible wins to the game's frame budget came out of the scripting system. Large batches of scripts loaded at the same time used to stall the main thread for several frames, the kind of hitch that's immediately noticeable. Combining the deserialisation speedup, the throttling system, and the property-block optimisations from my engine work ([see the Northlight page](/projects/northlight) for the details) brought that loading stage down to the point where it no longer registers on a frame-time graph.
+Whenever the player enters a new area, the game loads thousands of scripts that bring it to life. All of this work used to happen in a single frame, freezing the game for **240ms**, roughly a quarter of a second.
 
-# A Sampling-Based Lua Profiler
+| [![](/img/projects/y4/control-resonant/before.png)](/img/projects/y4/control-resonant/before.png) | [![](/img/projects/y4/control-resonant/after.png)](/img/projects/y4/control-resonant/after.png) |
+|---|---|
+| Before: a 240ms spike | After: at most 5ms |
 
-Existing profiling tools are great at telling you that the engine is spending time in Lua. What they can't do is tell you *which script or which function inside the VM* is responsible. Northlight has an existing Lua profiler, but it was missing some functionality: aggregating over a time range, identifying expensive C++ bindings, and performing line-by-line analysis.
+*Blue is total frame time, orange is time spent on scripts. Note the different vertical scales.*
 
-I built a sampling profiler for Lua to close that gap. It periodically snapshots the Lua call stack, aggregates samples per function, and surfaces the hotspots in a format I can hand directly to a gameplay programmer.
+**Doing less work: 240ms to 35ms**
+
+I cached results instead of recomputing them, sped up the slowest parts of loading, and moved work to export time, so it is done once when the game is built rather than every time an area loads.
+
+**Spreading the work out: 35ms to at most 5ms**
+
+Rather than loading everything at once, the game now loads a small batch of scripts per frame until the area is ready. The challenge was doing this without changing how the game behaves.
+
+My solution was to use static analysis to find groups of scripts that depend on each other. A group only starts running once every script in it has loaded, so no script ever sees another one half-ready. The game's behaviour stays the same; the group just becomes active a little later.
+
+Static analysis only gets you so far, so I paired it with runtime debugging tools that automatically catch the edge cases it misses.
 
 # Script-Level Performance Wins
 
-With the profiler in hand, I went looking for opportunities inside the gameplay scripts themselves, not the engine. This was a deliberate crossing of the usual engine/game line: I'm a core-engine programmer by title, but some of the biggest wins available weren't in the runtime, they were in how individual scripts were using it.
-
-The changes were case-by-case, but added up to a **10% improvement in second-to-second Lua script performance**. Beyond the number, this work made the gameplay programmers better equipped to do the same analysis themselves, which is the kind of lasting impact I aim for.
-
-# Cross-Project Coordination
-
-Control Resonant shares the engine with Remedy's other projects, so every engine change I roll in here has to land cleanly on those projects too. In practice this means landing changes behind a switch, enabling them for one project at a time, and working directly with each team to verify before extending. It's slower than a single all-hands rollout, but it's how I've learned to ship scripting-system changes without creating friction for any of the game teams, and it's produced faster real-world iteration than the alternative.
+Some of the biggest wins were not in the engine itself, but in how gameplay scripts used it. Using a sampling profiler, I identified a few of the worst bottlenecks and optimised them one by one. Together, these changes improved second-to-second Lua performance by **10%**.

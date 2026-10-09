@@ -28,15 +28,15 @@
 
 - name: Control Resonant
   start: February 2026
-  end: Present
-  duration: Ongoing
+  end: September 2026
+  duration: 8 Months
   details_link: "/projects/control-resonant"
   engine: Northlight
   thumbnail-img: /img/projects/y4/control-resonant/small-banner-without-title.png
   main-page-image: /img/projects/y4/control-resonant/banner-with-title.jpg
   platforms: PS5 | Xbox Series | Windows
-  brief-description: Control Resonant is Remedy Entertainment's upcoming sequel to <em>Control</em>, built on the Northlight engine. As a Junior Engine Programmer I contribute to the game's frame-rate targets through <strong>performance work</strong>, a <strong>custom sampling Luau profiler</strong>, and <strong>script-level optimisations</strong>.
-  contribution: Performance | Custom profiling tools | Lua integration | Cross-team support
+  brief-description: As a Junior Engine Programmer I contributed to the game's frame-rate targets through <strong>performance work</strong> and <strong>script-level optimisations</strong>.
+  contribution: Performance | Lua integration
 
 - name: Umbra Mortis
   start: September 2024

@@ -5,3 +5,4 @@ Gemfile.lock
 /.vs
 .vscode/ltex.hiddenFalsePositives.en-US.txt
 .vscode/ltex.disabledRules.en-US.txt
+/.jekyll-cache

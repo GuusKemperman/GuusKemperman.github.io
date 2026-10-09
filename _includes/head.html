@@ -1,16 +1,6 @@
 
 <!-- Site build date: {{ "now" | date: "%FT%T%z" }} -->
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGXT0BS33M"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-JGXT0BS33M');
-    </script>
-
     <!--Makes it so that external links open in a new tab by default-->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -45,15 +35,9 @@
 
     <!-- Begin highlight.js support -->
     <link rel="stylesheet" href="/js/highlightjs/styles/github.css">
-    <link rel="stylesheet" href="/js/highlightjs/styles/ssms.css" />
 
     <script type="text/javascript" src="/js/highlightjs/highlight.min.js"></script>
-
     <script type="text/javascript" src="/js/highlightjs/languages/plaintext.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/powershell.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/tsql.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/dot.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/python.min.js"></script>
 
     <script type="text/javascript">hljs.highlightAll();</script>
     <!-- end highlight.js support -->
@@ -62,13 +46,7 @@
     <script src="//unpkg.com/darkreader@4.9.40/darkreader.js"></script>
     <script type="text/javascript">
         DarkReader.setFetchMethod(window.fetch); // Fix to remedy CORS errors in chrome console
-        //DarkReader.enable();
         DarkReader.auto({ brightness: 100, contrast: 90, sepia: 10 });
     </script>
     {%- endif %}
-
-    <!-- mathjax support
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    -->
 </head>

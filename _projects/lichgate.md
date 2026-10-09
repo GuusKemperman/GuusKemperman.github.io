@@ -16,11 +16,7 @@ While I was mostly focused on maintaining and improving Coral Engine throughout 
 
 Our game featured many enemies. Rather than calculating thousands of paths, I used flowfields for more optimised pathfinding. 
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y2/lichgate/flowfields.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y2/lichgate/flowfields.mp4" %}
 
 The flowfield moves with the player and is updated asynchronously. The flowfield has multiple level of detail, allowing the flowfield to extend a greater distance while only being calculated at a lower resolution.
 
@@ -52,20 +48,12 @@ I later made a prototype for **3D flowfields** in **Unreal Engine**, allowing ag
 
 The tool worked by using a layering system; each layer can spawn a certain set of objects, and the level designer could manipulate the perlin noise to determine the frequency of the spawned objects.
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y2/lichgate/perlin-generation.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y2/lichgate/perlin-generation.mp4" %}
 
 The entire system is deterministic during a playthrough, each area will look consistent everytime the player returns.
 
 The tool was used by our level designer, Nikola Tunev, to create the endless world.
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y2/lichgate/EndlessTerrain.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y2/lichgate/EndlessTerrain.mp4" %}
 
 The generation of the terrain has been optimised significantly and can keep up with the fastests of players, even with the sheer ridiculousness of the endgame movement speed,

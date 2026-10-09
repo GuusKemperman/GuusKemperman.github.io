@@ -1,20 +1,3 @@
-#- skill: string
-#  description: string
-#  list:
-#    - array
-#    - of
-#    - strings
-#
-# Template supports both a description AND a skill list, however it may look best if only one or the
-# other is used. Lists are sorted and concatenated without line breaks separated by • (&bull;)
-
-# - skill: C++
-#   description: "Thousands of hours spent programming over the last few years. I've managed large projects, both solo and in teams."
-# - skill: Optimising
-#   description: "One of my favourite aspects of programming; benchmarks, profiling, optimising and seeing a clear objective improvement."
-
-# Tools
-
 - skill: C++
   description: "7 years of experience with a strong passion for C++. I watch conference talks, attend local meetings, give presentations and write blogs about the language and it's features."
   icon-dark: /img/socialicons/cpp.svg
@@ -39,24 +22,6 @@
   icon-light: /img/socialicons/unreal.svg
   icon-darklight: /img/socialicons/unreal-fallback.png
 
-# - skill: Optimising
-#   description: "I love optimising! Able to identify bottlenecks through profiling. Experienced with Data Oriented Design, multi-threading, and the occasional SIMD."
-#   icon-dark: /img/socialicons/optimise.png
-#   tags: 
-#     - white-bg
-
-# - skill: Engine Development
-#   description: "3 years of dedicated experience developing frameworks and engines, focused on creating systems that are not only powerful and flexible but also intuitive and simple to use. I thrive on the challenge of transforming complex problems into reusable, scalable solutions that stand the test of time. "
-#   icon-dark: /img/socialicons/engine.png
-#   tags: 
-#     - white-bg
-    
-# - skill: STL, ImGui & Entt Libraries
-#   description: "3-5 years of extensive usage, I actively follow their development"
-# - skill: Cross-platform development
-#   description: "Windows, Linux and Playstation 5"
-#   icon-dark: /img/socialicons/unreal.svg
-
 - skill: GitHub
   description: "6 years of experience. Experienced with its pipelines and used them in a team environment, including reviews, automated checks and managing branches."
   icon-dark: /img/socialicons/github.svg
@@ -75,15 +40,6 @@
   icon-dark: /img/socialicons/jira.svg
   icon-darklight: /img/socialicons/jira.svg
   icon-light: /img/socialicons/jira.svg
-
-
-# - skill: Perforce - Github - CI/CD
-#   description: "3 years of experience working with source control, set up CI/CD pipelines through Github"
-  
-#     # Soft skills
-# - skill: Teamwork
-#   description: "1 year of experience working in different teams of 10-20 people on various game projects, both programmers and designers"
-
 
 # <a href="https://www.flaticon.com/free-icons/sym-motor" title="sym-motor icons">Sym-motor icons created by Freepik - Flaticon</a>
 # <a href="https://www.flaticon.com/free-icons/quick" title="quick icons">Quick icons created by Freepik - Flaticon</a>

@@ -32,32 +32,19 @@ I continued working on Coral Engine for several months, ridding it of some techn
 <div class="project-grid">
   {% for item in site.data.coral-contributions %}
     {% assign link = item.details_link %}
-    {% if item.details_link %}
-      {% assign link = item.details_link %}
-    {% elsif item.game_link %}
-      {% assign link = item.game_link %}
-    {% elsif item.code_link %}
-      {% assign link = item.code_link %}
-    {% endif %}
 
    {% if link %}
-  <a href="{{ link }}" class="project-card narrow{% if item.tags contains 'highlighted' %} highlighted{% endif %}" 
-     style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9; position: relative; display: block; text-decoration: none; transition: transform 0.2s;">
+  <a href="{{ link }}" class="project-card narrow{% if item.tags contains 'highlighted' %} highlighted{% endif %}">
 {% else %}
-  <div class="project-card narrow no-link {% if item.tags contains 'highlighted' %} highlighted{% endif %}" 
-     style="border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f0f0f0; position: relative; display: block; text-decoration: none; transition: transform 0.2s;">
+  <div class="project-card narrow no-link {% if item.tags contains 'highlighted' %} highlighted{% endif %}">
 {% endif %}
 
   <h1>{{ item.name }}</h1>
 
   {% if item.thumbnail-img %}
-    <br><img class="project-media" src="{{ item.thumbnail-img }}" style="width: 100%; height: auto;">
+    <br><img class="project-media" src="{{ item.thumbnail-img }}">
   {% elsif item.thumbnail-vid %}
-  <div class="video-as-gif-container">
-    <video autoplay loop muted playsinline>
-      <source src="{{ item.thumbnail-vid }}" type="video/mp4">
-    </video>
-  </div>
+  {% include looping-video.html src=item.thumbnail-vid %}
   {% endif %}
   
   <p>{{ item.description }}</p>

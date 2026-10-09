@@ -36,11 +36,7 @@ The Raspberry has an integrated graphics card, and is *incredibly* slow. To get 
 
 While animations are not strictly necesarry for a game like this, I wanted to learn how to render animated meshes. I followed [this tutorial](https://learnopengl.com/Guest-Articles/2020/Skeletal-Animation) to learn about skeletal animation. 
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y1/blockb/dancing.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y1/blockb/dancing.mp4" %}
 
 The tutorial's content was helpful to get me started, but not very performance friendly and not const correct. There was a lot unnecessary copying of large amounts of data, they send a hundred matrices each frame representing the bone transform matrices even if there were only a few bones, and the shader itself had a lot of room for improvement. I've made a lot of changes from the original code, showing that my understanding goes further than knowing how to copy and paste existing code.
 
@@ -60,11 +56,7 @@ I achieved seamless tiling by sampling from multiple virtual texture variations,
 
 I am proud of my serialization system, especially since it seemed like the greatest challenge to me at the start of this block. The system can serialize arbirtrary data, including pointers and relations between different entities using entity IDs. 
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y1/blockb/serialised.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y1/blockb/serialised.mp4" %}
 
 While it worked great, it required the user to write OnSave/OnLoad functions for each entity type to specify which members to serialize. This led to a lot of code repetition, and is something I hope to learn from for future projects.
 

@@ -27,11 +27,7 @@ The AI work using steering behaviours. Depending on the state of the AI, they co
 
 The weapons are each quite different. To make the system as modular as possible, I decided to use the **smart objects** approach; the weapons themselves evaluate how useful it would be to fire in a given scenario, the character chooses to fire the weapon based on the weapons score.
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y1/blockd/ai-showcase.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y1/blockd/ai-showcase.mp4" %}
 
 *The pink car is the only human character. The AI are able to use weapons, stay on track and take shortcuts*
 
@@ -53,11 +49,7 @@ I added support for navigating the UI specifically for local multiplayer. In som
 
 I created the main menu, the pause menu and the splash screen. Each menu included animations, navigatable buttons. They supported a varying number of players, and scaled properly at different resolutions.
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y1/blockd/TurboUI.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y1/blockd/TurboUI.mp4" %}
 
 I contributed to the HUD by creating the UI for aiming the airstrikes. I added colourblind support by adding hovering numbers that follow each car.
 

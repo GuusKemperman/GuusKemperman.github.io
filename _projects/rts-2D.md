@@ -22,7 +22,7 @@ The behaviour behind each individual unit is relatively simple. The underlying s
 
 I support several unit types, with different ground troops and flying vehicles. Each unit type can be defined in a config file, making the system incredibly easy to extend with new unit types.
 
-```
+```plaintext
 entity {
 	military {
 		smalltank {

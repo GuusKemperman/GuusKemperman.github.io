@@ -8,18 +8,16 @@ layout: default
     <h1><strong>{{ project.name }}</strong></h1>
     <h4><em>{{ project.start }} - {{ project.end }}</em></h4>
 
-    {% if project.main-page-video %}
+    {% assign video = project.main-page-video %}
+    {% assign image = project.main-page-image | default: project.thumbnail-img %}
+    {% unless video or image %}{% assign video = project.thumbnail-vid %}{% endunless %}
+
+    {% if video %}
     <video class="project-media" controls autoplay loop muted>
-        <source src="{{ project.main-page-video }}" type="video/mp4">
+        <source src="{{ video }}" type="video/mp4">
     </video>
-    {% elsif project.main-page-image %}
-    <img class="project-media" src="{{ project.main-page-image }}">
-    {% elsif project.thumbnail-img %}
-    <img class="project-media" src="{{ project.thumbnail-img }}">
-    {% elsif project.thumbnail-vid %}
-    <video class="project-media" controls autoplay loop muted>
-        <source src="{{ project.thumbnail-vid }}" type="video/mp4">
-    </video>
+    {% elsif image %}
+    <img class="project-media" src="{{ image }}">
     {% endif %}
 
     <div class="project-tags-wrapping">

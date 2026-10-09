@@ -4,6 +4,7 @@ title: Guus Kemperman
 author: Guus Kemperman
 email: guus.kemperman@gmail.com
 url: https://GuusKemperman.github.io
+baseurl: "" # Set explicitly so jekyll-github-metadata doesn't need the GitHub API during local builds
 # Email / Social media user names used by the minima theme:
 # All of these are optional and can be removed or commented out
 #twitter_username: "twitteruser"
@@ -22,6 +23,9 @@ future: false # GitHub Pages will publish future posts if this isn't set to fals
 description: Portfolio of Guus Kemperman, an engine programmer specializing in scripting and runtime reflection.
 
 show_excerpts: false
+
+google_analytics:
+  - G-JGXT0BS33M
 
 # Used by simple links page
 social-links:
@@ -42,8 +46,6 @@ titles_from_headings:
   strip_title: true
 
 collections:
-  personal: # collection for personal blog posts
-    output: true
   projects:
     output: true
 
@@ -57,11 +59,6 @@ plugins:
 
 gravatar_hash: 9727281b743ee1d4b98f843b7f84278f723413d2b16e3af231286214863b0518
 code_block_max_height: 500px
-
-home_post_limit: 5
-
-# The github repo that is to be used for looking up comments
-comments_repo: GuusKemperman/GuusKemperman.github.io
 
 defaults:
   - scope:

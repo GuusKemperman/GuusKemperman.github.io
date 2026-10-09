@@ -1,22 +1,4 @@
-theme: default
 header:
   name: Guus Kemperman
-  display_contact_info: true
   current_title: Engine Programmer @ Remedy Entertainment
   intro: Hi, I'm Guus! I am an engine programmer with experience working on commercial engines across PC & consoles, all while balancing (overly) ambitious personal engine projects in my free time. I have a deep understanding of C++, as well as experience with integrating multiplayer, scripting and reflection into game engines. This is matched by strong communication skills and a genuine enthusiasm for contributing as part of a larger team. If that sounds of interest to you, feel free to reach out; I'm always open to new opportunities!
-
-contact:
-  email: guus.kemperman@gmail.com
-sections:
-  experience:   false
-  education:    true
-  skills:       true
-  recognition:  false
-  associations: false
-  interests:    false
-  links:        true
-  social_links: false
-social:
-  Website:    https://GuusKemperman.github.io
-  GitHub:     https://github.com/GuusKemperman
-  LinkedIn:   https://linkedin.com/in/GuusKemperman

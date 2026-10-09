@@ -15,11 +15,7 @@ The visual scripting enabled designers to implement player movement and the *man
 
 In the end, more than 90% of the gameplay in Lichgate was achieved through visual scripting, powered by 156 different scripts. 
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y2/coral/DifferentScripts.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y2/coral/DifferentScripts.mp4" %}
 
 The tool supports for-loops, while-loops, branches (if/else), getting & setting variables, function calls, and events.
 
@@ -51,11 +47,7 @@ I designed the workflow and the editor to be similar to Unreal Blueprints. I use
 
 I created a responsive and context aware search bar, greatly improving ease of use and development speed. The searching happens fully **asynchronously**. Options that are picked more frequently, or options that make more sense given the existing function, are ranked higher. 
 
-<div class="video-as-gif-container">
-  <video autoplay loop muted playsinline>
-    <source src="/img/projects/y2/coral/ScriptEditor.mp4" type="video/mp4">
-  </video>
-</div>
+{% include looping-video.html src="/img/projects/y2/coral/ScriptEditor.mp4" %}
 
 **Shortcuts**
 

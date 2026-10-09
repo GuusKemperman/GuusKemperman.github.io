@@ -93,7 +93,7 @@ std::sort(context.mCachedValues.begin(), context.mCachedValues.end());
 
 Searching through a vector is normally a linear process, but by utilizing binary search we can reduce this to O(Log(N)). The search time was now roughly the same as with the unordered_map.
 
-```
+```cpp
 // Binary search
 auto existingCachedValue = std::lower_bound(context.mCachedValues.begin(), context.mCachedValues.end(), pin.GetId());
 ASSERT(&existingCachedValue->mPinOfOrigin.get() == &pin);

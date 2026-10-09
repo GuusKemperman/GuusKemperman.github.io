@@ -1,122 +1,35 @@
-<!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+---
+layout: default
+---
 
-<!-- Site build date: {{ "now" | date: "%FT%T%z" }} -->
-<head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGXT0BS33M"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-        gtag('config', 'G-JGXT0BS33M');
-    </script>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <header class="post-header">
+        <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+        <p class="post-meta">
+            <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+                {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+                {{ page.date | date: date_format }}
+            </time>
+            {% assign author = page.author | default: site.author %}
+            {%- if author -%}
+            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ author }}</span></span>
+            {%- endif -%}
+        </p>
+    </header>
 
-    <!-- Begin SEO -->
-    {% seo %}
-    <!-- End SEO -->
+    <div class="share-links no-print">
+        {% include sharelinks.html %}
+    </div>
 
-    <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
-    <link rel="stylesheet" type="text/css" href="/css/override.css">
-    <link rel="stylesheet" type="text/css" href="/css/blogs.css">
-
-    {% feed_meta %}
-
-    {% if jekyll.environment == 'production' and site.google_analytics -%}
-    <!-- Begin Google Analytics -->
-    {% include google-analytics.html %}
-    <!-- End Google Analytics -->
-    {%- endif %}
-
-    <!-- Begin highlight.js support -->
-    <link rel="stylesheet" href="/js/highlightjs/styles/github.css">
-    <link rel="stylesheet" href="/js/highlightjs/styles/ssms.css" />
-
-    <script type="text/javascript" src="/js/highlightjs/highlight.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/plaintext.min.js"></script>
-
-    <script type="text/javascript" src="/js/highlightjs/languages/plaintext.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/powershell.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/tsql.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/dot.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/python.min.js"></script>
-    <script type="text/javascript" src="/js/highlightjs/languages/cpp.js"></script>
-
-    <script type="text/javascript">hljs.highlightAll();</script>
-    <!-- end highlight.js support -->
-    {% if jekyll.environment == 'production' -%}
-    <!-- dark theme using DarkReader -->
-    <script src="//unpkg.com/darkreader@4.9.40/darkreader.js"></script>
-    <script type="text/javascript">
-        DarkReader.setFetchMethod(window.fetch); // Fix to remedy CORS errors in chrome console
-        //DarkReader.enable();
-        DarkReader.auto({ brightness: 100, contrast: 90, sepia: 10 });
-    </script>
-    {%- endif %}
-
-    <!-- mathjax support
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    -->
-
-    <body>
-
+    <div class="post-content e-content" itemprop="articleBody">
+        {{ content }}
         <div class="no-print">
-            {%- include header.html -%}
+            {% include navlinks.html %}
         </div>
+    </div>
 
-        <main class="page-content" aria-label="Content">
-            <div class="wrapper">
-                <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+    <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+</article>
 
-                    <header class="post-header">
-                        <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
-                        <p class="post-meta">
-                            <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-                                {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-                                {{ page.date | date: date_format }}
-                            </time>
-                            {% assign author = page.author | default: site.author %}
-                            {%- if author -%}
-                            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ author }}</span></span>
-                            {%- endif -%}
-                        </p>
-                    </header>
-
-                    <div class="share-links no-print">
-                        {% include sharelinks.html %}
-                    </div>
-
-                    <div class="post-content e-content" itemprop="articleBody">
-                        {{ content }}
-                        <div class="no-print">
-                            {% include navlinks.html %}
-                        </div>
-                    </div>
-
-                    <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
-                </article>
-            </div>
-        </main>
-
-        <div class="no-print">
-            {%- include footer.html -%}
-        </div>
-    </body>
-
-
-</head>
-
-</html>
-
-<script type="text/javascript" src="/js/gifffer.min.js"></script>
-<script>window.onload = function () { Gifffer(); }</script>
 <script type="text/javascript" src="/js/copy-code-button.js"></script>
-
-
-
-

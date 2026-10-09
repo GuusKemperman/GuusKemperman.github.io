@@ -101,14 +101,6 @@ hr {
 
 .wrapper {
     max-width: 1100px; /* Take up the full width of the page */
-    /*width: 70%; /* Or a percentage of the page width */
-    margin: 0 auto; /* Keep it centered */
-    padding: 20px; /* Optional: Add some padding */
-}
-
-.wrapper-index {
-    max-width: 1100px; /* Take up the full width of the page */
-    /*width: 70%; /* Or a percentage of the page width */
     margin: 0 auto; /* Keep it centered */
     padding: 20px; /* Optional: Add some padding */
 }
@@ -132,11 +124,6 @@ body, p, ul, ol {
 
 .project-tags p {
     margin: 8px 0;
-}
-
-.project-tags i {
-    margin-right: 5px;
-    color: #555;
 }
 
 .project-tags-wrapping {
@@ -252,6 +239,7 @@ body, p, ul, ol {
 
 /* Styling for non-clickable cards */
 .project-card.narrow.no-link {
+  background-color: #f0f0f0;
   cursor: default; /* Indicate non-interactivity */
   opacity: 0.6;  /* Slightly dim to signal a disabled state */
   box-shadow: none; /* Add a subtle shadow */
@@ -349,10 +337,6 @@ body, p, ul, ol {
 .read-more:hover {
   color: #555;                /* Change text color on hover */
   border-color: #555;         /* Change border color on hover */
-}
-
-.read-more:hover::after {
-  transform: translateX(5px); /* Move arrow slightly on hover */
 }
 
 .read-more:visited {
@@ -530,11 +514,6 @@ img {
 
 }
 
-.experience-company {
-  font-size: 1.1rem; /* Matches body font size (110%) */
-  margin: 0 0 5px 0;
-}
-
 .experience-dates {
   font-size: 0.9rem; /* Slightly smaller than body */
   margin: 0;
@@ -585,3 +564,18 @@ img {
     font-size: 1.3rem; /* Slightly smaller on mobile */
   }
 }
+
+/* Share buttons on blog posts */
+#share-buttons {display: inline-block; vertical-align: middle; }
+#share-buttons:after {content: ""; display: block; clear: both;}
+#share-buttons > div {position: relative; text-align: left; height: 36px; width: 32px; float: left; text-align: center;}
+#share-buttons > div > svg {height: 16px; fill: #d5d5d5; margin-top: 10px;}
+#share-buttons > div:hover {cursor: pointer;}
+#share-buttons > div.facebook:hover > svg {fill: #3B5998;}
+#share-buttons > div.twitter:hover > svg {fill: #55ACEE;}
+#share-buttons > div.linkedin:hover > svg {fill: #0077b5;}
+#share-buttons > div.mail:hover > svg {fill: #7D7D7D;}
+#share-buttons > div.facebook > svg {height: 18px; margin-top: 9px;}
+#share-buttons > div.twitter > svg {height: 20px; margin-top: 8px;}
+#share-buttons > div.linkedin > svg {height: 19px; margin-top: 7px;}
+#share-buttons > div.mail > svg {height: 14px; margin-top: 11px;}

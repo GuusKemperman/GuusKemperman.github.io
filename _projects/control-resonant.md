@@ -6,7 +6,7 @@ name: "Control Resonant"
 Control Resonant is Remedy Entertainment's sequel to *Control*, built on the Northlight engine. From February to September 2026, much of my engine work focused on its frame rate.
 # My Contributions
 
-- *[Seamless Area Transitions](#seamless-area-transitions)*: Helped optimise the game's seamless area transitions, cutting a 240ms freeze down to at most 5ms.
+- *[Seamless Area Transitions](#seamless-area-transitions)*: Helped optimise the game's seamless area transitions, cutting a 240ms freeze down to at most 5ms and making loading script components from disk 20x faster.
 - *[Script-Level Performance Wins](#script-level-performance-wins)*: Improved second-to-second Lua performance by 10%.
 
 # Seamless Area Transitions
@@ -30,6 +30,12 @@ Rather than loading everything at once, the game now loads a small batch of scri
 My solution was to use static analysis to find groups of scripts that depend on each other. A group only starts running once every script in it has loaded, so no script ever sees another one half-ready. The game's behaviour stays the same; the group just becomes active a little later.
 
 Static analysis only gets you so far, so I paired it with runtime debugging tools that automatically catch the edge cases it misses.
+
+**Faster loading from disk: 20x speedup**
+
+Before any of this, every script component has to be loaded from disk, along with its custom properties. These properties differ from script to script, so they were stored in a flexible format, and reading each component back meant many small lookups and memory allocations. I replaced it with a compact binary format that loads each component in a single step, making loading from disk **20x faster** and the data **44% smaller**.
+
+This happens in the background, so it did not affect the freeze, but it did shorten the overall loading time.
 
 # Script-Level Performance Wins
 

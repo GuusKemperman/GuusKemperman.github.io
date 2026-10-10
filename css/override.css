@@ -1,6 +1,15 @@
 ---
 ---
 
+/* Type scale for the front page; keep text on one of these sizes */
+:root {
+  --font-display: 4rem;
+  --font-subtitle: 2rem;
+  --font-heading: 1.8rem; /* Largest size where project titles fit on one line in full-width cards */
+  --font-body: 1.25rem;
+  --font-small: 1rem;
+}
+
 hr {
   margin-top: 30px;
   margin-bottom: 20px;
@@ -188,6 +197,15 @@ body, p, ul, ol {
   margin-bottom: 10px;
 }
 
+.project-card h1 {
+  font-size: var(--font-heading);
+}
+
+.project-card h4,
+.project-tags p {
+  font-size: var(--font-body);
+}
+
 .project-card {
   flex: 1 1 max(400px, calc(50% - 100px)); /* Take up half of the row, minus gap space */
   border: 1px solid #ddd;
@@ -283,20 +301,20 @@ body, p, ul, ol {
 }
 
 .intro-text h1 {
-    font-size: 4.0rem;
+    font-size: var(--font-display);
     margin: 0px;
     margin-top: 0px;
 }
 
 .intro-text h2 {
-    font-size: 2.0rem;
+    font-size: var(--font-subtitle);
     margin: 0px;
     margin-top: -15px;
     color: #666;
 }
 
 .intro-text p {
-    font-size: 1.25rem;
+    font-size: var(--font-body);
     margin: 15px 0;
 }
 
@@ -326,7 +344,7 @@ body, p, ul, ol {
   padding: 6px 20px;         /* Adjust padding for a larger clickable area */
   color: black;               /* Text color */
   text-decoration: none;      /* Remove underline */
-  font-size: 1.25rem;
+  font-size: var(--font-body);
   border: 2px solid black;    /* Black border */
   border-radius: 25px;        /* Increased rounded edges */
   text-align: center;         /* Center the text within the button */
@@ -440,15 +458,20 @@ img {
   visibility: hidden;
   transition: all 0.3s ease;
   pointer-events: none;
-  font-size: 0.9rem;
+  font-size: var(--font-small);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 
+.skill-description p {
+  font-size: var(--font-small);
+  margin: 0;
+}
+
 .skill-description h4 {
   margin: 0 0 0.5rem 0;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: var(--font-small);
 }
 
 /* Hover: reveal tooltip and add subtle icon effects */
@@ -486,6 +509,7 @@ img {
 
 .experience-section h1 {
   text-align: center;
+  font-size: var(--font-heading);
 }
 
 .experience-grid {
@@ -509,13 +533,12 @@ img {
 }
 
 .experience-header p {
-
-      text-align: center;
-
+  text-align: center;
+  font-size: var(--font-body);
 }
 
-.experience-dates {
-  font-size: 0.9rem; /* Slightly smaller than body */
+.experience-header .experience-dates {
+  font-size: var(--font-small);
   margin: 0;
   font-style: italic;
 }
@@ -524,7 +547,7 @@ img {
   line-height: 1.6;
   margin: 0;
     text-align: center;
-      font-size: 1.25rem;
+      font-size: var(--font-body);
 
 
 }

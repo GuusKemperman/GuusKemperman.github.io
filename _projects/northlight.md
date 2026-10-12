@@ -17,7 +17,7 @@ I joined Remedy Entertainment's core engine team in February 2026 as a Junior En
 # My Contributions
 
 - *[Lua Optimisations](#lua-optimisations)*: Stopped script loading from freezing the game by spreading it across frames, and made loading script components from disk 20x faster.
-- *[World State](#world-state)*: Built the runtime side of the engine's new system for keeping the world in sync with the player's progress, including a custom expression language that is twice as fast as Lua.
+- *[World State](#world-state)*: Built the runtime side of the engine's new system for keeping the world in sync with the player's progress, including a custom expression language.
 - *[Stability & Quality](#stability--quality)*: Made live-editing scripts more reliable and added automated tests for the scripting systems.
 
 # Lua Optimisations
@@ -40,7 +40,7 @@ I added components that designers could attach to existing objects, so they coul
 
 Each of these components stored a condition that decided when it applied, such as `quest_open and not quest_done`. To run these conditions, I wrote a small compiler and bytecode interpreter. I chose this over existing languages for four reasons:
 
-- **Speed:** the system had to scale to at least 5,000 objects. These conditions loaded faster than the previous rule-based system, ran about 2x faster than the same conditions in Lua, and about 30% faster than an existing in-house expression language.
+- **Speed:** the system had to scale to at least 5,000 objects. These conditions loaded faster than the previous rule-based system, ran about **2x** faster than the same conditions in Lua, and about **30%** faster than an existing in-house expression language.
 - **Simplicity:** conditions should be readable at a glance. Complex logic stayed in Lua; conditions only combined a few facts.
 - **Keeping options open:** a simple language could later be moved onto a more powerful one. Going the other way would have meant supporting every feature that existing conditions already relied on.
 - **Clear errors:** mistakes were reported in plain language, so designers could fix their own conditions.
